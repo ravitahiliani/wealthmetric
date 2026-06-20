@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -2050,11 +2049,11 @@ function HomePage({setPage}){
       <div style={{padding:"64px 32px 40px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:1000,height:400,background:"radial-gradient(ellipse at 50% 0%,rgba(193,127,36,0.07) 0%,transparent 60%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",maxWidth:640,margin:"0 auto"}}>
-          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(40px,6vw,72px)",letterSpacing:"-2px",lineHeight:1.0,marginBottom:14,color:"#1A1714"}}>
-            Your Money,<br/><span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
+          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(52px,8vw,110px)",letterSpacing:"-3px",lineHeight:1.0,marginBottom:24,color:"#1A1714",whiteSpace:"nowrap"}}>
+            Your Money,{" "}<span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
           </h1>
-          <p style={{fontSize:"clamp(14px,1.5vw,16px)",color:TEXT3,lineHeight:1.6}}>
-            Free personal finance calculators for India.
+          <p style={{fontSize:"clamp(15px,1.6vw,19px)",color:TEXT2,lineHeight:1.6}}>
+            The metrics behind your wealth, simplified.
           </p>
         </div>
       </div>
