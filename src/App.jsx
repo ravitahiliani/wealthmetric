@@ -444,48 +444,48 @@ function CalculatorPage(){
       {/* ── INPUTS ROW ── */}
       {mode==="calculate"&&(
         <div className="card" style={{padding:0,overflow:"hidden"}}>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1px 1fr 1px 2fr",gap:0}}>
+          <div style={{display:"grid",gridTemplateColumns:"160px 1px 160px 1px 1fr",gap:0,alignItems:"stretch"}}>
             {/* Annual Return */}
-            <div style={{padding:"16px 20px"}}>
+            <div style={{padding:"18px 20px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
               <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Annual Return</div>
               <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
                 <input type="number" value={annualRate} step={0.1} min={0}
                   onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"9px 12px",fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
-                <span style={{padding:"0 12px",fontSize:12,color:TEXT3}}>% p.a.</span>
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"10px 12px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:60}}/>
+                <span style={{padding:"0 10px",fontSize:12,color:TEXT3,whiteSpace:"nowrap"}}>% p.a.</span>
               </div>
             </div>
             <div style={{background:BORDER}}/>
             {/* Time Horizon */}
-            <div style={{padding:"16px 20px"}}>
+            <div style={{padding:"18px 20px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
               <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Time Horizon</div>
               <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
                 <input type="number" value={years} step={0.5} min={0.5}
                   onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"9px 12px",fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
-                <span style={{padding:"0 12px",fontSize:12,color:TEXT3}}>years</span>
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"10px 12px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:60}}/>
+                <span style={{padding:"0 10px",fontSize:12,color:TEXT3}}>yrs</span>
               </div>
             </div>
             <div style={{background:BORDER}}/>
-            {/* Lumpsum + SIP combined panel */}
-            <div style={{padding:"16px 20px",display:"flex",flexDirection:"column",gap:12}}>
-              {/* Lumpsum */}
-              <div>
+            {/* Lumpsum + SIP combined — takes remaining space */}
+            <div style={{padding:"18px 24px",display:"flex",gap:24}}>
+              {/* Lumpsum half */}
+              <div style={{flex:1}}>
                 <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                  <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600}}>Lumpsum</div>
+                  <div style={{fontSize:9,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>Lumpsum</div>
                   <span style={{fontSize:9,color:TEXT3,background:"#F2F0EB",padding:"2px 7px",borderRadius:4}}>always on</span>
                 </div>
                 <Field label="" value={lumpsum} onChange={setLumpsum} prefix="₹" step={1000} min={0} color={ACC}/>
               </div>
-              {/* Divider */}
-              <div style={{height:1,background:BORDER}}/>
-              {/* SIP */}
-              <div>
+              {/* Vertical divider */}
+              <div style={{width:1,background:BORDER,alignSelf:"stretch"}}/>
+              {/* SIP half */}
+              <div style={{flex:"0 0 55%"}}>
                 <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                  <div style={{fontSize:9,color:BLUE,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600}}>Monthly SIP</div>
+                  <div style={{fontSize:9,color:BLUE,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>SIP</div>
                   <Toggle on={sipOn} set={setSipOn} color={BLUE}/>
                 </div>
-                {sipOn&&(<>
+                {sipOn?(<>
                   {/* Frequency pills */}
                   <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>
                     {Object.entries(SIP_FREQS).map(([k,v])=>(
@@ -495,22 +495,22 @@ function CalculatorPage(){
                     ))}
                   </div>
                   <Field label="" value={sipAmt} onChange={setSipAmt} prefix="₹" step={100} min={0} color={BLUE}/>
-                  {/* Step-up */}
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:10}}>
-                    <div>
+                  {/* Step-up — horizontal layout */}
+                  <div style={{display:"flex",gap:12,alignItems:"flex-start",marginTop:10}}>
+                    <div style={{width:100,flexShrink:0}}>
                       <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Step-Up %</div>
                       <NumInput value={stepPct} onChange={v=>setStepPct(v)} step={1} min={0} max={100} suffix="%" color={stepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"7px 10px",fontSize:14}}}/>
                     </div>
-                    <div>
+                    <div style={{flex:1,opacity:stepPct>0?1:0.35,pointerEvents:stepPct>0?"auto":"none"}}>
                       <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Every</div>
-                      <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
                         {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
                           <div key={k} onClick={()=>setStepFreq(k)}
-                            style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer",opacity:stepPct>0?1:0.3,pointerEvents:stepPct>0?"auto":"none"}}>
-                            <div style={{width:11,height:11,borderRadius:"50%",border:`2px solid ${stepFreq===k&&stepPct>0?"#F59E0B":BORDER}`,
-                              background:stepFreq===k&&stepPct>0?"#F59E0B":"transparent",flexShrink:0}}>
-                            </div>
-                            <span style={{fontSize:10,color:stepFreq===k&&stepPct>0?"#F59E0B":TEXT2}}>{v.label}</span>
+                            style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer",padding:"5px 10px",borderRadius:6,
+                              background:stepFreq===k&&stepPct>0?"#FFFBEB":"#FAF8F5",
+                              border:`1.5px solid ${stepFreq===k&&stepPct>0?"#F59E0B":BORDER}`}}>
+                            <div style={{width:8,height:8,borderRadius:"50%",background:stepFreq===k&&stepPct>0?"#F59E0B":BORDER,flexShrink:0}}/>
+                            <span style={{fontSize:11,fontWeight:600,color:stepFreq===k&&stepPct>0?"#F59E0B":TEXT2}}>{v.label}</span>
                           </div>
                         ))}
                       </div>
@@ -519,7 +519,9 @@ function CalculatorPage(){
                   {stepPct>0&&<div style={{marginTop:8,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:6,padding:"6px 10px",fontSize:11,color:"#F59E0B"}}>
                     ↑ SIP increases {stepPct}% every {STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}
                   </div>}
-                </>)}
+                </>):(
+                  <div style={{color:TEXT3,fontSize:12,marginTop:4}}>Toggle on to add SIP</div>
+                )}
               </div>
             </div>
           </div>
@@ -596,17 +598,18 @@ function CalculatorPage(){
           </div>
         )}
         {hasCalcResults&&(<>
-          {/* 4 stat cards — white, no black band */}
+          {/* 4 stat cards — prominent, no black band */}
           <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
             {[
-              {l:"Total Invested",v:formatINR(calcResults.total.invested),c:TEXT2,bg:"#ffffff",bc:BORDER},
-              {l:"Total Corpus",v:formatINR(calcResults.total.corpus),c:ACC,bg:"#FFFDF9",bc:ACC+"40"},
-              {l:"Total Gain",v:formatINR(calcResults.total.gain),c:calcResults.total.gain>=0?GREEN:RED,bg:calcResults.total.gain>=0?"#F6FBF8":"#FFF0F0",bc:(calcResults.total.gain>=0?GREEN:RED)+"40"},
-              {l:"Gain %",v:(calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0).toFixed(1)+"%",c:calcResults.total.gain>=0?GREEN:RED,bg:calcResults.total.gain>=0?"#F6FBF8":"#FFF0F0",bc:(calcResults.total.gain>=0?GREEN:RED)+"40"},
-            ].map(({l,v,c,bg,bc})=>(
-              <div key={l} style={{background:bg,border:`1px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
-                <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:8}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,2vw,26px)",color:c,lineHeight:1}}>{v}</div>
+              {l:"Total Invested",v:formatINR(calcResults.total.invested),c:"#5A5650",bg:"#ffffff",bc:BORDER,sub:null},
+              {l:"Total Corpus",v:formatINR(calcResults.total.corpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:"your final amount"},
+              {l:"Total Gain",v:formatINR(calcResults.total.gain),c:calcResults.total.gain>=0?GREEN:RED,bg:calcResults.total.gain>=0?"#F4FBF7":"#FFF0F0",bc:(calcResults.total.gain>=0?GREEN:RED)+"40",sub:null},
+              {l:"Return",v:(calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0).toFixed(1)+"%",c:calcResults.total.gain>=0?GREEN:RED,bg:calcResults.total.gain>=0?"#F4FBF7":"#FFF0F0",bc:(calcResults.total.gain>=0?GREEN:RED)+"40",sub:"absolute gain"},
+            ].map(({l,v,c,bg,bc,sub})=>(
+              <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"22px 24px"}}>
+                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:10,fontWeight:600}}>{l}</div>
+                <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.2vw,32px)",color:c,lineHeight:1}}>{v}</div>
+                {sub&&<div style={{fontSize:11,color:TEXT3,marginTop:6}}>{sub}</div>}
               </div>
             ))}
           </div>
