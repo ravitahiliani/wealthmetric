@@ -443,87 +443,85 @@ function CalculatorPage(){
 
       {/* ── INPUTS ROW ── */}
       {mode==="calculate"&&(
-        <div className="card" style={{padding:0,overflow:"hidden"}}>
-          <div style={{display:"grid",gridTemplateColumns:"160px 1px 160px 1px 1fr",gap:0,alignItems:"stretch"}}>
-            {/* Annual Return */}
-            <div style={{padding:"18px 20px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
-              <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Annual Return</div>
-              <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
-                <input type="number" value={annualRate} step={0.1} min={0}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"10px 12px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:60}}/>
-                <span style={{padding:"0 10px",fontSize:12,color:TEXT3,whiteSpace:"nowrap"}}>% p.a.</span>
+        <div style={{display:"grid",gridTemplateColumns:"280px 1fr",gap:14}}>
+          {/* LEFT: Annual Return + Time Horizon + Lumpsum */}
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            {/* Annual Return + Time Horizon side by side */}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div className="card" style={{padding:"16px 18px"}}>
+                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Annual Return</div>
+                <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
+                  <input type="number" value={annualRate} step={0.1} min={0}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
+                    style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"10px 10px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                  <span style={{padding:"0 8px",fontSize:11,color:TEXT3,whiteSpace:"nowrap"}}>%</span>
+                </div>
+              </div>
+              <div className="card" style={{padding:"16px 18px"}}>
+                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Time Horizon</div>
+                <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
+                  <input type="number" value={years} step={0.5} min={0.5}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
+                    style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"10px 10px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                  <span style={{padding:"0 8px",fontSize:11,color:TEXT3}}>yrs</span>
+                </div>
               </div>
             </div>
-            <div style={{background:BORDER}}/>
-            {/* Time Horizon */}
-            <div style={{padding:"18px 20px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
-              <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Time Horizon</div>
-              <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
-                <input type="number" value={years} step={0.5} min={0.5}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"10px 12px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:60}}/>
-                <span style={{padding:"0 10px",fontSize:12,color:TEXT3}}>yrs</span>
-              </div>
+            {/* Lumpsum */}
+            <div className="card" style={{padding:"16px 18px",borderColor:ACC+"40"}}>
+              <div style={{fontSize:15,color:ACC,fontWeight:700,marginBottom:12}}>Lumpsum</div>
+              <Field label="" value={lumpsum} onChange={setLumpsum} prefix="₹" step={1000} min={0} color={ACC}/>
             </div>
-            <div style={{background:BORDER}}/>
-            {/* Lumpsum + SIP combined — takes remaining space */}
-            <div style={{padding:"18px 24px",display:"flex",gap:24}}>
-              {/* Lumpsum half */}
-              <div style={{flex:1}}>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                  <div style={{fontSize:9,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>Lumpsum</div>
-                  <span style={{fontSize:9,color:TEXT3,background:"#F2F0EB",padding:"2px 7px",borderRadius:4}}>always on</span>
-                </div>
-                <Field label="" value={lumpsum} onChange={setLumpsum} prefix="₹" step={1000} min={0} color={ACC}/>
+          </div>
+
+          {/* RIGHT: SIP full panel */}
+          <div className="card" style={{padding:"18px 22px",borderColor:sipOn?BLUE+"40":BORDER}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+              <div style={{fontSize:15,color:BLUE,fontWeight:700}}>SIP</div>
+              <Toggle on={sipOn} set={setSipOn} color={BLUE}/>
+            </div>
+            {sipOn?(<>
+              {/* Frequency */}
+              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Frequency</div>
+              <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:14}}>
+                {Object.entries(SIP_FREQS).map(([k,v])=>(
+                  <div key={k} className={`pill ${sipFreqKey===k?"on":"off"}`}
+                    style={sipFreqKey===k?{background:BLUE,borderColor:BLUE,color:"#ffffff",fontSize:12,padding:"6px 14px"}:{fontSize:12,padding:"6px 14px"}}
+                    onClick={()=>setSipFreqKey(k)}>{v.label}</div>
+                ))}
               </div>
-              {/* Vertical divider */}
-              <div style={{width:1,background:BORDER,alignSelf:"stretch"}}/>
-              {/* SIP half */}
-              <div style={{flex:"0 0 55%"}}>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                  <div style={{fontSize:9,color:BLUE,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>SIP</div>
-                  <Toggle on={sipOn} set={setSipOn} color={BLUE}/>
+              {/* Amount */}
+              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Amount</div>
+              <Field label="" value={sipAmt} onChange={setSipAmt} prefix="₹" step={100} min={0} color={BLUE}/>
+              {/* Step-up */}
+              <div style={{height:1,background:BORDER,margin:"12px 0"}}/>
+              <div style={{display:"flex",gap:16,alignItems:"flex-start"}}>
+                <div style={{width:120,flexShrink:0}}>
+                  <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Step-Up %</div>
+                  <NumInput value={stepPct} onChange={v=>setStepPct(v)} step={1} min={0} max={100} suffix="%" color={stepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"9px 10px",fontSize:16}}}/>
+                  <div style={{fontSize:10,color:TEXT3,marginTop:4}}>0 = none</div>
                 </div>
-                {sipOn?(<>
-                  {/* Frequency pills */}
-                  <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>
-                    {Object.entries(SIP_FREQS).map(([k,v])=>(
-                      <div key={k} className={`pill ${sipFreqKey===k?"on":"off"}`}
-                        style={sipFreqKey===k?{background:BLUE,borderColor:BLUE,color:"#ffffff",fontSize:11,padding:"4px 10px"}:{fontSize:11,padding:"4px 10px"}}
-                        onClick={()=>setSipFreqKey(k)}>{v.label}</div>
+                <div style={{flex:1,opacity:stepPct>0?1:0.3,pointerEvents:stepPct>0?"auto":"none"}}>
+                  <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Increase Every</div>
+                  <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                    {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
+                      <div key={k} onClick={()=>setStepFreq(k)}
+                        style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",padding:"6px 12px",borderRadius:7,
+                          background:stepFreq===k&&stepPct>0?"#FFFBEB":"#FAF8F5",
+                          border:`1.5px solid ${stepFreq===k&&stepPct>0?"#F59E0B":BORDER}`}}>
+                        <div style={{width:8,height:8,borderRadius:"50%",background:stepFreq===k&&stepPct>0?"#F59E0B":BORDER}}/>
+                        <span style={{fontSize:12,fontWeight:600,color:stepFreq===k&&stepPct>0?"#F59E0B":TEXT2}}>{v.label}</span>
+                      </div>
                     ))}
                   </div>
-                  <Field label="" value={sipAmt} onChange={setSipAmt} prefix="₹" step={100} min={0} color={BLUE}/>
-                  {/* Step-up — horizontal layout */}
-                  <div style={{display:"flex",gap:12,alignItems:"flex-start",marginTop:10}}>
-                    <div style={{width:100,flexShrink:0}}>
-                      <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Step-Up %</div>
-                      <NumInput value={stepPct} onChange={v=>setStepPct(v)} step={1} min={0} max={100} suffix="%" color={stepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"7px 10px",fontSize:14}}}/>
-                    </div>
-                    <div style={{flex:1,opacity:stepPct>0?1:0.35,pointerEvents:stepPct>0?"auto":"none"}}>
-                      <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Every</div>
-                      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-                        {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
-                          <div key={k} onClick={()=>setStepFreq(k)}
-                            style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer",padding:"5px 10px",borderRadius:6,
-                              background:stepFreq===k&&stepPct>0?"#FFFBEB":"#FAF8F5",
-                              border:`1.5px solid ${stepFreq===k&&stepPct>0?"#F59E0B":BORDER}`}}>
-                            <div style={{width:8,height:8,borderRadius:"50%",background:stepFreq===k&&stepPct>0?"#F59E0B":BORDER,flexShrink:0}}/>
-                            <span style={{fontSize:11,fontWeight:600,color:stepFreq===k&&stepPct>0?"#F59E0B":TEXT2}}>{v.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  {stepPct>0&&<div style={{marginTop:8,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:6,padding:"6px 10px",fontSize:11,color:"#F59E0B"}}>
-                    ↑ SIP increases {stepPct}% every {STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}
-                  </div>}
-                </>):(
-                  <div style={{color:TEXT3,fontSize:12,marginTop:4}}>Toggle on to add SIP</div>
-                )}
+                </div>
               </div>
-            </div>
+              {stepPct>0&&<div style={{marginTop:10,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"7px 12px",fontSize:12,color:"#F59E0B"}}>
+                ↑ SIP increases {stepPct}% every {STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}
+              </div>}
+            </>):(
+              <div style={{color:TEXT3,fontSize:13,padding:"20px 0",textAlign:"center"}}>Toggle on to add a SIP alongside your lumpsum</div>
+            )}
           </div>
         </div>
       )}
@@ -598,21 +596,30 @@ function CalculatorPage(){
           </div>
         )}
         {hasCalcResults&&(<>
-          {/* 4 stat cards — prominent, no black band */}
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
-            {[
-              {l:"Total Invested",v:formatINR(calcResults.total.invested),c:"#5A5650",bg:"#ffffff",bc:BORDER,sub:null},
-              {l:"Total Corpus",v:formatINR(calcResults.total.corpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:"your final amount"},
-              {l:"Total Gain",v:formatINR(calcResults.total.gain),c:calcResults.total.gain>=0?GREEN:RED,bg:calcResults.total.gain>=0?"#F4FBF7":"#FFF0F0",bc:(calcResults.total.gain>=0?GREEN:RED)+"40",sub:null},
-              {l:"Return",v:(calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0).toFixed(1)+"%",c:calcResults.total.gain>=0?GREEN:RED,bg:calcResults.total.gain>=0?"#F4FBF7":"#FFF0F0",bc:(calcResults.total.gain>=0?GREEN:RED)+"40",sub:"absolute gain"},
-            ].map(({l,v,c,bg,bc,sub})=>(
-              <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"22px 24px"}}>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:10,fontWeight:600}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.2vw,32px)",color:c,lineHeight:1}}>{v}</div>
-                {sub&&<div style={{fontSize:11,color:TEXT3,marginTop:6}}>{sub}</div>}
+          {/* 6 stat cards — invested / corpus / abs gain / gain% / CAGR / XIRR */}
+          {(()=>{
+            const gainColor=calcResults.total.gain>=0?GREEN:RED;
+            const gainBg=calcResults.total.gain>=0?"#F4FBF7":"#FFF0F0";
+            const gainBc=(calcResults.total.gain>=0?GREEN:RED)+"40";
+            const gainPct=calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0;
+            return(
+              <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
+                {[
+                  {l:"Total Invested",v:formatINR(calcResults.total.invested),c:TEXT2,bg:"#ffffff",bc:BORDER},
+                  {l:"Total Corpus",v:formatINR(calcResults.total.corpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
+                  {l:"Absolute Gain",v:formatINR(calcResults.total.gain),c:gainColor,bg:gainBg,bc:gainBc},
+                  {l:"Gain %",v:gainPct.toFixed(1)+"%",c:gainColor,bg:gainBg,bc:gainBc},
+                  {l:"Lumpsum CAGR",v:rate+"%",c:ACC,bg:"#FFFBF2",bc:ACC+"40"},
+                  {l:"SIP XIRR",v:sipOn?calcResults.sip.xirr.toFixed(1)+"%":"—",c:BLUE,bg:"#F0F4FF",bc:BLUE+"40"},
+                ].map(({l,v,c,bg,bc})=>(
+                  <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+                    <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:10,fontWeight:600}}>{l}</div>
+                    <div className="num" style={{fontWeight:700,fontSize:"clamp(20px,2vw,28px)",color:c,lineHeight:1}}>{v}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            );
+          })()}
 
           {/* Lumpsum + SIP breakdown side by side */}
           <div style={{display:"grid",gridTemplateColumns:sipOn?"1fr 1fr":"1fr",gap:12}}>
