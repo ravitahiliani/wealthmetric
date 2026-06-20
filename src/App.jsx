@@ -3,6 +3,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend, BarChart, Bar, Cell, AreaChart, Area
 } from "recharts";
+
 // ─── GLOBAL CSS ───────────────────────────────────────────────────────────────
 const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;900&display=swap');
@@ -2032,15 +2033,6 @@ function GoalSeekPage(){
 
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 function HomePage({setPage}){
-  const [heroSip,setHeroSip]=React.useState(10000);
-  const [heroYears,setHeroYears]=React.useState(10);
-  const [heroRate,setHeroRate]=React.useState(12);
-
-  const heroCorpus=useMemo(()=>{
-    const mr=Math.pow(1+heroRate/100,1/12)-1,n=heroYears*12;
-    return Math.round(heroSip*(Math.pow(1+mr,n)-1)/mr*(1+mr));
-  },[heroSip,heroYears,heroRate]);
-
   const CALCULATORS=[
     {id:"calculator",icon:"🧮",label:"Lumpsum & SIP",color:ACC,desc:"Calculate corpus growth or find the monthly SIP needed to hit a target",tags:["Lumpsum","SIP","Step-Up","Find SIP"]},
     {id:"emi",icon:"🏦",label:"EMI",color:"#F59E0B",desc:"Home, car, personal & education loans with prepayment strategies",tags:["Home Loan","Car Loan","Prepayment","Amortization"]},
@@ -2054,51 +2046,20 @@ function HomePage({setPage}){
   return(
     <div style={{maxWidth:1400,margin:"0 auto"}}>
       {/* Hero */}
-      <div style={{padding:"88px 32px 64px",textAlign:"center",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:1000,height:500,background:"radial-gradient(ellipse at 50% 0%,rgba(193,127,36,0.08) 0%,transparent 60%)",pointerEvents:"none"}}/>
-        <div style={{position:"relative",maxWidth:820,margin:"0 auto"}}>
-          <div style={{display:"inline-flex",alignItems:"center",gap:7,background:ACC_L,border:`1px solid ${ACC}40`,borderRadius:20,padding:"6px 16px",marginBottom:28}}>
-            <div style={{width:7,height:7,borderRadius:"50%",background:ACC,flexShrink:0}}/>
-            <span style={{fontSize:12,color:ACC_D,fontWeight:600,letterSpacing:"0.3px"}}>Free · No Ads · Built for India</span>
-          </div>
-          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(44px,7vw,80px)",letterSpacing:"-2px",lineHeight:0.98,marginBottom:22,color:"#1A1714"}}>
+      <div style={{padding:"64px 32px 40px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:1000,height:400,background:"radial-gradient(ellipse at 50% 0%,rgba(193,127,36,0.07) 0%,transparent 60%)",pointerEvents:"none"}}/>
+        <div style={{position:"relative",maxWidth:640,margin:"0 auto"}}>
+          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(40px,6vw,72px)",letterSpacing:"-2px",lineHeight:1.0,marginBottom:14,color:"#1A1714"}}>
             Your Money,<br/><span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
           </h1>
-          <p style={{fontSize:"clamp(15px,1.8vw,18px)",color:TEXT2,maxWidth:520,margin:"0 auto 52px",lineHeight:1.75}}>
-            Personal finance calculators built for real decisions — not demos.
+          <p style={{fontSize:"clamp(14px,1.5vw,16px)",color:TEXT3,lineHeight:1.6}}>
+            Free personal finance calculators for India.
           </p>
-
-          {/* Live calculator */}
-          <div style={{display:"inline-flex",alignItems:"stretch",background:"#ffffff",border:`1px solid ${BORDER}`,borderRadius:18,overflow:"hidden",flexWrap:"wrap",boxShadow:`0 20px 60px rgba(26,23,20,0.10), 0 0 0 1px ${ACC}12`,maxWidth:"100%"}}>
-            {[
-              {label:"Monthly SIP",value:heroSip,set:setHeroSip,prefix:"₹",step:1000,min:500},
-              {label:"Time Horizon",value:heroYears,set:setHeroYears,suffix:" yrs",step:1,min:1,max:40},
-              {label:"Return",value:heroRate,set:setHeroRate,suffix:"% p.a.",step:1,min:1,max:30},
-            ].map(({label,value,set,prefix,suffix,step,min,max})=>(
-              <div key={label} style={{padding:"20px 24px",borderRight:`1px solid ${BORDER}`}}>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:9}}>{label}</div>
-                <div style={{display:"flex",alignItems:"center",gap:5}}>
-                  {prefix&&<span className="num" style={{color:ACC,fontWeight:700,fontSize:18}}>{prefix}</span>}
-                  <NumInput value={value} onChange={set} step={step} min={min||0} max={max} color="#1A1714" style={{input:{padding:"2px 0",fontSize:24,fontFamily:"'DM Mono',monospace",fontWeight:700,width:96}}}/>
-                  {suffix&&<span style={{color:TEXT3,fontSize:14,marginLeft:2}}>{suffix}</span>}
-                </div>
-              </div>
-            ))}
-            <div style={{padding:"20px 28px",background:ACC_L,display:"flex",flexDirection:"column",justifyContent:"center",minWidth:160}}>
-              <div style={{fontSize:10,color:ACC_D,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:9}}>You'll have</div>
-              <div className="num" style={{fontWeight:700,fontSize:28,color:ACC,whiteSpace:"nowrap",lineHeight:1}}>{formatINR(heroCorpus)}</div>
-              <div style={{fontSize:12,color:ACC_D,marginTop:5}}>in {heroYears} years</div>
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Calculators grid */}
-      <div style={{padding:"16px 32px 60px"}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:28}}>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:700,fontSize:"clamp(20px,2.2vw,28px)",color:"#1A1714"}}>Calculators</div>
-          <div style={{fontSize:12,color:TEXT2,background:"#F2F0EB",border:`1px solid ${BORDER}`,padding:"3px 12px",borderRadius:10,fontWeight:600}}>{CALCULATORS.length} tools</div>
-        </div>
+      <div style={{padding:"0 32px 60px"}}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(310px,1fr))",gap:16}}>
           {CALCULATORS.map(t=>(
             <div key={t.id} onClick={()=>setPage(t.id)}
