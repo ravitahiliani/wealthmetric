@@ -2118,55 +2118,93 @@ function GoalSeekPage(){
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 function HomePage({setPage}){
   const CALCULATORS=[
-    {id:"calculator",icon:"🧮",label:"Lumpsum & SIP",color:ACC,desc:"Calculate corpus growth or find the monthly SIP needed to hit a target",tags:["Lumpsum","SIP","Step-Up","Find SIP"]},
-    {id:"emi",icon:"🏦",label:"EMI",color:"#F59E0B",desc:"Home, car, personal & education loans with prepayment strategies",tags:["Home Loan","Car Loan","Prepayment","Amortization"]},
-    {id:"retirement",icon:"🌅",label:"Retirement",color:PURP,desc:"Plan check, find required SIP, or discover your earliest retirement age",tags:["Plan Check","SIP Needed","Retire When"]},
-    {id:"car",icon:"🚗",label:"Car Affordability",color:BLUE,desc:"Is that car within budget? Or find exactly what car you can afford",tags:["Affordability","Running Costs","EMI Gauge"]},
-    {id:"house",icon:"🏠",label:"House Affordability",color:GREEN,desc:"Home affordability, max budget calculator and rent vs buy analysis",tags:["Affordability","Buy vs Rent","Crossover"]},
-    {id:"gratuity",icon:"🎁",label:"Gratuity",color:"#F97316",desc:"Gratuity eligibility, tax exemption and retirement projection",tags:["Eligibility","Tax Exempt","Act 1972"]},
-    {id:"goalseek",icon:"🎯",label:"Goal Planner",color:"#C084FC",desc:"Plan up to 5 goals — get monthly SIP needed per goal and combined total",tags:["Goals","SIP","Future Value","Timeline"]},
+    {id:"calculator",icon:"🧮",label:"Lumpsum & SIP",color:ACC,bgColor:"#FFFBF2",desc:"Corpus growth calculator with step-up SIP, XIRR and target corpus finder",tags:["Lumpsum","SIP","Step-Up","Target SIP"]},
+    {id:"emi",icon:"🏦",label:"EMI Calculator",color:"#D97706",bgColor:"#FFFBEB",desc:"Home, car, personal & education loans with full amortization schedule",tags:["Home Loan","Car Loan","Amortization"]},
+    {id:"retirement",icon:"🌅",label:"Retirement Planner",color:PURP,bgColor:"#F0EAFA",desc:"Plan check, find required SIP, or discover your earliest retirement age",tags:["Plan Check","SIP Needed","Retire When"]},
+    {id:"car",icon:"🚗",label:"Car Affordability",color:BLUE,bgColor:"#E8F0FA",desc:"Is that car within budget? Or discover exactly what car you can afford",tags:["Affordability","EMI Gauge","Running Cost"]},
+    {id:"house",icon:"🏠",label:"House Affordability",color:GREEN,bgColor:"#EAF5EE",desc:"Home budget calculator with rent vs buy crossover analysis",tags:["Affordability","Rent vs Buy","Crossover"]},
+    {id:"gratuity",icon:"🎁",label:"Gratuity",color:"#F97316",bgColor:"#FFF0E6",desc:"Gratuity eligibility, tax exemption calculation and retirement projection",tags:["Eligibility","Tax Exempt","Act 1972"]},
+    {id:"goalseek",icon:"🎯",label:"Goal Planner",color:"#9333EA",bgColor:"#F5F0FF",desc:"Plan up to 5 financial goals — get monthly SIP needed and combined total",tags:["Goals","SIP","Future Value"]},
+  ];
+
+  const COMING_SOON=[
+    {icon:"📈",label:"Index SIPs",desc:"Nifty 50, Midcap 150, Smallcap 250 SIP return tracker"},
+    {icon:"🏢",label:"Stock SIPs",desc:"Individual stock SIP performance & XIRR calculator"},
+    {icon:"🌍",label:"Global Indices",desc:"S&P 500, Nasdaq and global market SIP calculator"},
+    {icon:"💼",label:"Networth Calculator",desc:"Track all your assets & liabilities in one dashboard"},
+    {icon:"⚖️",label:"Portfolio Allocator",desc:"Optimal asset allocation by age and risk profile"},
+    {icon:"🏛️",label:"PPF Calculator",desc:"PPF maturity, partial withdrawal and loan planning"},
   ];
 
   return(
     <div style={{maxWidth:1400,margin:"0 auto"}}>
       {/* Hero */}
-      <div style={{padding:"64px 32px 40px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+      <div style={{padding:"64px 32px 48px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:1000,height:400,background:"radial-gradient(ellipse at 50% 0%,rgba(193,127,36,0.07) 0%,transparent 60%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",maxWidth:640,margin:"0 auto"}}>
-          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(40px,6vw,72px)",letterSpacing:"-2px",lineHeight:1.0,marginBottom:14,color:"#1A1714"}}>
-            Your Money,<br/><span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
+          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(44px,6.5vw,80px)",letterSpacing:"-2.5px",lineHeight:1.0,marginBottom:16,color:"#1A1714"}}>
+            Your Money,{" "}<span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
           </h1>
-          <p style={{fontSize:"clamp(14px,1.5vw,16px)",color:TEXT3,lineHeight:1.6}}>
-            Free personal finance calculators for India.
+          <p style={{fontSize:"clamp(15px,1.5vw,18px)",color:TEXT2,lineHeight:1.6}}>
+            The metrics behind your wealth, simplified.
           </p>
         </div>
       </div>
 
-      {/* Calculators grid */}
       <div style={{padding:"0 32px 60px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(310px,1fr))",gap:16}}>
+        {/* Section header — Live */}
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
+          <div style={{fontSize:13,fontWeight:700,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",whiteSpace:"nowrap"}}>Live Calculators</div>
+          <div style={{flex:1,height:1,background:BORDER}}/>
+          <div style={{fontSize:12,color:TEXT2,background:"#ffffff",border:`1px solid ${BORDER}`,padding:"3px 12px",borderRadius:8,fontWeight:600,whiteSpace:"nowrap"}}>{CALCULATORS.length} tools</div>
+        </div>
+
+        {/* Calculator cards grid */}
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:16,marginBottom:52}}>
           {CALCULATORS.map(t=>(
             <div key={t.id} onClick={()=>setPage(t.id)}
-              style={{background:"#ffffff",border:`1px solid ${BORDER}`,borderRadius:16,padding:"26px",cursor:"pointer",transition:"all 0.2s",position:"relative",overflow:"hidden"}}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor=t.color+"55";e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow=`0 16px 40px rgba(26,23,20,0.08),0 0 0 1px ${t.color}25`;}}
+              style={{background:"#ffffff",border:`1px solid ${BORDER}`,borderRadius:18,padding:"28px",cursor:"pointer",transition:"all 0.2s",position:"relative",overflow:"hidden"}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=t.color+"60";e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow=`0 16px 40px rgba(26,23,20,0.09)`;}}
               onMouseLeave={e=>{e.currentTarget.style.borderColor=BORDER;e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="none";}}>
-              <div style={{position:"absolute",bottom:-10,right:-6,fontSize:90,opacity:0.04,lineHeight:1,pointerEvents:"none",userSelect:"none"}}>{t.icon}</div>
-              <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:14}}>
-                <div style={{width:46,height:46,borderRadius:12,background:t.color+"18",border:`1px solid ${t.color}28`,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{t.icon}</div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:17,color:"#1A1714"}}>{t.label}</div>
-              </div>
+              <div style={{position:"absolute",bottom:-8,right:-4,fontSize:100,opacity:0.04,lineHeight:1,pointerEvents:"none",userSelect:"none"}}>{t.icon}</div>
+              <div style={{width:52,height:52,borderRadius:14,background:t.bgColor,border:`1px solid ${t.color}28`,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,marginBottom:16}}>{t.icon}</div>
+              <div style={{fontWeight:700,fontSize:18,color:"#1A1714",marginBottom:8}}>{t.label}</div>
               <div style={{fontSize:13,color:TEXT2,lineHeight:1.7,marginBottom:16}}>{t.desc}</div>
-              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:16}}>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
                 {t.tags.map(tag=><span key={tag} style={{fontSize:11,color:TEXT2,background:"#F2F0EB",border:`1px solid ${BORDER}`,borderRadius:6,padding:"3px 9px",fontWeight:500}}>{tag}</span>)}
               </div>
-              <div style={{display:"flex",alignItems:"center",gap:5,fontSize:13,color:t.color,fontWeight:600}}>Open calculator <span style={{fontSize:15}}>→</span></div>
+              <div style={{display:"flex",alignItems:"center",gap:5,fontSize:13,color:t.color,fontWeight:700}}>Open calculator <span style={{fontSize:16}}>→</span></div>
             </div>
           ))}
         </div>
-      </div>
 
-      <div style={{padding:"0 24px 32px"}}>
-        <div style={{padding:"10px 14px",background:"#F2F0EB",border:`1px solid ${BORDER}`,borderRadius:8,fontSize:11,color:TEXT3,lineHeight:1.7}}>
+        {/* Section divider — Coming Soon */}
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
+          <div style={{fontSize:13,fontWeight:700,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",whiteSpace:"nowrap"}}>Coming Soon</div>
+          <div style={{flex:1,height:1,background:BORDER}}/>
+          <div style={{fontSize:11,fontWeight:700,color:ACC,background:"#FFFBF2",border:`1px solid ${ACC}40`,padding:"3px 12px",borderRadius:20,whiteSpace:"nowrap"}}>In development</div>
+        </div>
+
+        {/* Coming Soon section */}
+        <div style={{background:"#F2F0EB",border:`1px solid ${BORDER}`,borderRadius:18,padding:"28px",marginBottom:32}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:12}}>
+            {COMING_SOON.map(t=>(
+              <div key={t.label} style={{background:"#ffffff",border:`1px solid ${BORDER}`,borderRadius:12,padding:"16px 18px",display:"flex",alignItems:"flex-start",gap:14,opacity:0.8}}>
+                <div style={{width:40,height:40,borderRadius:10,background:"#F2F0EB",border:`1px solid ${BORDER}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{t.icon}</div>
+                <div style={{flex:1}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+                    <div style={{fontSize:14,fontWeight:700,color:"#1A1714"}}>{t.label}</div>
+                    <div style={{fontSize:10,fontWeight:700,color:TEXT3,background:"#E4E0D8",padding:"2px 7px",borderRadius:10,letterSpacing:"0.3px"}}>SOON</div>
+                  </div>
+                  <div style={{fontSize:12,color:TEXT3,lineHeight:1.5}}>{t.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div style={{padding:"10px 16px",background:"#F2F0EB",border:`1px solid ${BORDER}`,borderRadius:8,fontSize:11,color:TEXT3,lineHeight:1.7}}>
           <strong style={{color:ACC}}>Disclaimer:</strong> All calculations are indicative and for educational purposes only. Market return data is illustrative. Not financial advice.
         </div>
       </div>
