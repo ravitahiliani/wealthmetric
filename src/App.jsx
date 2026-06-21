@@ -1612,6 +1612,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
   const [insurance,setInsurance]=useState(0);
   const [maintenance,setMaintenance]=useState(6000);
   const [fuel,setFuel]=useState(6000);
+  const [tyres,setTyres]=useState(0);
   const [emiPctOfIncome,setEmiPctOfIncome]=useState(15);
   const [discoverDownPct,setDiscoverDownPct]=useState(20);
   const [discoverRate,setDiscoverRate]=useState(9.5);
@@ -1620,13 +1621,15 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
 
   const insAuto=Math.round(carPrice*0.025/1000)*1000;
   const effectiveIns=insurance>0?insurance:insAuto;
+  const tyreAutoMonthly=Math.round((carPrice<500000?3000:carPrice<1500000?5000:9000)*4/5/12/100)*100;
+  const effectiveTyres=tyres>0?tyres:tyreAutoMonthly;
 
   const check=useMemo(()=>{
     const down=carPrice*downPct/100,loan=carPrice-down,r=rate/12/100,n=tenure*12;
     const emi=r===0?loan/n:loan*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
-    const monthlyIns=effectiveIns/12,monthlyCost=emi+monthlyIns+maintenance+fuel;
+    const monthlyIns=effectiveIns/12,monthlyCost=emi+monthlyIns+maintenance+fuel+effectiveTyres;
     const emiPct=emi/income*100,totalCostPct=monthlyCost/income*100,disposable=income-expenses-monthlyCost;
-    const totalOwnership=down+emi*n+effectiveIns*tenure+maintenance*12*tenure+fuel*12*tenure;
+    const totalOwnership=down+emi*n+effectiveIns*tenure+maintenance*12*tenure+fuel*12*tenure+effectiveTyres*12*tenure;
     const comfortable=emiPct<=15,manageable=emiPct<=25;
     const verdict=comfortable?"Comfortable 😊":manageable?"Manageable ⚠️":"Stretched 🔴";
     const verdictColor=comfortable?GREEN:manageable?"#F59E0B":RED;
@@ -1635,10 +1638,11 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
       {name:"Loan Interest",value:Math.round(emi*n-loan),color:"#F59E0B"},
       {name:"Insurance",value:Math.round(effectiveIns*tenure),color:"#EC4899"},
       {name:"Maintenance",value:Math.round(maintenance*12*tenure),color:PURP},
+      {name:"Tyres",value:Math.round(effectiveTyres*12*tenure),color:"#10B981"},
       {name:"Fuel",value:Math.round(fuel*12*tenure),color:ACC},
     ];
     return{down,loan,emi,monthlyCost,emiPct,totalCostPct,disposable,totalOwnership,breakdown,verdict,verdictColor,comfortable,manageable};
-  },[carPrice,downPct,rate,tenure,effectiveIns,maintenance,fuel,income,expenses]);
+  },[carPrice,downPct,rate,tenure,effectiveIns,maintenance,fuel,effectiveTyres,income,expenses]);
 
   const discover=useMemo(()=>{
     const disposableAfterExpenses=income-expenses,runningBudget=discoverRunning||0;
@@ -1672,13 +1676,16 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
           {/* Finances */}
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
-            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Income" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
+              💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
+            </div>
             <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, all existing EMIs — except this car"/>
           </div>
           {/* Car Details */}
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Car Details</div>
-            <Field label="Car Price" value={carPrice} onChange={setCarPrice} prefix="₹" step={50000} min={0} color={BLUE}/>
+            <Field label="Car Price (On Road)" value={carPrice} onChange={setCarPrice} prefix="₹" step={50000} min={0} color={BLUE}/>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={BLUE}/>
               <Field label="Interest Rate" value={rate} onChange={setRate} suffix="%" step={0.1} min={0} color={BLUE}/>
@@ -1692,11 +1699,20 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Running Costs</div>
             <Field label="Annual Insurance" value={effectiveIns} onChange={setInsurance} prefix="₹" step={1000} min={0} color={BLUE}/>
-            <div style={{fontSize:12,color:TEXT3,marginTop:-10,marginBottom:14}}>Auto-estimate: {formatINR(insAuto)}/yr</div>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
+              💡 Auto-estimated at 2.5% of on-road price ({formatINR(insAuto)}/yr). Edit above if you have a quote.
+            </div>
             <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={BLUE}/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
+              💡 Thumb rule: ~1% of on-road price per year ({formatINR(Math.round(carPrice*0.01/12))}/mo) for servicing. Add more for older or premium cars.
+            </div>
             <Field label="Monthly Fuel / Charging" value={fuel} onChange={setFuel} prefix="₹" step={500} min={0} color={BLUE}/>
-            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4}}>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4,marginBottom:14}}>
               💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo
+            </div>
+            <Field label="Monthly Tyres (amortised)" value={effectiveTyres} onChange={setTyres} prefix="₹" step={100} min={0} color={BLUE}/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6}}>
+              💡 Tyres last 4–5 yrs in Indian cities. Budget: ~₹12–15K/set, Mid: ~₹20–30K/set, SUV: ~₹36K+/set. Auto-estimated at {formatINR(tyreAutoMonthly)}/mo — edit if known.
             </div>
           </div>
         </div>
@@ -1706,7 +1722,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
           <div style={{fontSize:40}}>{check.comfortable?"🚗":check.manageable?"⚠️":"🔴"}</div>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:22,color:check.verdictColor}}>{check.verdict}</div>
-            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · All-in monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
+            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly cost <strong style={{color:check.verdictColor}}>{formatINRFull(check.monthlyCost)}</strong></div>
           </div>
           <div style={{textAlign:"right"}}>
             <div style={{fontSize:12,color:TEXT3,marginBottom:4}}>Remaining</div>
@@ -1717,7 +1733,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
         <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
           {[
             {l:"Monthly EMI",v:formatINRFull(check.emi),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40"},
-            {l:"All-in Monthly",v:formatINR(check.monthlyCost),c:BLUE,bg:"#F0F4FF",bc:BLUE+"30"},
+            {l:"Total Monthly Cost",v:formatINRFull(check.monthlyCost),c:BLUE,bg:"#F0F4FF",bc:BLUE+"30"},
             {l:"Down Payment",v:formatINR(check.down),c:TEXT2,bg:"#ffffff",bc:BORDER},
             {l:`Total Cost (${tenure}Y)`,v:formatINR(check.totalOwnership),c:TEXT2,bg:"#ffffff",bc:BORDER},
           ].map(({l,v,c,bg,bc})=>(
@@ -1768,7 +1784,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
-            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Income" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
@@ -1925,7 +1941,7 @@ function HousePage(){
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
-            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Income" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
@@ -1954,7 +1970,7 @@ function HousePage(){
           <div style={{fontSize:40}}>{check.comfortable?"🏠":check.manageable?"⚠️":"🔴"}</div>
           <div style={{flex:1}}>
             <div style={{fontWeight:700,fontSize:22,color:check.verdictColor}}>{check.verdict}</div>
-            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · All-in monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
+            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly cost <strong style={{color:check.verdictColor}}>{formatINRFull(check.monthlyCost)}</strong></div>
           </div>
           <div style={{textAlign:"right"}}>
             <div style={{fontSize:12,color:TEXT3,marginBottom:4}}>Remaining</div>
@@ -1994,7 +2010,7 @@ function HousePage(){
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
-            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Income" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
