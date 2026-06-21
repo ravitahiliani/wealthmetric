@@ -427,320 +427,430 @@ function CalculatorPage(){
   const hasCalcResults=calcResults&&totalMonths>0;
 
   return(
-    <div style={{display:"flex",flexDirection:"column",gap:16}}>
-      {/* Mode switcher */}
-      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-        {[
-          {k:"calculate",label:"Corpus Calculator"},
-          {k:"findsip",label:"SIP for Target"},
-        ].map(m=>(
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+
+      {/* MODE TOGGLE */}
+      <div style={{display:"flex",gap:0,background:"#ffffff",border:`1px solid ${BORDER}`,borderRadius:10,padding:3,alignSelf:"flex-start"}}>
+        {[{k:"calculate",label:"Corpus Calculator"},{k:"findsip",label:"SIP for Target"}].map(m=>(
           <div key={m.k} onClick={()=>setMode(m.k)}
-            style={{padding:"10px 20px",borderRadius:10,cursor:"pointer",display:"flex",alignItems:"center",gap:8,
-              transition:"all 0.2s",background:mode===m.k?ACC:"#ffffff",
-              color:mode===m.k?"#ffffff":TEXT2,border:`1.5px solid ${mode===m.k?ACC:BORDER}`}}>
-            <div style={{fontWeight:600,fontSize:13}}>{m.label}</div>
+            style={{padding:"8px 24px",borderRadius:8,cursor:"pointer",fontWeight:600,fontSize:13,
+              transition:"all 0.18s",background:mode===m.k?ACC:"transparent",
+              color:mode===m.k?"#ffffff":TEXT2,boxShadow:mode===m.k?"0 2px 8px rgba(193,127,36,0.25)":"none"}}>
+            {m.label}
           </div>
         ))}
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:18,alignItems:"start"}}>
-        {/* LEFT */}
-        <div style={{display:"flex",flexDirection:"column",gap:12}}>
-          <div className="card">
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Shared Settings</div>
-            <Field label="Annual Return %" value={annualRate} onChange={setAnnualRate} suffix="% p.a." step={0.1} min={0} color={ACC} hint="Applies to lumpsum + SIP"/>
-            <Field label="Time Horizon" value={years} onChange={setYears} suffix="years" step={0.5} min={0.5} color={ACC} hint="Decimals allowed — e.g. 7.5"/>
+      {/* ── CORPUS CALCULATOR INPUTS ── */}
+      {mode==="calculate"&&(
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch"}}>
+
+          {/* LEFT: Annual Return + Time Horizon + Lumpsum */}
+          <div style={{display:"grid",gridTemplateRows:"auto 1fr",gap:14}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              <div className="card" style={{padding:"18px 18px"}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                  <input type="number" value={annualRate} step={0.1} min={0}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
+                    style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
+                </div>
+                <div style={{fontSize:12,color:TEXT3,marginTop:6}}>per annum</div>
+              </div>
+              <div className="card" style={{padding:"18px 18px"}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                  <input type="number" value={years} step={0.5} min={0.5}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
+                    style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
+                </div>
+                <div style={{fontSize:12,color:TEXT3,marginTop:6}}>investment period</div>
+              </div>
+            </div>
+            <div className="card" style={{padding:"20px 22px",borderColor:ACC+"50"}}>
+              <div style={{fontSize:13,color:ACC,fontWeight:700,marginBottom:14}}>Lumpsum</div>
+              <div style={{display:"flex",alignItems:"center",background:"#FFF8EE",border:`1.5px solid ${ACC}40`,borderRadius:9,overflow:"hidden"}}>
+                <span style={{padding:"0 14px",color:ACC,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${ACC}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
+                <input type="number" value={lumpsum} step={1000} min={0}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setLumpsum(n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+              </div>
+              <div className="num" style={{fontSize:12,color:ACC,marginTop:8,fontWeight:600}}>
+                {lumpsum>=10000000?`= ₹${(lumpsum/10000000).toFixed(2)} Crore`:lumpsum>=100000?`= ₹${(lumpsum/100000).toFixed(2)} Lakh`:lumpsum>=1000?`= ₹${(lumpsum/1000).toFixed(1)}K`:""}
+              </div>
+            </div>
           </div>
 
-          {mode==="calculate"&&(<>
-            <div className="card" style={{borderColor:ACC+"40"}}>
-              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
-                <div style={{width:8,height:8,borderRadius:2,background:ACC}}/>
-                <span style={{fontWeight:700,fontSize:13,color:ACC,flex:1}}>Lumpsum</span>
-                <span style={{fontSize:10,color:TEXT3,background:"#F7F5F0",padding:"2px 7px",borderRadius:4}}>always on</span>
-              </div>
-              <Field label="One-time Investment" value={lumpsum} onChange={setLumpsum} prefix="₹" step={1000} min={0} color={ACC}/>
+          {/* RIGHT: SIP */}
+          <div className="card" style={{padding:"22px 26px",borderColor:sipOn?BLUE+"50":BORDER}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:20}}>
+              <div style={{fontSize:15,color:BLUE,fontWeight:700}}>SIP</div>
+              <Toggle on={sipOn} set={setSipOn} color={BLUE}/>
             </div>
-            <div className="card" style={{borderColor:sipOn?BLUE+"40":BORDER}}>
-              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:sipOn?14:0}}>
-                <div style={{width:8,height:8,borderRadius:2,background:BLUE}}/>
-                <span style={{fontWeight:700,fontSize:13,color:BLUE,flex:1}}>SIP</span>
-                <Toggle on={sipOn} set={setSipOn} color={BLUE}/>
-              </div>
-              {sipOn&&(<>
-                <div style={{height:1,background:BORDER,marginBottom:14}}/>
-                <div style={{marginBottom:14}}>
-                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:7}}>Frequency</div>
-                  <PillRow options={Object.entries(SIP_FREQS).map(([k,v])=>[k,v.label])} value={sipFreqKey} set={setSipFreqKey} activeColor={BLUE}/>
-                </div>
-                <Field label={`${SIP_FREQS[sipFreqKey]?.label||"Monthly"} Amount`} value={sipAmt} onChange={setSipAmt} prefix="₹" step={100} min={0} color={BLUE}/>
-                <div style={{height:1,background:BORDER,margin:"4px 0 14px"}}/>
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:stepPct>0?10:0}}>
-                  <div>
-                    <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
-                    <NumInput value={stepPct} onChange={v=>setStepPct(v)} step={1} min={0} max={100} suffix="%" color={stepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"9px 12px",fontSize:15}}}/>
-                    <div style={{fontSize:12,color:TEXT3,marginTop:5}}>0 = no step-up</div>
-                  </div>
-                  <div>
-                    <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
-                    <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                      {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
-                        <div key={k} onClick={()=>setStepFreq(k)}
-                          style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",opacity:stepPct>0?1:0.3,pointerEvents:stepPct>0?"auto":"none"}}>
-                          <div style={{width:12,height:12,borderRadius:"50%",border:`2px solid ${stepFreq===k&&stepPct>0?"#F59E0B":BORDER}`,
-                            background:stepFreq===k&&stepPct>0?"#F59E0B":"transparent",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
-                            {stepFreq===k&&stepPct>0&&<div style={{width:4,height:4,borderRadius:"50%",background:"#ffffff"}}/>}
-                          </div>
-                          <span style={{fontSize:11,color:stepFreq===k&&stepPct>0?"#F59E0B":TEXT2}}>{v.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {stepPct>0&&<div style={{background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"7px 11px",fontSize:11,color:"#F59E0B"}}>
-                  ↑ SIP increases <strong>{stepPct}%</strong> every <strong>{STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}</strong>
-                </div>}
-              </>)}
-            </div>
-          </>)}
-
-          {mode==="findsip"&&(<>
-            <div className="card" style={{borderColor:PURP+"40"}}>
-              <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Target</div>
-              <Field label="Target Corpus" value={targetCorpus} onChange={setTargetCorpus} prefix="₹" step={100000} min={0} color={PURP} hint="The final amount you want to accumulate"/>
-            </div>
-            <div className="card" style={{borderColor:ACC+"40"}}>
-              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Lumpsum (optional)</div>
-              <Field label="One-time Investment at Start" value={fsLumpsum} onChange={setFsLumpsum} prefix="₹" step={1000} min={0} color={ACC} hint="Grows independently. SIP covers the remaining gap."/>
-            </div>
-            <div className="card" style={{borderColor:BLUE+"40"}}>
-              <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>SIP Settings</div>
-              <div style={{marginBottom:14}}>
-                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:7}}>Frequency</div>
-                <PillRow options={Object.entries(SIP_FREQS).map(([k,v])=>[k,v.label])} value={fsSipFreqKey} set={setFsSipFreqKey} activeColor={BLUE}/>
-              </div>
-              <div style={{height:1,background:BORDER,margin:"4px 0 14px"}}/>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:fsStepPct>0?10:0}}>
-                <div>
-                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
-                  <NumInput value={fsStepPct} onChange={v=>setFsStepPct(v)} step={1} min={0} max={100} suffix="%" color={fsStepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"9px 12px",fontSize:15}}}/>
-                  <div style={{fontSize:12,color:TEXT3,marginTop:5}}>0 = no step-up</div>
-                </div>
-                <div>
-                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
-                  <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                    {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
-                      <div key={k} onClick={()=>setFsStepFreq(k)}
-                        style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",opacity:fsStepPct>0?1:0.3,pointerEvents:fsStepPct>0?"auto":"none"}}>
-                        <div style={{width:12,height:12,borderRadius:"50%",border:`2px solid ${fsStepFreq===k&&fsStepPct>0?"#F59E0B":BORDER}`,
-                          background:fsStepFreq===k&&fsStepPct>0?"#F59E0B":"transparent",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
-                          {fsStepFreq===k&&fsStepPct>0&&<div style={{width:4,height:4,borderRadius:"50%",background:"#ffffff"}}/>}
-                        </div>
-                        <span style={{fontSize:11,color:fsStepFreq===k&&fsStepPct>0?"#F59E0B":TEXT2}}>{v.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              {fsStepPct>0&&<div style={{background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"7px 11px",fontSize:11,color:"#F59E0B"}}>
-                ↑ SIP increases {fsStepPct}% every {STEPUP_FREQS[fsStepFreq]?.label?.toLowerCase()}
-              </div>}
-            </div>
-          </>)}
-        </div>
-
-        {/* RIGHT */}
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>
-          {mode==="calculate"&&(<>
-            {!hasCalcResults&&(
-              <div className="card" style={{textAlign:"center",padding:"40px 20px",color:TEXT2}}>
-                <div style={{fontSize:32,marginBottom:10}}>🧮</div>
-                <div style={{fontWeight:700,fontSize:15}}>Enter your inputs to see results</div>
-              </div>
-            )}
-            {hasCalcResults&&(<>
-              {/* Results banner */}
-              <div className="stat-banner" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:16}}>
-                {[
-                  ["Total Invested",formatINR(calcResults.total.invested),"#8A8480"],
-                  ["Total Corpus",formatINR(calcResults.total.corpus),ACC],
-                  ["Total Gain",formatINR(calcResults.total.gain),calcResults.total.gain>=0?GREEN:RED],
-                  ["Gain %",(calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0).toFixed(1)+"%",calcResults.total.gain>=0?"#86EFAC":"#FCA5A5"],
-                ].map(([l,v,c])=>(
-                  <div key={l}>
-                    <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div>
-                    <div className="num" style={{fontWeight:700,fontSize:"clamp(15px,1.5vw,20px)",color:c}}>{v}</div>
+            {sipOn?(<>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Frequency</div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
+                {Object.entries(SIP_FREQS).map(([k,v])=>(
+                  <div key={k} onClick={()=>setSipFreqKey(k)}
+                    style={{cursor:"pointer",padding:"7px 14px",borderRadius:7,fontSize:12,fontWeight:600,
+                      transition:"all 0.15s",userSelect:"none",
+                      background:sipFreqKey===k?BLUE:"#FAF8F5",
+                      color:sipFreqKey===k?"#ffffff":TEXT2,
+                      border:`1.5px solid ${sipFreqKey===k?BLUE:BORDER}`}}>
+                    {v.label}
                   </div>
                 ))}
               </div>
-
-              {/* Mini cards */}
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:10}}>
-                <div className="card" style={{borderColor:ACC+"40"}}>
-                  <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:10}}>
-                    <div style={{width:7,height:7,borderRadius:"50%",background:ACC}}/>
-                    <span style={{fontSize:11,color:ACC,fontWeight:700}}>Lumpsum</span>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Amount</div>
+              <div style={{display:"flex",alignItems:"center",background:"#EEF3FF",border:`1.5px solid ${BLUE}40`,borderRadius:9,overflow:"hidden",marginBottom:20}}>
+                <span style={{padding:"0 14px",color:BLUE,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${BLUE}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
+                <input type="number" value={sipAmt} step={100} min={0}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setSipAmt(n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+                <div className="num" style={{padding:"0 14px",fontSize:12,color:BLUE,fontWeight:600,whiteSpace:"nowrap"}}>
+                  {sipAmt>=100000?`${(sipAmt/100000).toFixed(2)}L`:sipAmt>=1000?`${(sipAmt/1000).toFixed(1)}K`:""}
+                </div>
+              </div>
+              <div style={{paddingTop:16,borderTop:`1px solid ${BORDER}`}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Step-Up</div>
+                <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
+                  <div style={{flexShrink:0}}>
+                    <div style={{fontSize:12,color:TEXT3,marginBottom:6}}>Percentage</div>
+                    <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden",width:90}}>
+                      <input type="number" value={stepPct} step={1} min={0} max={100}
+                        onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setStepPct(n);}}
+                        style={{flex:1,background:"transparent",border:"none",color:stepPct>0?"#F59E0B":"#1A1714",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                      <span style={{padding:"0 8px",fontSize:12,color:TEXT3}}>%</span>
+                    </div>
                   </div>
-                  <div className="num" style={{fontWeight:700,fontSize:18,color:ACC,marginBottom:2}}>{formatINR(calcResults.ls.corpus)}</div>
-                  <div style={{fontSize:10,color:TEXT3}}>Invested: {formatINR(calcResults.ls.invested)}</div>
-                  <div style={{display:"flex",justifyContent:"space-between",marginTop:8}}>
-                    <div><div style={{fontSize:9,color:TEXT3}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:12,color:GREEN}}>{formatINR(calcResults.ls.gain)}</div></div>
-                    <div style={{textAlign:"right"}}><div style={{fontSize:9,color:TEXT3}}>CAGR</div><div className="num" style={{fontWeight:700,fontSize:12,color:GREEN}}>{rate}%</div></div>
+                  <div style={{flex:1,opacity:stepPct>0?1:0.3,pointerEvents:stepPct>0?"auto":"none"}}>
+                    <div style={{fontSize:12,color:TEXT3,marginBottom:6}}>Increase Every</div>
+                    <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                      {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
+                        const active=stepFreq===k&&stepPct>0;
+                        return(
+                          <div key={k} onClick={()=>setStepFreq(k)}
+                            style={{cursor:"pointer",padding:"7px 14px",borderRadius:7,fontSize:12,fontWeight:600,
+                              transition:"all 0.15s",userSelect:"none",
+                              background:active?"#F59E0B":"#FAF8F5",
+                              color:active?"#ffffff":TEXT2,
+                              border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>
+                            {v.label}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-                {sipOn&&(
-                  <div className="card" style={{borderColor:BLUE+"40"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:10}}>
-                      <div style={{width:7,height:7,borderRadius:"50%",background:BLUE}}/>
-                      <span style={{fontSize:11,color:BLUE,fontWeight:700}}>
-                        SIP — {SIP_FREQS[sipFreqKey]?.label}
-                        {stepPct>0&&<span style={{color:"#F59E0B",marginLeft:5}}>+{stepPct}% step-up</span>}
-                      </span>
-                    </div>
-                    <div className="num" style={{fontWeight:700,fontSize:18,color:BLUE,marginBottom:2}}>{formatINR(calcResults.sip.corpus)}</div>
-                    <div style={{fontSize:10,color:TEXT3}}>Invested: {formatINR(calcResults.sip.invested)}</div>
-                    <div style={{display:"flex",justifyContent:"space-between",marginTop:8}}>
-                      <div><div style={{fontSize:9,color:TEXT3}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:12,color:BLUE}}>{formatINR(calcResults.sip.gain)}</div></div>
-                      <div style={{textAlign:"right"}}><div style={{fontSize:9,color:TEXT3}}>XIRR</div><div className="num" style={{fontWeight:700,fontSize:12,color:BLUE}}>{calcResults.sip.xirr.toFixed(1)}%</div></div>
-                    </div>
-                  </div>
-                )}
+                {stepPct>0&&<div style={{marginTop:10,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"8px 12px",fontSize:12,color:"#F59E0B"}}>
+                  ↑ SIP increases by {stepPct}% every {STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}
+                </div>}
               </div>
+            </>):(
+              <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"60%",color:TEXT3,gap:8}}>
+                <div style={{fontSize:32}}>📈</div>
+                <div style={{fontSize:13,fontWeight:500}}>Toggle on to add a SIP</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
-              {/* Chart */}
-              <div className="card">
-                <div className="lbl" style={{marginBottom:4}}>Total Corpus vs Total Invested</div>
-                <ResponsiveContainer width="100%" height={280}>
-                  <AreaChart data={calcResults.yearData} margin={{top:4,right:16,left:0,bottom:0}}>
-                    <defs>
-                      <linearGradient id="tcg" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={ACC} stopOpacity={0.2}/><stop offset="95%" stopColor={ACC} stopOpacity={0}/></linearGradient>
-                      <linearGradient id="tig" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#8A8480" stopOpacity={0.1}/><stop offset="95%" stopColor="#8A8480" stopOpacity={0}/></linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
-                    <XAxis dataKey="yr" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
-                    <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-                    <Tooltip content={<ChartTooltip/>}/>
-                    <Legend wrapperStyle={{fontSize:11}} formatter={v=>({totalCorpus:"Total Corpus",totalInvested:"Total Invested"}[v]||v)}/>
-                    <Area type="monotone" dataKey="totalInvested" name="Total Invested" stroke="#C8C3B8" strokeWidth={1.5} strokeDasharray="5 4" fill="url(#tig)"/>
-                    <Area type="monotone" dataKey="totalCorpus" name="Total Corpus" stroke={ACC} strokeWidth={2.5} fill="url(#tcg)"/>
-                  </AreaChart>
-                </ResponsiveContainer>
+      {/* ── SIP FOR TARGET INPUTS ── */}
+      {mode==="findsip"&&(
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch"}}>
+          <div style={{display:"grid",gridTemplateRows:"auto 1fr",gap:14}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              <div className="card" style={{padding:"18px 18px"}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                  <input type="number" value={annualRate} step={0.1} min={0}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
+                    style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
+                </div>
+                <div style={{fontSize:12,color:TEXT3,marginTop:6}}>per annum</div>
               </div>
-
-              {/* Summary table */}
-              <div className="card">
-                <div className="lbl" style={{marginBottom:12}}>Summary</div>
-                <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-                  <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
-                    <th style={{textAlign:"left",padding:"6px 12px",color:TEXT3,fontWeight:600,fontSize:10}}>Component</th>
-                    {["Invested","Corpus","Gain","Return"].map(h=>(
-                      <th key={h} style={{textAlign:"right",padding:"6px 12px",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
-                    ))}
-                  </tr></thead>
-                  <tbody>
-                    {[
-                      {label:"Lumpsum",color:ACC,inv:calcResults.ls.invested,corp:calcResults.ls.corpus,gain:calcResults.ls.gain,ret:rate+"%"},
-                      ...(sipOn?[{label:`SIP (${SIP_FREQS[sipFreqKey]?.label}${stepPct>0?` · +${stepPct}%`:""})`
-                        ,color:BLUE,inv:calcResults.sip.invested,corp:calcResults.sip.corpus,gain:calcResults.sip.gain,ret:calcResults.sip.xirr.toFixed(1)+"%"}]:[]),
-                      {label:"TOTAL",color:"#1A1714",inv:calcResults.total.invested,corp:calcResults.total.corpus,gain:calcResults.total.gain,
-                        ret:(calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0).toFixed(1)+"%",bold:true},
-                    ].map((row,i)=>(
-                      <tr key={i} style={{borderBottom:`1px solid #F2F0EB`,background:row.bold?"#FAF8F5":"transparent"}}>
-                        <td style={{padding:"8px 12px",color:row.color,fontWeight:row.bold?700:500,fontSize:row.bold?13:12}}>
-                          {!row.bold&&<span style={{display:"inline-block",width:7,height:7,borderRadius:"50%",background:row.color,marginRight:6,verticalAlign:"middle"}}/>}
-                          {row.label}
-                        </td>
-                        <td className="num" style={{padding:"8px 12px",textAlign:"right",color:TEXT2}}>{formatINR(row.inv)}</td>
-                        <td className="num" style={{padding:"8px 12px",textAlign:"right",color:row.color,fontWeight:row.bold?700:500}}>{formatINR(row.corp)}</td>
-                        <td className="num" style={{padding:"8px 12px",textAlign:"right",color:GREEN}}>{formatINR(row.gain)}</td>
-                        <td className="num" style={{padding:"8px 12px",textAlign:"right",color:GREEN}}>{row.ret}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>)}
-          </>)}
-
-          {mode==="findsip"&&findSipResults&&(<>
-            <div style={{background:BG_INV,border:`1px solid ${PURP}60`,borderRadius:12,padding:"22px 28px"}}>
-              <div style={{fontSize:11,color:ACC,letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>
-                {fsSipFreqKey.charAt(0).toUpperCase()+fsSipFreqKey.slice(1)} SIP Required
-              </div>
-              <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:PURP}}>
-                {formatINRFull(findSipResults.effectiveSip)}
-              </div>
-              <div style={{fontSize:12,color:"#8A8480",marginTop:6}}>
-                to reach <strong style={{color:"#E4D8C8"}}>{formatINR(targetCorpus)}</strong> in <strong style={{color:ACC}}>{years} years</strong> at <strong style={{color:ACC}}>{annualRate}%</strong>
-                {fsStepPct>0&&<span style={{color:"#F59E0B"}}> with {fsStepPct}% step-up</span>}
+              <div className="card" style={{padding:"18px 18px"}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                  <input type="number" value={years} step={0.5} min={0.5}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
+                    style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
+                </div>
+                <div style={{fontSize:12,color:TEXT3,marginTop:6}}>investment period</div>
               </div>
             </div>
-
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))",gap:10}}>
-              {[
-                [`${findSipResults.freqLabel} SIP`,formatINRFull(findSipResults.effectiveSip),PURP],
-                ["Lumpsum Contribution",formatINR(findSipResults.lsGrowth),ACC],
-                ["SIP Contribution",formatINR(findSipResults.sipTarget),BLUE],
-                ["Target Corpus",formatINR(targetCorpus),"#1A1714"],
-              ].map(([l,v,c])=>(
-                <div key={l} className="card" style={{borderColor:PURP+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                  <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
+            <div className="card" style={{padding:"20px 22px",borderColor:PURP+"50"}}>
+              <div style={{fontSize:13,color:PURP,fontWeight:700,marginBottom:14}}>Target Corpus</div>
+              <div style={{display:"flex",alignItems:"center",background:"#F5F0FF",border:`1.5px solid ${PURP}40`,borderRadius:9,overflow:"hidden"}}>
+                <span style={{padding:"0 14px",color:PURP,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${PURP}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
+                <input type="number" value={targetCorpus} step={100000} min={0}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setTargetCorpus(n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+              </div>
+              <div className="num" style={{fontSize:12,color:PURP,marginTop:8,fontWeight:600}}>
+                {targetCorpus>=10000000?`= ₹${(targetCorpus/10000000).toFixed(2)} Crore`:targetCorpus>=100000?`= ₹${(targetCorpus/100000).toFixed(2)} Lakh`:targetCorpus>=1000?`= ₹${(targetCorpus/1000).toFixed(1)}K`:""}
+              </div>
+            </div>
+          </div>
+          <div className="card" style={{padding:"22px 26px",borderColor:ACC+"40"}}>
+            <div style={{fontSize:13,color:ACC,fontWeight:700,marginBottom:14}}>Lumpsum (optional)</div>
+            <div style={{display:"flex",alignItems:"center",background:"#FFF8EE",border:`1.5px solid ${ACC}40`,borderRadius:9,overflow:"hidden",marginBottom:20}}>
+              <span style={{padding:"0 14px",color:ACC,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${ACC}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
+              <input type="number" value={fsLumpsum} step={1000} min={0}
+                onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setFsLumpsum(n);}}
+                style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+            </div>
+            <div style={{height:1,background:BORDER,marginBottom:18}}/>
+            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>SIP Frequency</div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
+              {Object.entries(SIP_FREQS).map(([k,v])=>(
+                <div key={k} onClick={()=>setFsSipFreqKey(k)}
+                  style={{cursor:"pointer",padding:"7px 14px",borderRadius:7,fontSize:12,fontWeight:600,
+                    transition:"all 0.15s",userSelect:"none",
+                    background:fsSipFreqKey===k?BLUE:"#FAF8F5",
+                    color:fsSipFreqKey===k?"#ffffff":TEXT2,
+                    border:`1.5px solid ${fsSipFreqKey===k?BLUE:BORDER}`}}>
+                  {v.label}
                 </div>
               ))}
             </div>
-
-            <div className="card">
-              <div className="lbl" style={{marginBottom:4}}>Corpus Journey to Target</div>
-              <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={findSipResults.yearData} margin={{top:4,right:16,left:0,bottom:0}}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
-                  <XAxis dataKey="yr" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
-                  <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-                  <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
-                  <Line type="monotone" dataKey="lsCorpus" name="Lumpsum" stroke={ACC} strokeWidth={1.5} dot={false}/>
-                  <Line type="monotone" dataKey="sipCorpus" name="SIP" stroke={BLUE} strokeWidth={1.5} dot={false}/>
-                  <Line type="monotone" dataKey="totalCorpus" name="Total" stroke={PURP} strokeWidth={2.5} dot={false} activeDot={{r:4}}/>
-                  <Line type="monotone" dataKey="target" name="Target" stroke="#F59E0B" strokeWidth={1.5} strokeDasharray="5 4" dot={false}/>
-                </LineChart>
-              </ResponsiveContainer>
+            <div style={{paddingTop:16,borderTop:`1px solid ${BORDER}`}}>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Step-Up</div>
+              <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
+                <div style={{flexShrink:0}}>
+                  <div style={{fontSize:12,color:TEXT3,marginBottom:6}}>Percentage</div>
+                  <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden",width:90}}>
+                    <input type="number" value={fsStepPct} step={1} min={0} max={100}
+                      onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setFsStepPct(n);}}
+                      style={{flex:1,background:"transparent",border:"none",color:fsStepPct>0?"#F59E0B":"#1A1714",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                    <span style={{padding:"0 8px",fontSize:12,color:TEXT3}}>%</span>
+                  </div>
+                </div>
+                <div style={{flex:1,opacity:fsStepPct>0?1:0.3,pointerEvents:fsStepPct>0?"auto":"none"}}>
+                  <div style={{fontSize:12,color:TEXT3,marginBottom:6}}>Increase Every</div>
+                  <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                    {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
+                      const active=fsStepFreq===k&&fsStepPct>0;
+                      return(
+                        <div key={k} onClick={()=>setFsStepFreq(k)}
+                          style={{cursor:"pointer",padding:"7px 14px",borderRadius:7,fontSize:12,fontWeight:600,
+                            transition:"all 0.15s",userSelect:"none",
+                            background:active?"#F59E0B":"#FAF8F5",
+                            color:active?"#ffffff":TEXT2,
+                            border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>
+                          {v.label}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              {fsStepPct>0&&<div style={{marginTop:10,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"8px 12px",fontSize:12,color:"#F59E0B"}}>
+                ↑ SIP increases by {fsStepPct}% every {STEPUP_FREQS[fsStepFreq]?.label?.toLowerCase()}
+              </div>}
             </div>
-
-            <div className="card">
-              <div className="lbl" style={{marginBottom:4}}>SIP Required at Different Step-Up Levels</div>
-              <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-                <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
-                  {["Step-Up","Starting SIP","vs No Step-Up","Saving"].map(h=>(
-                    <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
-                  ))}
-                </tr></thead>
-                <tbody>
-                  {findSipResults.variants.map((v,i)=>{
-                    const saving=findSipResults.variants[0].sipPerPeriod-v.sipPerPeriod;
-                    const isSelected=v.stepPct===fsStepPct;
-                    const color=v.stepPct===0?"#9CA3AF":v.stepPct<=10?GREEN:"#34D399";
-                    return(
-                      <tr key={i} style={{borderBottom:`1px solid #F2F0EB`,background:isSelected?"#F0EAFA":"transparent",cursor:"pointer"}}
-                        onClick={()=>setFsStepPct(v.stepPct)}>
-                        <td className="num" style={{padding:"8px 10px",textAlign:"right",color:PURP,fontWeight:isSelected?700:400}}>{v.label}{isSelected?" ←":""}</td>
-                        <td className="num" style={{padding:"8px 10px",textAlign:"right",color,fontWeight:600}}>{formatINR(v.sipPerPeriod)}</td>
-                        <td style={{padding:"8px 10px",textAlign:"right",color:TEXT2}}>{v.stepPct===0?"—":`${((saving/findSipResults.variants[0].sipPerPeriod)*100).toFixed(0)}% lower`}</td>
-                        <td className="num" style={{padding:"8px 10px",textAlign:"right",color:GREEN}}>{v.stepPct===0?"—":formatINR(saving)+"/period less"}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </>)}
-          {mode==="findsip"&&!findSipResults&&(
-            <div className="card" style={{textAlign:"center",padding:"40px 20px",color:TEXT2}}>
-              <div style={{fontSize:32,marginBottom:10}}>🎯</div>
-              <div style={{fontWeight:700,fontSize:15}}>Enter a target corpus to calculate</div>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* ── CALCULATE RESULTS ── */}
+      {mode==="calculate"&&(<>
+        {!hasCalcResults&&(
+          <div className="card" style={{textAlign:"center",padding:"48px 20px",color:TEXT2}}>
+            <div style={{fontSize:36,marginBottom:10}}>🧮</div>
+            <div style={{fontWeight:700,fontSize:15}}>Enter your inputs above to see results</div>
+          </div>
+        )}
+        {hasCalcResults&&(<>
+          {/* 6 stat cards */}
+          {(()=>{
+            const gainColor=calcResults.total.gain>=0?GREEN:RED;
+            const gainBg=calcResults.total.gain>=0?"#F4FBF7":"#FFF0F0";
+            const gainBc=(calcResults.total.gain>=0?GREEN:RED)+"40";
+            const gainPct=calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0;
+            return(
+              <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
+                {[
+                  {l:"Total Invested",v:formatINR(calcResults.total.invested),c:TEXT2,bg:"#ffffff",bc:BORDER},
+                  {l:"Total Corpus",v:formatINR(calcResults.total.corpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
+                  {l:"Absolute Gain",v:formatINR(calcResults.total.gain),c:gainColor,bg:gainBg,bc:gainBc},
+                  {l:"Gain %",v:gainPct.toFixed(1)+"%",c:gainColor,bg:gainBg,bc:gainBc},
+                  {l:"Lumpsum CAGR",v:rate+"%",c:ACC,bg:"#FFFBF2",bc:ACC+"40"},
+                  {l:"SIP XIRR",v:sipOn?calcResults.sip.xirr.toFixed(1)+"%":"—",c:BLUE,bg:"#F0F4FF",bc:BLUE+"40"},
+                ].map(({l,v,c,bg,bc})=>(
+                  <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"22px 24px"}}>
+                    <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",marginBottom:10,fontWeight:700}}>{l}</div>
+                    <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.2vw,32px)",color:c,lineHeight:1}}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
+
+          {/* Lumpsum + SIP breakdown */}
+          <div style={{display:"grid",gridTemplateColumns:sipOn?"1fr 1fr":"1fr",gap:12}}>
+            <div className="card" style={{borderColor:ACC+"50"}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                <div style={{display:"flex",alignItems:"center",gap:7}}>
+                  <div style={{width:8,height:8,borderRadius:2,background:ACC}}/>
+                  <span style={{fontSize:13,color:ACC,fontWeight:700}}>Lumpsum</span>
+                </div>
+                <span style={{fontSize:11,color:TEXT3}}>invested {formatINR(calcResults.ls.invested)}</span>
+              </div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.5vw,32px)",color:ACC,lineHeight:1,marginBottom:4}}>{formatINR(calcResults.ls.corpus)}</div>
+              <div style={{display:"flex",gap:20,paddingTop:12,borderTop:`1px solid ${BORDER}`,marginTop:12}}>
+                <div><div style={{fontSize:11,color:TEXT3,marginBottom:3}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:14,color:GREEN}}>{formatINR(calcResults.ls.gain)}</div></div>
+                <div><div style={{fontSize:11,color:TEXT3,marginBottom:3}}>CAGR</div><div className="num" style={{fontWeight:700,fontSize:14,color:GREEN}}>{rate}%</div></div>
+              </div>
+            </div>
+            {sipOn&&(
+              <div className="card" style={{borderColor:BLUE+"50"}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                  <div style={{display:"flex",alignItems:"center",gap:7}}>
+                    <div style={{width:8,height:8,borderRadius:2,background:BLUE}}/>
+                    <span style={{fontSize:13,color:BLUE,fontWeight:700}}>SIP — {SIP_FREQS[sipFreqKey]?.label}</span>
+                  </div>
+                  <div style={{display:"flex",gap:6,alignItems:"center"}}>
+                    {stepPct>0&&<span style={{fontSize:11,color:"#F59E0B",background:"#FFFBEB",padding:"2px 8px",borderRadius:4}}>+{stepPct}% step-up</span>}
+                    <span style={{fontSize:11,color:TEXT3}}>invested {formatINR(calcResults.sip.invested)}</span>
+                  </div>
+                </div>
+                <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.5vw,32px)",color:BLUE,lineHeight:1,marginBottom:4}}>{formatINR(calcResults.sip.corpus)}</div>
+                <div style={{display:"flex",gap:20,paddingTop:12,borderTop:`1px solid ${BORDER}`,marginTop:12}}>
+                  <div><div style={{fontSize:11,color:TEXT3,marginBottom:3}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:14,color:BLUE}}>{formatINR(calcResults.sip.gain)}</div></div>
+                  <div><div style={{fontSize:11,color:TEXT3,marginBottom:3}}>XIRR</div><div className="num" style={{fontWeight:700,fontSize:14,color:BLUE}}>{calcResults.sip.xirr.toFixed(1)}%</div></div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Chart */}
+          <div className="card">
+            <div className="lbl" style={{marginBottom:14}}>Total Corpus vs Total Invested</div>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={calcResults.yearData} margin={{top:4,right:16,left:0,bottom:0}}>
+                <defs>
+                  <linearGradient id="tcg" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={ACC} stopOpacity={0.2}/><stop offset="95%" stopColor={ACC} stopOpacity={0}/></linearGradient>
+                  <linearGradient id="tig" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#8A8480" stopOpacity={0.1}/><stop offset="95%" stopColor="#8A8480" stopOpacity={0}/></linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
+                <XAxis dataKey="yr" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
+                <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
+                <Tooltip content={<ChartTooltip/>}/>
+                <Legend wrapperStyle={{fontSize:11}} formatter={v=>({totalCorpus:"Total Corpus",totalInvested:"Total Invested"}[v]||v)}/>
+                <Area type="monotone" dataKey="totalInvested" name="Total Invested" stroke="#C8C3B8" strokeWidth={1.5} strokeDasharray="5 4" fill="url(#tig)"/>
+                <Area type="monotone" dataKey="totalCorpus" name="Total Corpus" stroke={ACC} strokeWidth={2.5} fill="url(#tcg)"/>
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Summary table */}
+          <div className="card">
+            <div className="lbl" style={{marginBottom:12}}>Summary</div>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+              <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
+                <th style={{textAlign:"left",padding:"6px 12px",color:TEXT2,fontWeight:700,fontSize:12}}>Component</th>
+                {["Invested","Corpus","Gain","Return"].map(h=>(
+                  <th key={h} style={{textAlign:"right",padding:"6px 12px",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
+                ))}
+              </tr></thead>
+              <tbody>
+                {[
+                  {label:"Lumpsum",color:ACC,inv:calcResults.ls.invested,corp:calcResults.ls.corpus,gain:calcResults.ls.gain,ret:rate+"%"},
+                  ...(sipOn?[{label:`SIP (${SIP_FREQS[sipFreqKey]?.label}${stepPct>0?` · +${stepPct}%`:""})`,color:BLUE,inv:calcResults.sip.invested,corp:calcResults.sip.corpus,gain:calcResults.sip.gain,ret:calcResults.sip.xirr.toFixed(1)+"%"}]:[]),
+                  {label:"TOTAL",color:"#1A1714",inv:calcResults.total.invested,corp:calcResults.total.corpus,gain:calcResults.total.gain,ret:(calcResults.total.invested>0?(calcResults.total.gain/calcResults.total.invested*100):0).toFixed(1)+"%",bold:true},
+                ].map((row,i)=>(
+                  <tr key={i} style={{borderBottom:`1px solid #F2F0EB`,background:row.bold?"#FAF8F5":"transparent"}}>
+                    <td style={{padding:"8px 12px",color:row.color,fontWeight:row.bold?700:500,fontSize:row.bold?13:12}}>
+                      {!row.bold&&<span style={{display:"inline-block",width:7,height:7,borderRadius:"50%",background:row.color,marginRight:6,verticalAlign:"middle"}}/>}
+                      {row.label}
+                    </td>
+                    <td className="num" style={{padding:"8px 12px",textAlign:"right",color:TEXT2}}>{formatINR(row.inv)}</td>
+                    <td className="num" style={{padding:"8px 12px",textAlign:"right",color:row.color,fontWeight:row.bold?700:500}}>{formatINR(row.corp)}</td>
+                    <td className="num" style={{padding:"8px 12px",textAlign:"right",color:GREEN}}>{formatINR(row.gain)}</td>
+                    <td className="num" style={{padding:"8px 12px",textAlign:"right",color:GREEN}}>{row.ret}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>)}
+      </>)}
+
+      {/* ── SIP FOR TARGET RESULTS ── */}
+      {mode==="findsip"&&findSipResults&&(<>
+        <div style={{background:"#FFFDF9",border:`1px solid ${ACC}50`,borderRadius:14,padding:"24px 28px"}}>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{fsSipFreqKey.charAt(0).toUpperCase()+fsSipFreqKey.slice(1)} SIP Required</div>
+          <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:PURP,lineHeight:1}}>{formatINRFull(findSipResults.effectiveSip)}</div>
+          <div style={{fontSize:13,color:TEXT2,marginTop:8}}>
+            to reach <strong style={{color:"#1A1714"}}>{formatINR(targetCorpus)}</strong> in <strong style={{color:ACC}}>{years} years</strong> at <strong style={{color:ACC}}>{annualRate}%</strong>
+            {fsStepPct>0&&<span style={{color:"#F59E0B"}}> with {fsStepPct}% step-up</span>}
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+          {[[`${findSipResults.freqLabel} SIP`,formatINRFull(findSipResults.effectiveSip),PURP,"#F5F0FF",PURP+"30"],
+            ["Lumpsum Contribution",formatINR(findSipResults.lsGrowth),ACC,"#FFFDF9",ACC+"30"],
+            ["SIP Contribution",formatINR(findSipResults.sipTarget),BLUE,"#F0F4FF",BLUE+"30"],
+            ["Target Corpus",formatINR(targetCorpus),"#1A1714","#ffffff",BORDER],
+          ].map(([l,v,c,bg,bc])=>(
+            <div key={l} style={{background:bg,border:`1px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
+              <div style={{fontSize:12,color:TEXT2,marginBottom:8,textTransform:"uppercase",letterSpacing:"0.8px",fontWeight:700}}>{l}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(15px,1.6vw,20px)",color:c}}>{v}</div>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="lbl" style={{marginBottom:14}}>Corpus Journey to Target</div>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={findSipResults.yearData} margin={{top:4,right:16,left:0,bottom:0}}>
+              <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
+              <XAxis dataKey="yr" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
+              <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
+              <Line type="monotone" dataKey="lsCorpus" name="Lumpsum" stroke={ACC} strokeWidth={1.5} dot={false}/>
+              <Line type="monotone" dataKey="sipCorpus" name="SIP" stroke={BLUE} strokeWidth={1.5} dot={false}/>
+              <Line type="monotone" dataKey="totalCorpus" name="Total" stroke={PURP} strokeWidth={2.5} dot={false} activeDot={{r:4}}/>
+              <Line type="monotone" dataKey="target" name="Target" stroke="#F59E0B" strokeWidth={1.5} strokeDasharray="5 4" dot={false}/>
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="card">
+          <div className="lbl" style={{marginBottom:12}}>SIP at Different Step-Up Levels</div>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+            <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
+              {["Step-Up","Starting SIP","vs No Step-Up","Saving"].map(h=>(
+                <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
+              ))}
+            </tr></thead>
+            <tbody>
+              {findSipResults.variants.map((v,i)=>{
+                const saving=findSipResults.variants[0].sipPerPeriod-v.sipPerPeriod;
+                const isSelected=v.stepPct===fsStepPct;
+                const color=v.stepPct===0?"#9CA3AF":v.stepPct<=10?GREEN:"#34D399";
+                return(
+                  <tr key={i} style={{borderBottom:`1px solid #F2F0EB`,background:isSelected?"#F0EAFA":"transparent",cursor:"pointer"}} onClick={()=>setFsStepPct(v.stepPct)}>
+                    <td className="num" style={{padding:"8px 10px",textAlign:"right",color:PURP,fontWeight:isSelected?700:400}}>{v.label}{isSelected?" ←":""}</td>
+                    <td className="num" style={{padding:"8px 10px",textAlign:"right",color,fontWeight:600}}>{formatINR(v.sipPerPeriod)}</td>
+                    <td style={{padding:"8px 10px",textAlign:"right",color:TEXT2}}>{v.stepPct===0?"—":`${((saving/findSipResults.variants[0].sipPerPeriod)*100).toFixed(0)}% lower`}</td>
+                    <td className="num" style={{padding:"8px 10px",textAlign:"right",color:GREEN}}>{v.stepPct===0?"—":formatINR(saving)+"/period less"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>)}
+      {mode==="findsip"&&!findSipResults&&(
+        <div className="card" style={{textAlign:"center",padding:"48px 20px",color:TEXT2}}>
+          <div style={{fontSize:36,marginBottom:10}}>🎯</div>
+          <div style={{fontWeight:700,fontSize:15}}>Enter a target corpus above to calculate</div>
+        </div>
+      )}
     </div>
   );
 }
