@@ -2184,16 +2184,7 @@ export default function App(){
         </div>
       </div>
 
-      {/* Breadcrumb */}
-      {page!=="home"&&(
-        <div style={{background:"#F2F0EB",borderBottom:`1px solid ${BORDER}`,padding:"10px 24px"}}>
-          <div style={{maxWidth:1400,margin:"0 auto",display:"flex",alignItems:"center",gap:8}}>
-            <span style={{fontSize:12,color:TEXT2,cursor:"pointer",fontWeight:500}} onClick={()=>setPage("home")}>Home</span>
-            <span style={{color:BORDER,fontSize:14}}>›</span>
-            <span style={{fontSize:14,color:"#1A1714",fontWeight:700}}>{PAGES.find(p=>p.id===page)?.icon} {PAGES.find(p=>p.id===page)?.label}</span>
-          </div>
-        </div>
-      )}
+
 
       {/* Content */}
       <div style={{...(page!=="home"?{maxWidth:1400,margin:"0 auto",padding:"20px 16px"}:{})}}>
