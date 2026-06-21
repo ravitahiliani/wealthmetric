@@ -1651,154 +1651,189 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
   },[income,expenses,emiPctOfIncome,discoverDownPct,discoverRate,discoverTenure,discoverRunning]);
 
   return(
-    <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:16,alignItems:"start"}}>
-      <div style={{display:"flex",flexDirection:"column",gap:12}}>
-        <FinancesPanel income={income} setIncome={setIncome} expenses={expenses} setExpenses={setExpenses} expenseHint="Include rent, food, utilities, all existing EMIs — except this car"/>
-        <div className="card" style={{padding:10}}>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
-            {[{k:"check",label:"Is it affordable?",desc:"Enter car price"},{k:"discover",label:"What can I afford?",desc:"Find your budget"}].map(m=>(
-              <div key={m.k} onClick={()=>setMode(m.k)} style={{padding:"10px 12px",borderRadius:8,cursor:"pointer",border:`1px solid ${mode===m.k?BLUE:BORDER}`,background:mode===m.k?BLUE_L:"transparent",transition:"all 0.15s"}}>
-                <div style={{fontSize:11,fontWeight:700,color:mode===m.k?BLUE:TEXT3}}>{m.label}</div>
-                <div style={{fontSize:9,color:TEXT3,marginTop:2}}>{m.desc}</div>
-              </div>
-            ))}
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+
+      {/* MODE TOGGLE */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,maxWidth:500}}>
+        {[{k:"check",label:"Is it affordable?",desc:"Enter car price"},{k:"discover",label:"What can I afford?",desc:"Find your budget"}].map(m=>(
+          <div key={m.k} onClick={()=>setMode(m.k)}
+            style={{padding:"14px 20px",borderRadius:12,cursor:"pointer",border:`1.5px solid ${mode===m.k?BLUE:BORDER}`,
+              background:mode===m.k?BLUE_L:"#ffffff",transition:"all 0.15s"}}>
+            <div style={{fontSize:14,fontWeight:700,color:mode===m.k?BLUE:TEXT2}}>{m.label}</div>
+            <div style={{fontSize:12,color:TEXT3,marginTop:2}}>{m.desc}</div>
           </div>
-        </div>
-        {mode==="check"&&(
-          <div className="card" style={{borderColor:BLUE+"40"}}>
+        ))}
+      </div>
+
+      {/* ── CHECK MODE ── */}
+      {mode==="check"&&(<>
+        {/* INPUTS */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          {/* Finances */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
+            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Exclude this car's EMI"/>
+          </div>
+          {/* Car Details */}
+          <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Car Details</div>
             <Field label="Car Price" value={carPrice} onChange={setCarPrice} prefix="₹" step={50000} min={0} color={BLUE}/>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={BLUE}/>
               <Field label="Interest Rate" value={rate} onChange={setRate} suffix="%" step={0.1} min={0} color={BLUE}/>
             </div>
-            <TipBox>💡 PSU banks 8.5–10% · Private 9.5–12% · NBFCs 12–16%</TipBox>
             <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={BLUE}/>
-            <div style={{height:1,background:BORDER,margin:"4px 0 14px"}}/>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <div>
-                <Field label="Annual Insurance" value={effectiveIns} onChange={setInsurance} prefix="₹" step={1000} min={0} color={BLUE}/>
-                <div style={{fontSize:10,color:TEXT3,marginTop:-10,marginBottom:14}}>Auto-est: {formatINR(insAuto)}/yr</div>
-              </div>
-              <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={BLUE}/>
-            </div>
-            <Field label="Monthly Fuel / Charging" value={fuel} onChange={setFuel} prefix="₹" step={500} min={0} color={BLUE}/>
           </div>
-        )}
-        {mode==="discover"&&(
-          <div className="card" style={{borderColor:BLUE+"40"}}>
-            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Comfort Level</div>
-            <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE} hint="Insurance/12 + maintenance + fuel"/>
-            <TipBox>💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo</TipBox>
-            <Field label="Max EMI as % of Income (ceiling)" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={1} min={1} color={BLUE}/>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <Field label="Down Payment" value={discoverDownPct} onChange={setDiscoverDownPct} suffix="%" step={5} min={0} color={BLUE}/>
-              <Field label="Interest Rate" value={discoverRate} onChange={setDiscoverRate} suffix="%" step={0.1} min={0} color={BLUE}/>
+          {/* Running Costs */}
+          <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
+            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Running Costs</div>
+            <Field label="Annual Insurance" value={effectiveIns} onChange={setInsurance} prefix="₹" step={1000} min={0} color={BLUE}/>
+            <div style={{fontSize:12,color:TEXT3,marginTop:-10,marginBottom:14}}>Auto-estimate: {formatINR(insAuto)}/yr</div>
+            <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={BLUE}/>
+            <Field label="Monthly Fuel / Charging" value={fuel} onChange={setFuel} prefix="₹" step={500} min={0} color={BLUE}/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5}}>
+              💡 PSU banks 8.5–10% · Private 9.5–12% · NBFCs 12–16%
             </div>
+          </div>
+        </div>
+
+        {/* RESULTS */}
+        <div style={{background:check.comfortable?"#EAF5EE":check.manageable?"#FFFBEB":"#FDEAEA",border:`1.5px solid ${check.verdictColor}`,borderRadius:14,padding:"20px 26px",display:"flex",alignItems:"center",gap:20}}>
+          <div style={{fontSize:40}}>{check.comfortable?"🚗":check.manageable?"⚠️":"🔴"}</div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,fontSize:22,color:check.verdictColor}}>{check.verdict}</div>
+            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · All-in monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontSize:12,color:TEXT3,marginBottom:4}}>Remaining</div>
+            <div className="num" style={{fontWeight:700,fontSize:24,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
+          </div>
+        </div>
+
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+          {[
+            {l:"Monthly EMI",v:formatINRFull(check.emi),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40"},
+            {l:"All-in Monthly",v:formatINR(check.monthlyCost),c:BLUE,bg:"#F0F4FF",bc:BLUE+"30"},
+            {l:"Down Payment",v:formatINR(check.down),c:TEXT2,bg:"#ffffff",bc:BORDER},
+            {l:`Total Cost (${tenure}Y)`,v:formatINR(check.totalOwnership),c:TEXT2,bg:"#ffffff",bc:BORDER},
+          ].map(({l,v,c,bg,bc})=>(
+            <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{l}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* EMI Gauge */}
+        <div className="card">
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>EMI Comfort Gauge</div>
+          <div style={{position:"relative",height:12,borderRadius:6,background:BORDER,overflow:"hidden",marginBottom:8}}>
+            <div style={{position:"absolute",left:0,height:"100%",width:`${Math.min(check.emiPct,100)}%`,background:check.verdictColor,borderRadius:6}}/>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:TEXT3}}>
+            <span style={{color:GREEN}}>0–15% Comfortable</span>
+            <span style={{color:"#F59E0B"}}>15–25% Manageable</span>
+            <span style={{color:RED}}>25%+ Stretched</span>
+          </div>
+        </div>
+
+        {/* Cost breakdown */}
+        <div className="card">
+          <div className="lbl" style={{marginBottom:14}}>Total Cost of Ownership over {tenure} years</div>
+          {check.breakdown.map((d,i)=>(
+            <div key={i} style={{marginBottom:10}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:4}}>
+                <span style={{color:d.color}}>● {d.name}</span>
+                <span className="num" style={{color:"#1A1714",fontWeight:600}}>{formatINR(d.value)}</span>
+              </div>
+              <div style={{height:6,borderRadius:3,background:BORDER,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${(d.value/check.totalOwnership*100).toFixed(0)}%`,background:d.color,borderRadius:3}}/>
+              </div>
+            </div>
+          ))}
+          <div style={{borderTop:`1px solid ${BORDER}`,paddingTop:10,display:"flex",justifyContent:"space-between"}}>
+            <span style={{color:ACC,fontSize:13,fontWeight:600}}>Total</span>
+            <span className="num" style={{fontWeight:700,color:"#1A1714",fontSize:15}}>{formatINR(check.totalOwnership)}</span>
+          </div>
+        </div>
+      </>)}
+
+      {/* ── DISCOVER MODE ── */}
+      {mode==="discover"&&(<>
+        {/* INPUTS */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
+            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+          </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
+            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
+            <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={1} min={1} color={BLUE}/>
+            <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE} hint="Insurance/12 + maintenance + fuel"/>
+          </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
+            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Settings</div>
+            <Field label="Down Payment" value={discoverDownPct} onChange={setDiscoverDownPct} suffix="%" step={5} min={0} color={BLUE}/>
+            <Field label="Interest Rate" value={discoverRate} onChange={setDiscoverRate} suffix="%" step={0.1} min={0} color={BLUE}/>
             <Field label="Tenure" value={discoverTenure} onChange={setDiscoverTenure} suffix="years" step={1} min={1} color={BLUE}/>
           </div>
-        )}
-      </div>
+        </div>
 
-      <div style={{display:"flex",flexDirection:"column",gap:14}}>
-        {mode==="check"&&(<>
-          <div style={{background:check.comfortable?"#EAF5EE":check.manageable?"#FFFBEB":"#FDEAEA",border:`1px solid ${check.verdictColor}`,borderRadius:12,padding:"16px 20px",display:"flex",alignItems:"center",gap:14}}>
-            <div style={{fontSize:36}}>{check.comfortable?"🚗":check.manageable?"⚠️":"🔴"}</div>
-            <div style={{flex:1}}>
-              <div style={{fontWeight:700,fontSize:20,color:check.verdictColor}}>{check.verdict}</div>
-              <div style={{fontSize:12,color:TEXT2,marginTop:3}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
-            </div>
-            <div style={{textAlign:"right"}}>
-              <div style={{fontSize:11,color:TEXT3,marginBottom:4}}>REMAINING</div>
-              <div className="num" style={{fontWeight:700,fontSize:20,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
-            </div>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))",gap:10}}>
-            {[["Monthly EMI",formatINRFull(check.emi),BLUE],["All-in Monthly",formatINR(check.monthlyCost),"#60A5FA"],
-              ["Down Payment",formatINR(check.down),"#93C5FD"],[`Total Cost (${tenure}Y)`,formatINR(check.totalOwnership),"#BFDBFE"]].map(([l,v,c])=>(
-              <div key={l} className="card" style={{borderColor:BLUE+"20"}}>
-                <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
-              </div>
-            ))}
-          </div>
-          <div className="card">
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>EMI Comfort Gauge</div>
-            <div style={{position:"relative",height:10,borderRadius:5,background:BORDER,overflow:"hidden",marginBottom:6}}>
-              <div style={{position:"absolute",left:0,height:"100%",width:`${Math.min(check.emiPct,100)}%`,background:check.verdictColor,borderRadius:5}}/>
-            </div>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:TEXT3}}>
-              <span style={{color:GREEN}}>0–15% Comfortable</span><span style={{color:"#F59E0B"}}>15–25% Manageable</span><span style={{color:RED}}>25%+ Stretched</span>
-            </div>
-          </div>
-          <div className="card">
-            <div className="lbl" style={{marginBottom:14}}>Total Cost of Ownership over {tenure} years</div>
-            {check.breakdown.map((d,i)=>(
-              <div key={i} style={{marginBottom:10}}>
-                <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:4}}>
-                  <span style={{color:d.color}}>● {d.name}</span>
-                  <span className="num" style={{color:"#1A1714",fontWeight:600}}>{formatINR(d.value)}</span>
-                </div>
-                <div style={{height:5,borderRadius:3,background:BORDER,overflow:"hidden"}}>
-                  <div style={{height:"100%",width:`${(d.value/check.totalOwnership*100).toFixed(0)}%`,background:d.color,borderRadius:3}}/>
-                </div>
-              </div>
-            ))}
-            <div style={{borderTop:`1px solid ${BORDER}`,paddingTop:8,display:"flex",justifyContent:"space-between"}}>
-              <span style={{color:ACC,fontSize:12}}>Total</span>
-              <span className="num" style={{fontWeight:700,color:"#1A1714"}}>{formatINR(check.totalOwnership)}</span>
-            </div>
-          </div>
-        </>)}
+        {/* RESULTS */}
+        <div style={{background:"#E8F0FA",border:`1.5px solid ${BLUE}`,borderRadius:14,padding:"24px 28px"}}>
+          <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Max Car Price You Can Afford</div>
+          <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:BLUE,lineHeight:1}}>{formatINR(discover.maxCarPrice)}</div>
+          <div style={{fontSize:13,color:TEXT2,marginTop:8}}>Max EMI: <strong style={{color:BLUE}}>{formatINRFull(discover.maxEmi)}/mo</strong> · {discoverTenure}Y at {discoverRate}%
+            {discover.limitedByRunning&&<span style={{color:"#F59E0B",marginLeft:8}}>⚠ Limited by cash flow</span>}</div>
+        </div>
 
-        {mode==="discover"&&(<>
-          <div style={{background:BG_INV,border:`1px solid ${BLUE}`,borderRadius:12,padding:"20px 24px"}}>
-            <div style={{fontSize:11,color:ACC,letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>Max Car Price You Can Afford</div>
-            <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:BLUE}}>{formatINR(discover.maxCarPrice)}</div>
-            <div style={{fontSize:12,color:"#8A8480",marginTop:6}}>Max EMI: <strong style={{color:"#93C5FD"}}>{formatINRFull(discover.maxEmi)}/mo</strong> · {discoverTenure}Y at {discoverRate}%
-              {discover.limitedByRunning&&<span style={{color:"#F59E0B",marginLeft:8}}>⚠ Limited by cash flow</span>}</div>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(155px,1fr))",gap:10}}>
-            {[["Max Car Price",formatINR(discover.maxCarPrice),BLUE],["Max Loan",formatINR(discover.loanAmt),"#60A5FA"],
-              ["Down Payment",formatINR(discover.down),"#93C5FD"],["Total Monthly",formatINR(discover.totalMonthly),"#BFDBFE"]].map(([l,v,c])=>(
-              <div key={l} className="card" style={{borderColor:BLUE+"20"}}>
-                <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
-              </div>
-            ))}
-          </div>
-          <div className="card">
-            <div className="lbl" style={{marginBottom:12}}>Max Car Price at Different EMI % Caps</div>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-              <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
-                {["EMI % Cap","Max EMI/mo","Max Loan","Max Car Price","Comfort"].map(h=>(
-                  <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
-                ))}
-              </tr></thead>
-              <tbody>
-                {[10,15,20,25,30].map(p=>{
-                  const emiCap=income*p/100,budgetAfter=Math.max(0,income-expenses-discover.runningBudget);
-                  const maxE=Math.min(budgetAfter,emiCap),r=discoverRate/12/100,n=discoverTenure*12;
-                  const loan=r===0?maxE*n:maxE*(Math.pow(1+r,n)-1)/(r*Math.pow(1+r,n));
-                  const carP=loan/(1-discoverDownPct/100);
-                  const color=p<=15?GREEN:p<=25?"#F59E0B":RED;
-                  const label=p<=15?"Comfortable":p<=25?"Manageable":"Stretched";
-                  const isSelected=p===emiPctOfIncome;
-                  return(
-                    <tr key={p} style={{borderBottom:`1px solid #F2F0EB`,background:isSelected?"#E8F0FA":"transparent",cursor:"pointer"}} onClick={()=>setEmiPctOfIncome(p)}>
-                      <td className="num" style={{padding:"8px 10px",color,fontWeight:isSelected?700:400}}>{p}%{isSelected?" ←":""}</td>
-                      <td className="num" style={{padding:"8px 10px",textAlign:"right",color:TEXT2}}>{formatINR(maxE)}</td>
-                      <td className="num" style={{padding:"8px 10px",textAlign:"right",color:TEXT2}}>{formatINR(loan)}</td>
-                      <td className="num" style={{padding:"8px 10px",textAlign:"right",color,fontWeight:600}}>{formatINR(carP)}</td>
-                      <td style={{padding:"8px 10px",textAlign:"right",color}}>{label}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </>)}
-      </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+          {[
+            {l:"Max Car Price",v:formatINR(discover.maxCarPrice),c:BLUE,bg:"#E8F0FA",bc:BLUE+"40"},
+            {l:"Max Loan",v:formatINR(discover.loanAmt),c:BLUE,bg:"#F0F4FF",bc:BLUE+"30"},
+            {l:"Down Payment",v:formatINR(discover.down),c:TEXT2,bg:"#ffffff",bc:BORDER},
+            {l:"Total Monthly",v:formatINR(discover.totalMonthly),c:TEXT2,bg:"#ffffff",bc:BORDER},
+          ].map(({l,v,c,bg,bc})=>(
+            <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{l}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="card">
+          <div className="lbl" style={{marginBottom:12}}>Max Car Price at Different EMI % Caps</div>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+            <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
+              {["EMI % Cap","Max EMI/mo","Max Loan","Max Car Price","Comfort"].map(h=>(
+                <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
+              ))}
+            </tr></thead>
+            <tbody>
+              {[10,15,20,25,30].map(p=>{
+                const emiCap=income*p/100,budgetAfter=Math.max(0,income-expenses-discover.runningBudget);
+                const maxE=Math.min(budgetAfter,emiCap),r2=discoverRate/12/100,n2=discoverTenure*12;
+                const loan2=r2===0?maxE*n2:maxE*(Math.pow(1+r2,n2)-1)/(r2*Math.pow(1+r2,n2));
+                const carP=loan2/(1-discoverDownPct/100);
+                const color=p<=15?GREEN:p<=25?"#F59E0B":RED;
+                const label=p<=15?"Comfortable":p<=25?"Manageable":"Stretched";
+                const isSelected=p===emiPctOfIncome;
+                return(
+                  <tr key={p} style={{borderBottom:`1px solid #F2F0EB`,background:isSelected?"#E8F0FA":"transparent",cursor:"pointer"}} onClick={()=>setEmiPctOfIncome(p)}>
+                    <td className="num" style={{padding:"8px 10px",color,fontWeight:isSelected?700:400}}>{p}%{isSelected?" ←":""}</td>
+                    <td className="num" style={{padding:"8px 10px",textAlign:"right",color:TEXT2}}>{formatINR(maxE)}</td>
+                    <td className="num" style={{padding:"8px 10px",textAlign:"right",color:TEXT2}}>{formatINR(loan2)}</td>
+                    <td className="num" style={{padding:"8px 10px",textAlign:"right",color,fontWeight:600}}>{formatINR(carP)}</td>
+                    <td style={{padding:"8px 10px",textAlign:"right",color}}>{label}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </>)}
     </div>
   );
 }
@@ -1862,145 +1897,193 @@ function HousePage(){
   },[housePrice,downPct,rate,tenure,maintenance,rent,rentIncrease,appreciation,investReturn]);
 
   return(
-    <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:16,alignItems:"start"}}>
-      <div style={{display:"flex",flexDirection:"column",gap:12}}>
-        <FinancesPanel income={income} setIncome={setIncome} expenses={expenses} setExpenses={setExpenses} expenseHint="Include rent, food, utilities, existing EMIs — except this house"/>
-        <div className="card" style={{padding:10}}>
-          <div style={{display:"flex",flexDirection:"column",gap:6}}>
-            {[{k:"check",label:"Is it affordable?",desc:"Enter house price"},{k:"discover",label:"What can I afford?",desc:"Find your budget"},{k:"rentorbuy",label:"Rent or Buy?",desc:"Compare both paths"}].map(m=>(
-              <div key={m.k} onClick={()=>setMode(m.k)} style={{padding:"10px 12px",borderRadius:8,cursor:"pointer",border:`1px solid ${mode===m.k?ACC:BORDER}`,background:mode===m.k?ACC_L:"transparent",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <div><div style={{fontSize:11,fontWeight:700,color:mode===m.k?ACC_D:TEXT3}}>{m.label}</div><div style={{fontSize:9,color:TEXT3,marginTop:1}}>{m.desc}</div></div>
-                {mode===m.k&&<div style={{width:6,height:6,borderRadius:"50%",background:ACC}}/>}
-              </div>
-            ))}
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+
+      {/* MODE TOGGLE */}
+      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        {[{k:"check",label:"Is it affordable?",desc:"Enter house price"},{k:"discover",label:"What can I afford?",desc:"Find your budget"},{k:"rentorbuy",label:"Rent or Buy?",desc:"Compare both paths"}].map(m=>(
+          <div key={m.k} onClick={()=>setMode(m.k)}
+            style={{padding:"14px 22px",borderRadius:12,cursor:"pointer",border:`1.5px solid ${mode===m.k?ACC:BORDER}`,
+              background:mode===m.k?ACC_L:"#ffffff",transition:"all 0.15s",minWidth:160}}>
+            <div style={{fontSize:14,fontWeight:700,color:mode===m.k?ACC_D:TEXT2}}>{m.label}</div>
+            <div style={{fontSize:12,color:TEXT3,marginTop:2}}>{m.desc}</div>
           </div>
-        </div>
-        {(mode==="check"||mode==="rentorbuy")&&(
-          <div className="card" style={{borderColor:ACC+"40"}}>
+        ))}
+      </div>
+
+      {/* ── CHECK MODE ── */}
+      {mode==="check"&&(<>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
+            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Exclude this home's EMI"/>
+          </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Property Details</div>
             <Field label="House Price" value={housePrice} onChange={setHousePrice} prefix="₹" step={500000} min={0} color={ACC}/>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={ACC}/>
               <Field label="Interest Rate" value={rate} onChange={setRate} suffix="%" step={0.1} min={0} color={ACC}/>
             </div>
-            <TipBox>💡 PSU banks 8–9.5% · Private 8.5–10.5% · Check PMAY subsidy if eligible</TipBox>
             <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={ACC}/>
-            {mode==="check"&&<Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={ACC} hint="Society: ₹2–10K/mo"/>}
           </div>
-        )}
-        {mode==="discover"&&(
-          <div className="card" style={{borderColor:ACC+"40"}}>
+          <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Additional Costs</div>
+            <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={ACC} hint="Society: ₹2–10K/mo"/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:8}}>
+              💡 PSU banks 8–9.5% · Private 8.5–10.5%<br/>Check PMAY subsidy if eligible
+            </div>
+          </div>
+        </div>
+
+        {/* VERDICT */}
+        <div style={{background:check.comfortable?"#EAF5EE":check.manageable?"#FFFBEB":"#FDEAEA",border:`1.5px solid ${check.verdictColor}`,borderRadius:14,padding:"20px 26px",display:"flex",alignItems:"center",gap:20}}>
+          <div style={{fontSize:40}}>{check.comfortable?"🏠":check.manageable?"⚠️":"🔴"}</div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,fontSize:22,color:check.verdictColor}}>{check.verdict}</div>
+            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · All-in monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontSize:12,color:TEXT3,marginBottom:4}}>Remaining</div>
+            <div className="num" style={{fontWeight:700,fontSize:24,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
+          </div>
+        </div>
+
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+          {[
+            {l:"Monthly EMI",v:formatINRFull(check.emi),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
+            {l:"Down Payment",v:formatINR(check.down),c:GREEN,bg:"#EAF5EE",bc:GREEN+"40"},
+            {l:`Value in ${tenure}Y`,v:formatINR(check.finalVal),c:GREEN,bg:"#EAF5EE",bc:GREEN+"30"},
+            {l:"Equity Built",v:formatINR(check.equityBuilt),c:TEXT2,bg:"#ffffff",bc:BORDER},
+          ].map(({l,v,c,bg,bc})=>(
+            <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{l}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="card">
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>EMI Comfort Gauge</div>
+          <div style={{position:"relative",height:12,borderRadius:6,background:BORDER,overflow:"hidden",marginBottom:8}}>
+            <div style={{position:"absolute",left:0,height:"100%",width:`${Math.min(check.emiPct,100)}%`,background:check.verdictColor,borderRadius:6}}/>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:TEXT3}}>
+            <span style={{color:GREEN}}>0–30% Comfortable</span>
+            <span style={{color:"#F59E0B"}}>30–45% Manageable</span>
+            <span style={{color:RED}}>45%+ Stretched</span>
+          </div>
+        </div>
+      </>)}
+
+      {/* ── DISCOVER MODE ── */}
+      {mode==="discover"&&(<>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
+            <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+          </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
             <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={5} min={5} color={ACC} hint="RBI guideline: EMI ≤ 40–50% of net income"/>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <Field label="Down Payment" value={discoverDownPct} onChange={setDiscoverDownPct} suffix="%" step={5} min={10} color={ACC}/>
-              <Field label="Interest Rate" value={discoverRate} onChange={setDiscoverRate} suffix="%" step={0.1} min={0} color={ACC}/>
-            </div>
+          </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Settings</div>
+            <Field label="Down Payment" value={discoverDownPct} onChange={setDiscoverDownPct} suffix="%" step={5} min={10} color={ACC}/>
+            <Field label="Interest Rate" value={discoverRate} onChange={setDiscoverRate} suffix="%" step={0.1} min={0} color={ACC}/>
             <Field label="Tenure" value={discoverTenure} onChange={setDiscoverTenure} suffix="years" step={1} min={1} color={ACC}/>
           </div>
-        )}
-        {mode==="rentorbuy"&&(
-          <div className="card" style={{borderColor:PURP+"40"}}>
-            <div style={{fontSize:10,color:PURP,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Renting Scenario</div>
+        </div>
+
+        <div style={{background:"#FFFBF2",border:`1.5px solid ${ACC}`,borderRadius:14,padding:"24px 28px"}}>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Max Home Price You Can Afford</div>
+          <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:ACC,lineHeight:1}}>{formatINR(discover.maxPrice)}</div>
+          <div style={{fontSize:13,color:TEXT2,marginTop:8}}>at {emiPctOfIncome}% → max EMI <strong style={{color:ACC}}>{formatINRFull(discover.maxEmi)}/mo</strong></div>
+        </div>
+
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+          {[
+            {l:"Max Home Price",v:formatINR(discover.maxPrice),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
+            {l:"Max Loan",v:formatINR(discover.loan),c:GREEN,bg:"#EAF5EE",bc:GREEN+"40"},
+            {l:"Down Needed",v:formatINR(discover.down),c:TEXT2,bg:"#ffffff",bc:BORDER},
+            {l:"Max Monthly EMI",v:formatINRFull(discover.maxEmi),c:ACC,bg:"#FFFBF2",bc:ACC+"30"},
+          ].map(({l,v,c,bg,bc})=>(
+            <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{l}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </>)}
+
+      {/* ── RENT OR BUY MODE ── */}
+      {mode==="rentorbuy"&&(<>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Property (Buy)</div>
+            <Field label="House Price" value={housePrice} onChange={setHousePrice} prefix="₹" step={500000} min={0} color={ACC}/>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={ACC}/>
+              <Field label="Interest Rate" value={rate} onChange={setRate} suffix="%" step={0.1} min={0} color={ACC}/>
+            </div>
+            <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={ACC}/>
+          </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:PURP+"40"}}>
+            <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Renting Scenario</div>
             <Field label="Current Monthly Rent" value={rent} onChange={setRent} prefix="₹" step={1000} min={0} color={PURP}/>
             <Field label="Annual Rent Increase" value={rentIncrease} onChange={setRentIncrease} suffix="%" step={0.5} min={0} color={PURP}/>
-            <Field label="Property Appreciation" value={appreciation} onChange={setAppreciation} suffix="%" step={0.5} min={0} color={PURP}/>
-            <Field label="Investment Return (if renting)" value={investReturn} onChange={setInvestReturn} suffix="%" step={0.5} min={0} color={PURP} hint="Down payment + EMI-rent diff invested in MF"/>
           </div>
-        )}
-      </div>
+          <div className="card" style={{padding:"20px 22px",borderColor:GREEN+"40"}}>
+            <div style={{fontSize:12,color:GREEN,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Growth Assumptions</div>
+            <Field label="Property Appreciation" value={appreciation} onChange={setAppreciation} suffix="%" step={0.5} min={0} color={GREEN}/>
+            <Field label="Investment Return (if renting)" value={investReturn} onChange={setInvestReturn} suffix="%" step={0.5} min={0} color={GREEN} hint="Down payment + EMI-rent diff invested"/>
+          </div>
+        </div>
 
-      <div style={{display:"flex",flexDirection:"column",gap:14}}>
-        {mode==="check"&&(
-          <>
-            <div style={{background:check.comfortable?"#EAF5EE":check.manageable?"#FFFBEB":"#FDEAEA",border:`1px solid ${check.verdictColor}`,borderRadius:12,padding:"16px 20px",display:"flex",alignItems:"center",gap:14}}>
-              <div style={{fontSize:36}}>{check.comfortable?"🏠":check.manageable?"⚠️":"🔴"}</div>
-              <div style={{flex:1}}>
-                <div style={{fontWeight:700,fontSize:20,color:check.verdictColor}}>{check.verdict}</div>
-                <div style={{fontSize:12,color:TEXT2,marginTop:3}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
-              </div>
-              <div style={{textAlign:"right"}}>
-                <div style={{fontSize:11,color:TEXT3,marginBottom:4}}>REMAINING</div>
-                <div className="num" style={{fontWeight:700,fontSize:20,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
-              </div>
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))",gap:10}}>
-              {[["Monthly EMI",formatINRFull(check.emi),ACC],["Down Payment",formatINR(check.down),GREEN],[`Value in ${tenure}Y`,formatINR(check.finalVal),"#34D399"],["Equity Built",formatINR(check.equityBuilt),"#A7F3D0"]].map(([l,v,c])=>(
-                <div key={l} className="card" style={{borderColor:ACC+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                  <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
+        {/* VERDICT */}
+        <div style={{background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:14,padding:"20px 26px",display:"flex",gap:24,flexWrap:"wrap",alignItems:"center"}}>
+          <div>
+            <div style={{fontSize:11,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",marginBottom:6}}>Buy — Monthly</div>
+            <div className="num" style={{fontWeight:700,fontSize:24,color:ACC}}>{formatINR(rentorbuy.emi+maintenance)}</div>
+          </div>
+          <div style={{width:1,height:40,background:BORDER}}/>
+          <div>
+            <div style={{fontSize:11,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",marginBottom:6}}>Rent — Monthly</div>
+            <div className="num" style={{fontWeight:700,fontSize:24,color:PURP}}>{formatINR(rent)}</div>
+          </div>
+          <div style={{marginLeft:"auto",textAlign:"right"}}>
+            {rentorbuy.crossover?(
+              <>
+                <div style={{fontSize:11,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",marginBottom:6}}>Buy becomes better at</div>
+                <div className="num" style={{fontWeight:700,fontSize:28,color:GREEN}}>Year {rentorbuy.crossover.year}</div>
+              </>
+            ):(
+              <>
+                <div style={{fontSize:11,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",marginBottom:6}}>Verdict in {tenure}Y</div>
+                <div className="num" style={{fontWeight:700,fontSize:22,color:rentorbuy.data[rentorbuy.data.length-1]?.buy>rentorbuy.data[rentorbuy.data.length-1]?.rent?ACC:PURP}}>
+                  {rentorbuy.data[rentorbuy.data.length-1]?.buy>rentorbuy.data[rentorbuy.data.length-1]?.rent?"Buy wins 🏠":"Rent wins 📈"}
                 </div>
-              ))}
-            </div>
-            <div className="card">
-              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>EMI Comfort Gauge</div>
-              <div style={{position:"relative",height:10,borderRadius:5,background:BORDER,overflow:"hidden",marginBottom:6}}>
-                <div style={{position:"absolute",left:0,height:"100%",width:`${Math.min(check.emiPct,100)}%`,background:check.verdictColor,borderRadius:5}}/>
-              </div>
-              <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:TEXT3}}>
-                <span style={{color:GREEN}}>0–30% Comfortable</span><span style={{color:"#F59E0B"}}>30–45% Manageable</span><span style={{color:RED}}>45%+ Stretched</span>
-              </div>
-            </div>
-          </>
-        )}
-        {mode==="discover"&&(
-          <>
-            <div style={{background:BG_INV,border:`1px solid ${ACC}`,borderRadius:12,padding:"24px 28px"}}>
-              <div style={{fontSize:11,color:ACC,letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>Max Home Price You Can Afford</div>
-              <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:ACC}}>{formatINR(discover.maxPrice)}</div>
-              <div style={{fontSize:13,color:"#8A8480",marginTop:6}}>at {emiPctOfIncome}% → max EMI <strong style={{color:ACC_L}}>{formatINRFull(discover.maxEmi)}/mo</strong></div>
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:10}}>
-              {[["Max Home Price",formatINR(discover.maxPrice),ACC],["Max Loan",formatINR(discover.loan),GREEN],["Down Needed",formatINR(discover.down),"#34D399"],["Max Monthly EMI",formatINRFull(discover.maxEmi),"#A7F3D0"]].map(([l,v,c])=>(
-                <div key={l} className="card" style={{borderColor:ACC+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                  <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-        {mode==="rentorbuy"&&(
-          <>
-            <div style={{background:BG_INV,border:`1px solid ${PURP}40`,borderRadius:12,padding:"16px 20px",display:"flex",gap:20,flexWrap:"wrap"}}>
-              <div>
-                <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Buy — Monthly</div>
-                <div className="num" style={{fontWeight:700,fontSize:20,color:ACC}}>{formatINR(rentorbuy.emi+maintenance)}</div>
-              </div>
-              <div>
-                <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Rent — Monthly</div>
-                <div className="num" style={{fontWeight:700,fontSize:20,color:PURP}}>{formatINR(rent)}</div>
-              </div>
-              {rentorbuy.crossover?(
-                <div style={{marginLeft:"auto",textAlign:"right"}}>
-                  <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Buy becomes better at</div>
-                  <div className="num" style={{fontWeight:700,fontSize:20,color:GREEN}}>Year {rentorbuy.crossover.year}</div>
-                </div>
-              ):(
-                <div style={{marginLeft:"auto",textAlign:"right"}}>
-                  <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Verdict in {tenure}Y</div>
-                  <div className="num" style={{fontWeight:700,fontSize:18,color:rentorbuy.data[rentorbuy.data.length-1]?.buy>rentorbuy.data[rentorbuy.data.length-1]?.rent?ACC:PURP}}>
-                    {rentorbuy.data[rentorbuy.data.length-1]?.buy>rentorbuy.data[rentorbuy.data.length-1]?.rent?"Buy wins 🏠":"Rent wins 📈"}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="card">
-              <div className="lbl" style={{marginBottom:14}}>Net Worth — Buy vs Rent</div>
-              <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={rentorbuy.data} margin={{top:4,right:16,left:0,bottom:0}}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
-                  <XAxis dataKey="year" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
-                  <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-                  <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
-                  <Line type="monotone" dataKey="buy" name="Buy (Equity)" stroke={ACC} strokeWidth={2.5} dot={false} activeDot={{r:4}}/>
-                  <Line type="monotone" dataKey="rent" name="Rent (Invest)" stroke={PURP} strokeWidth={2.5} strokeDasharray="5 4" dot={false}/>
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </>
-        )}
-      </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="lbl" style={{marginBottom:14}}>Net Worth — Buy vs Rent</div>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={rentorbuy.data} margin={{top:4,right:16,left:0,bottom:0}}>
+              <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
+              <XAxis dataKey="year" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
+              <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
+              <Line type="monotone" dataKey="buy" name="Buy (Equity)" stroke={ACC} strokeWidth={2.5} dot={false} activeDot={{r:4}}/>
+              <Line type="monotone" dataKey="rent" name="Rent (Invest)" stroke={PURP} strokeWidth={2.5} strokeDasharray="5 4" dot={false}/>
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </>)}
     </div>
   );
 }
@@ -2384,8 +2467,8 @@ const PAGES=[
   {id:"calculator", label:"Lumpsum & SIP",    icon:"🧮"},
   {id:"emi",        label:"EMI",              icon:"🏦"},
   {id:"retirement", label:"Retirement",       icon:"🌅"},
-  {id:"car",        label:"Car",              icon:"🚗"},
-  {id:"house",      label:"House",            icon:"🏠"},
+  {id:"car",        label:"Car Affordability",icon:"🚗"},
+  {id:"house",      label:"House Affordability",icon:"🏠"},
   {id:"gratuity",   label:"Gratuity",         icon:"🎁"},
   {id:"goalseek",   label:"Goal Planner",     icon:"🎯"},
 ];
