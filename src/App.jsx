@@ -1229,7 +1229,9 @@ function RetirementPage(){
   const largeArc=arcAngle>180?1:0;
 
   return(
-    <div style={{display:"flex",flexDirection:"column",gap:16}}>
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+
+      {/* MODE TABS */}
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
         {[{k:"check",label:"Plan Check",desc:"How am I tracking?"},{k:"sipneeded",label:"SIP Needed",desc:"What SIP do I need?"},{k:"retirewhen",label:"Retire When",desc:"When can I retire?"}].map(m=>(
           <div key={m.k} onClick={()=>setMode(m.k)}
@@ -1243,90 +1245,124 @@ function RetirementPage(){
           </div>
         ))}
       </div>
-      <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:16,alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:12}}>
-          <RetirementSharedInputs currentAge={currentAge} setCurrentAge={setCurrentAge} lifeExp={lifeExp} setLifeExp={setLifeExp}
-            retireAge={mode==="check"?retireAge:sipRetireAge} setRetireAge={mode==="check"?setRetireAge:setSipRetireAge}
-            showRetireAge={mode!=="retirewhen"} currentSavings={currentSavings} setCurrentSavings={setCurrentSavings}
-            monthlyExpense={monthlyExpense} setMonthlyExpense={setMonthlyExpense} preReturnRate={preReturnRate} setPreReturnRate={setPreReturnRate}
-            postReturnRate={postReturnRate} setPostReturnRate={setPostReturnRate} inflation={inflation} setInflation={setInflation}/>
-          {mode==="check"&&(
-            <div className="card" style={{borderColor:ACC+"40"}}>
-              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Monthly SIP</div>
-              <Field label="SIP Amount" value={monthlySIP} onChange={setMonthlySIP} prefix="₹" step={500} min={0} color={ACC}/>
-              <div style={{height:1,background:BORDER,margin:"2px 0 12px"}}/>
-              <RetirementStepUp stepPct={sipStepPct} setStepPct={setSipStepPct} stepFreq={sipStepFreq} setStepFreq={setSipStepFreq}/>
-            </div>
-          )}
-          {mode==="sipneeded"&&(
-            <div className="card" style={{borderColor:PURP+"40"}}>
-              <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Target Corpus</div>
-              <Field label="Target Corpus (0 = auto from expenses)" value={targetCorpus} onChange={setTargetCorpus} prefix="₹" step={100000} min={0} color={PURP}
-                hint={`0 = auto-calculate: ${sipNeededResult?formatINR(sipNeededResult.autoCorpus):"calculating..."}`}/>
-              <div style={{height:1,background:BORDER,margin:"2px 0 12px"}}/>
-              <RetirementStepUp stepPct={sipStep2Pct} setStepPct={setSipStep2Pct} stepFreq={sipStep2Freq} setStepFreq={setSipStep2Freq}/>
-            </div>
-          )}
-          {mode==="retirewhen"&&(
-            <div className="card" style={{borderColor:"#EC489940"}}>
-              <div style={{fontSize:12,color:"#EC4899",letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Monthly SIP</div>
-              <Field label="SIP Amount" value={rwMonthlySIP} onChange={setRwMonthlySIP} prefix="₹" step={500} min={0} color="#EC4899"/>
-              <div style={{height:1,background:BORDER,margin:"2px 0 12px"}}/>
-              <RetirementStepUp stepPct={rwStepPct} setStepPct={setRwStepPct} stepFreq={rwStepFreq} setStepFreq={setRwStepFreq}/>
-              <TipBox>💡 We scan every retirement age from {currentAge+1} to 80 and find the earliest age where your corpus covers all expenses through age {lifeExp}.</TipBox>
-            </div>
-          )}
-        </div>
 
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>
-          {mode==="check"&&checkResult&&(<>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:12}}>
+      {/* ══ PLAN CHECK ══ */}
+      {mode==="check"&&(<>
+        {/* INPUTS ROW */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          {/* Timeline */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
               {[
-                {l:"Corpus Needed",v:formatINR(checkResult.corpusNeeded),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40",sub:"At retirement"},
-                {l:"Corpus You'll Build",v:formatINR(checkResult.totalCorpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:"At retirement"},
-                {l:checkResult.surplus>=0?"Surplus":"Shortfall",v:formatINR(Math.abs(checkResult.surplus)),c:checkResult.surplus>=0?GREEN:RED,bg:checkResult.surplus>=0?"#EAF5EE":"#FDEAEA",bc:(checkResult.surplus>=0?GREEN:RED)+"40",sub:null},
-                {l:"Monthly Exp. at Retirement",v:formatINR(checkResult.expAtRetire),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:"Inflation adjusted"},
-              ].map(({l,v,c,bg,bc,sub})=>(
-                <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
-                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
-                  <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
-                  {sub&&<div style={{fontSize:12,color:TEXT3,marginTop:6}}>{sub}</div>}
+                {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
+                {label:"Retire At",val:retireAge,set:v=>setRetireAge(Math.max(currentAge+1,v)),color:ACC},
+                {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
+              ].map(({label,val,set,color})=>(
+                <div key={label}>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
+                  <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                    <input type="number" value={val} step={1} min={18}
+                      onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
+                      style={{background:"transparent",border:"none",color,padding:0,fontSize:30,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                    <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                  </div>
                 </div>
               ))}
             </div>
+            <div style={{marginTop:12,paddingTop:10,borderTop:`1px solid ${BORDER}`,fontSize:12,color:TEXT3,display:"flex",justifyContent:"space-between"}}>
+              <span>Accumulation: <strong style={{color:ACC}}>{retireAge-currentAge} yrs</strong></span>
+              <span>Retirement: <strong style={{color:BLUE}}>{lifeExp-retireAge} yrs</strong></span>
+            </div>
+          </div>
 
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
-              <div className="card" style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-                <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8,alignSelf:"flex-start"}}>Retirement Readiness</div>
-                <svg width="140" height="80" viewBox="0 0 140 80">
-                  <path d={`M ${CX-R} ${CY} A ${R} ${R} 0 0 1 ${CX+R} ${CY}`} fill="none" stroke={BORDER} strokeWidth="12" strokeLinecap="round"/>
-                  {pct>0&&<path d={`M ${CX-R} ${CY} A ${R} ${R} 0 ${largeArc} 1 ${arcX} ${arcY}`} fill="none" stroke={gaugeColor} strokeWidth="12" strokeLinecap="round"/>}
-                  <text x={CX} y={CY+4} textAnchor="middle" fill={gaugeColor} fontSize="18" fontFamily="'DM Mono',monospace" fontWeight="700">{Math.min(Math.round(pct),150)}%</text>
-                  <text x={CX} y={CY+18} textAnchor="middle" fill={TEXT3} fontSize="8">of target</text>
-                </svg>
-                <div style={{fontSize:12,fontWeight:700,color:gaugeColor,marginTop:4}}>{pct>=100?"On Track ✓":pct>=70?"Almost There":"Needs Attention"}</div>
+          {/* Financials */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
+            <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
+          </div>
+
+          {/* Rates + SIP */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Rates & SIP</div>
+            <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC}/>
+            <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE}/>
+            <Field label="Inflation" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
+            <div style={{height:1,background:BORDER,margin:"8px 0 12px"}}/>
+            <Field label="Monthly SIP" value={monthlySIP} onChange={setMonthlySIP} prefix="₹" step={500} min={0} color={ACC}/>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:4}}>
+              <div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
+                <NumInput value={sipStepPct} onChange={v=>setSipStepPct(v)} step={1} min={0} max={50} suffix="%" color={sipStepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"8px 10px",fontSize:15}}}/>
               </div>
-              <div className="card" style={{borderColor:checkResult.corpusSurvives?GREEN+"50":RED+"50",background:checkResult.corpusSurvives?"#F4FBF7":"#FFF0F0"}}>
-                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Corpus Survivability</div>
-                {checkResult.corpusSurvives?(
-                  <>
-                    <div style={{fontWeight:700,fontSize:22,color:GREEN,marginBottom:8}}>✓ Lasts till age {lifeExp}</div>
-                    <div style={{fontSize:13,color:TEXT2,marginBottom:4}}>Balance remaining</div>
-                    <div className="num" style={{fontWeight:700,fontSize:20,color:GREEN}}>{formatINR(checkResult.drawData[checkResult.drawData.length-1]?.balance||0)}</div>
-                  </>
-                ):(
-                  <>
-                    <div style={{fontWeight:700,fontSize:22,color:RED,marginBottom:8}}>⚠ Depletes at age {checkResult.depletionAge}</div>
-                    <div style={{fontSize:13,color:TEXT2,marginBottom:4}}>Years short</div>
-                    <div className="num" style={{fontWeight:700,fontSize:20,color:"#F59E0B"}}>{lifeExp-(checkResult.depletionAge||lifeExp)} years before expectancy</div>
-                  </>
-                )}
+              <div style={{opacity:sipStepPct>0?1:0.3,pointerEvents:sipStepPct>0?"auto":"none"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
+                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+                  {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
+                    const active=sipStepFreq===k&&sipStepPct>0;
+                    return <div key={k} onClick={()=>setSipStepFreq(k)}
+                      style={{cursor:"pointer",padding:"4px 8px",borderRadius:6,fontSize:10,fontWeight:600,
+                        background:active?"#F59E0B":"#FAF8F5",color:active?"#ffffff":TEXT2,border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>{v.label}</div>;
+                  })}
+                </div>
               </div>
             </div>
+          </div>
+        </div>
 
+        {/* RESULTS */}
+        {checkResult&&(<>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+            {[
+              {l:"Corpus Needed",v:formatINR(checkResult.corpusNeeded),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40",sub:"at retirement"},
+              {l:"Corpus You'll Build",v:formatINR(checkResult.totalCorpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:"at retirement"},
+              {l:checkResult.surplus>=0?"Surplus":"Shortfall",v:formatINR(Math.abs(checkResult.surplus)),c:checkResult.surplus>=0?GREEN:RED,bg:checkResult.surplus>=0?"#EAF5EE":"#FDEAEA",bc:(checkResult.surplus>=0?GREEN:RED)+"40",sub:null},
+              {l:"Monthly Exp. at Retirement",v:formatINR(checkResult.expAtRetire),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:"inflation adjusted"},
+            ].map(({l,v,c,bg,bc,sub})=>(
+              <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
+                <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+                {sub&&<div style={{fontSize:12,color:TEXT3,marginTop:6}}>{sub}</div>}
+              </div>
+            ))}
+          </div>
+
+          {/* Readiness + Survivability */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+            <div className="card" style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"24px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14,alignSelf:"flex-start"}}>Retirement Readiness</div>
+              <svg width="160" height="90" viewBox="0 0 140 80">
+                <path d={`M ${CX-R} ${CY} A ${R} ${R} 0 0 1 ${CX+R} ${CY}`} fill="none" stroke={BORDER} strokeWidth="12" strokeLinecap="round"/>
+                {pct>0&&<path d={`M ${CX-R} ${CY} A ${R} ${R} 0 ${largeArc} 1 ${arcX} ${arcY}`} fill="none" stroke={gaugeColor} strokeWidth="12" strokeLinecap="round"/>}
+                <text x={CX} y={CY+4} textAnchor="middle" fill={gaugeColor} fontSize="18" fontFamily="'DM Mono',monospace" fontWeight="700">{Math.min(Math.round(pct),150)}%</text>
+                <text x={CX} y={CY+18} textAnchor="middle" fill={TEXT3} fontSize="8">of target</text>
+              </svg>
+              <div style={{fontSize:14,fontWeight:700,color:gaugeColor,marginTop:4}}>{pct>=100?"On Track ✓":pct>=70?"Almost There":"Needs Attention"}</div>
+            </div>
+            <div className="card" style={{padding:"24px",background:checkResult.corpusSurvives?"#F4FBF7":"#FFF0F0",borderColor:checkResult.corpusSurvives?GREEN+"50":RED+"50"}}>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Corpus Survivability</div>
+              {checkResult.corpusSurvives?(
+                <>
+                  <div style={{fontWeight:700,fontSize:22,color:GREEN,marginBottom:8}}>✓ Lasts till age {lifeExp}</div>
+                  <div style={{fontSize:13,color:TEXT2,marginBottom:4}}>Balance remaining</div>
+                  <div className="num" style={{fontWeight:700,fontSize:20,color:GREEN}}>{formatINR(checkResult.drawData[checkResult.drawData.length-1]?.balance||0)}</div>
+                </>
+              ):(
+                <>
+                  <div style={{fontWeight:700,fontSize:22,color:RED,marginBottom:8}}>⚠ Depletes at age {checkResult.depletionAge}</div>
+                  <div style={{fontSize:13,color:TEXT2,marginBottom:4}}>Years short</div>
+                  <div className="num" style={{fontWeight:700,fontSize:20,color:"#F59E0B"}}>{lifeExp-(checkResult.depletionAge||lifeExp)} years before expectancy</div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Charts */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
             <div className="card">
-              <div className="lbl" style={{marginBottom:4}}>Corpus Building Journey</div>
-              <ResponsiveContainer width="100%" height={260}>
+              <div className="lbl" style={{marginBottom:14}}>Corpus Building Journey</div>
+              <ResponsiveContainer width="100%" height={240}>
                 <AreaChart data={checkResult.accumData} margin={{top:4,right:16,left:0,bottom:0}}>
                   <defs>
                     <linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={ACC} stopOpacity={0.25}/><stop offset="95%" stopColor={ACC} stopOpacity={0}/></linearGradient>
@@ -1342,10 +1378,9 @@ function RetirementPage(){
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-
             <div className="card">
-              <div className="lbl" style={{marginBottom:4}}>Retirement Corpus Drawdown</div>
-              <ResponsiveContainer width="100%" height={220}>
+              <div className="lbl" style={{marginBottom:14}}>Retirement Drawdown</div>
+              <ResponsiveContainer width="100%" height={240}>
                 <AreaChart data={checkResult.drawData} margin={{top:4,right:16,left:0,bottom:0}}>
                   <defs><linearGradient id="ddg" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={BLUE} stopOpacity={0.25}/><stop offset="95%" stopColor={BLUE} stopOpacity={0}/></linearGradient></defs>
                   <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
@@ -1357,69 +1392,200 @@ function RetirementPage(){
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </>)}
+          </div>
+        </>)}
+      </>)}
 
-          {mode==="sipneeded"&&sipNeededResult&&(<>
-            <div style={{background:"#F5F0FF",border:`1.5px solid ${PURP}50`,borderRadius:14,padding:"24px 28px"}}>
-              <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Monthly SIP Required to Retire at {sipRetireAge}</div>
-              <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:PURP,lineHeight:1}}>{formatINRFull(sipNeededResult.sipNeeded)}</div>
-              {sipStep2Pct>0&&<div style={{fontSize:12,color:TEXT2,marginTop:8}}>Starting SIP with <strong style={{color:"#F59E0B"}}>{sipStep2Pct}% step-up</strong> · Without step-up: <strong style={{color:PURP}}>{formatINRFull(sipNeededResult.sipNeededFlat)}</strong></div>}
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:10}}>
-              {[["Target Corpus",formatINR(sipNeededResult.corpusTarget),PURP],["From Savings",formatINR(sipNeededResult.savingsC),"#C4B5FD"],
-                ["SIP Must Build",formatINR(Math.max(0,sipNeededResult.corpusTarget-sipNeededResult.savingsC)),"#E879F9"],["Time to Retire",`${sipNeededResult.yearsToRetire} years`,"#F0ABFC"]].map(([l,v,c])=>(
-                <div key={l} className="card" style={{borderColor:PURP+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                  <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
+      {/* ══ SIP NEEDED ══ */}
+      {mode==="sipneeded"&&(<>
+        {/* INPUTS ROW */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          {/* Timeline */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+              {[
+                {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
+                {label:"Retire At",val:sipRetireAge,set:setSipRetireAge,color:ACC},
+                {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
+              ].map(({label,val,set,color})=>(
+                <div key={label}>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
+                  <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                    <input type="number" value={val} step={1} min={18}
+                      onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
+                      style={{background:"transparent",border:"none",color,padding:0,fontSize:30,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                    <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="card">
-              <div className="lbl" style={{marginBottom:14}}>Corpus Building Journey (with this SIP)</div>
-              <ResponsiveContainer width="100%" height={240}>
-                <AreaChart data={sipNeededResult.accumData} margin={{top:4,right:16,left:0,bottom:0}}>
-                  <defs><linearGradient id="sng" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={PURP} stopOpacity={0.25}/><stop offset="95%" stopColor={PURP} stopOpacity={0}/></linearGradient></defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
-                  <XAxis dataKey="age" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
-                  <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-                  <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
-                  <Area type="monotone" dataKey="corpus" name="Projected Corpus" stroke={PURP} strokeWidth={2.5} fill="url(#sng)"/>
-                  <Line type="monotone" dataKey="target" name="Target Path" stroke="#F59E0B" strokeWidth={1.5} strokeDasharray="5 4" dot={false}/>
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </>)}
+          </div>
 
-          {mode==="retirewhen"&&retireWhenResult&&(<>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-              {[{label:"Earliest You Can Retire",val:retireWhenResult.earliest,color:"#EC4899",bg:"#FDF0F6",bc:"#EC489940"},{label:"Comfortable (120% funded)",val:retireWhenResult.comfortable,color:GREEN,bg:"#EAF5EE",bc:GREEN+"40"}].map(({label,val,color,bg,bc})=>(
-                <div key={label} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
-                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>{label}</div>
-                  {val?(
-                    <><div className="num" style={{fontWeight:700,fontSize:40,color,lineHeight:1}}>{val.age}</div>
-                    <div style={{fontSize:13,color:TEXT2,marginTop:8}}>In <strong style={{color}}>{val.age-currentAge} years</strong> · {val.pct}% funded</div></>
-                  ):(
-                    <div style={{fontWeight:700,fontSize:14,color:RED,marginTop:8}}>Not achievable by 80</div>
-                  )}
+          {/* Financials */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
+            <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
+            <Field label="Target Corpus (0 = auto)" value={targetCorpus} onChange={setTargetCorpus} prefix="₹" step={100000} min={0} color={PURP}
+              hint={`Auto: ${sipNeededResult?formatINR(sipNeededResult.autoCorpus):"calculating..."}`}/>
+          </div>
+
+          {/* Rates + Step-up */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Rates & Step-Up</div>
+            <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC}/>
+            <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE}/>
+            <Field label="Inflation" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
+            <div style={{height:1,background:BORDER,margin:"8px 0 12px"}}/>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
+                <NumInput value={sipStep2Pct} onChange={v=>setSipStep2Pct(v)} step={1} min={0} max={50} suffix="%" color={sipStep2Pct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"8px 10px",fontSize:15}}}/>
+              </div>
+              <div style={{opacity:sipStep2Pct>0?1:0.3,pointerEvents:sipStep2Pct>0?"auto":"none"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
+                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+                  {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
+                    const active=sipStep2Freq===k&&sipStep2Pct>0;
+                    return <div key={k} onClick={()=>setSipStep2Freq(k)}
+                      style={{cursor:"pointer",padding:"4px 8px",borderRadius:6,fontSize:10,fontWeight:600,
+                        background:active?"#F59E0B":"#FAF8F5",color:active?"#ffffff":TEXT2,border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>{v.label}</div>;
+                  })}
                 </div>
-              ))}
+              </div>
             </div>
-            <div className="card">
-              <div className="lbl" style={{marginBottom:4}}>Corpus vs Required at Each Retirement Age</div>
-              <ResponsiveContainer width="100%" height={260}>
-                <LineChart data={retireWhenResult.timeline} margin={{top:4,right:16,left:0,bottom:0}}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
-                  <XAxis dataKey="age" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
-                  <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-                  <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
-                  <Line type="monotone" dataKey="corpus" name="Your Corpus" stroke="#EC4899" strokeWidth={2.5} dot={false} activeDot={{r:4}}/>
-                  <Line type="monotone" dataKey="needed" name="Corpus Needed" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 4" dot={false}/>
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </>)}
+          </div>
         </div>
-      </div>
+
+        {/* RESULTS */}
+        {sipNeededResult&&(<>
+          <div style={{background:"#F5F0FF",border:`1.5px solid ${PURP}50`,borderRadius:14,padding:"24px 28px"}}>
+            <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Monthly SIP Required to Retire at {sipRetireAge}</div>
+            <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:PURP,lineHeight:1}}>{formatINRFull(sipNeededResult.sipNeeded)}</div>
+            {sipStep2Pct>0&&<div style={{fontSize:12,color:TEXT2,marginTop:8}}>Starting SIP with <strong style={{color:"#F59E0B"}}>{sipStep2Pct}% step-up</strong> · Without step-up: <strong style={{color:PURP}}>{formatINRFull(sipNeededResult.sipNeededFlat)}</strong></div>}
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+            {[["Target Corpus",formatINR(sipNeededResult.corpusTarget),PURP,"#F5F0FF",PURP+"30"],
+              ["From Savings",formatINR(sipNeededResult.savingsC),"#9333EA","#F5F0FF",PURP+"20"],
+              ["SIP Must Build",formatINR(Math.max(0,sipNeededResult.corpusTarget-sipNeededResult.savingsC)),"#7C3AED","#F5F0FF",PURP+"20"],
+              ["Time to Retire",`${sipNeededResult.yearsToRetire} years`,ACC,"#FFFBF2",ACC+"30"],
+            ].map(([l,v,c,bg,bc])=>(
+              <div key={l} style={{background:bg,border:`1px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{l}</div>
+                <div className="num" style={{fontWeight:700,fontSize:"clamp(16px,1.6vw,22px)",color:c}}>{v}</div>
+              </div>
+            ))}
+          </div>
+          <div className="card">
+            <div className="lbl" style={{marginBottom:14}}>Corpus Building Journey</div>
+            <ResponsiveContainer width="100%" height={260}>
+              <AreaChart data={sipNeededResult.accumData} margin={{top:4,right:16,left:0,bottom:0}}>
+                <defs><linearGradient id="sng" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={PURP} stopOpacity={0.25}/><stop offset="95%" stopColor={PURP} stopOpacity={0}/></linearGradient></defs>
+                <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
+                <XAxis dataKey="age" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
+                <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
+                <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
+                <Area type="monotone" dataKey="corpus" name="Projected Corpus" stroke={PURP} strokeWidth={2.5} fill="url(#sng)"/>
+                <Line type="monotone" dataKey="target" name="Target Path" stroke="#F59E0B" strokeWidth={1.5} strokeDasharray="5 4" dot={false}/>
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </>)}
+      </>)}
+
+      {/* ══ RETIRE WHEN ══ */}
+      {mode==="retirewhen"&&(<>
+        {/* INPUTS ROW */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+          {/* Timeline */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              {[
+                {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
+                {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
+              ].map(({label,val,set,color})=>(
+                <div key={label}>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
+                  <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                    <input type="number" value={val} step={1} min={18}
+                      onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
+                      style={{background:"transparent",border:"none",color,padding:0,fontSize:30,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                    <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{marginTop:12,fontSize:12,color:TEXT3}}>We scan ages {currentAge+1}–80 to find when you can retire</div>
+          </div>
+
+          {/* Financials */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
+            <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
+            <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
+          </div>
+
+          {/* Rates + SIP */}
+          <div className="card" style={{padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Rates & SIP</div>
+            <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC}/>
+            <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE}/>
+            <Field label="Inflation" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
+            <div style={{height:1,background:BORDER,margin:"8px 0 12px"}}/>
+            <Field label="Monthly SIP" value={rwMonthlySIP} onChange={setRwMonthlySIP} prefix="₹" step={500} min={0} color="#EC4899"/>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:4}}>
+              <div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
+                <NumInput value={rwStepPct} onChange={v=>setRwStepPct(v)} step={1} min={0} max={50} suffix="%" color={rwStepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"8px 10px",fontSize:15}}}/>
+              </div>
+              <div style={{opacity:rwStepPct>0?1:0.3,pointerEvents:rwStepPct>0?"auto":"none"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
+                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+                  {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
+                    const active=rwStepFreq===k&&rwStepPct>0;
+                    return <div key={k} onClick={()=>setRwStepFreq(k)}
+                      style={{cursor:"pointer",padding:"4px 8px",borderRadius:6,fontSize:10,fontWeight:600,
+                        background:active?"#F59E0B":"#FAF8F5",color:active?"#ffffff":TEXT2,border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>{v.label}</div>;
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RESULTS */}
+        {retireWhenResult&&(<>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+            {[{label:"Earliest You Can Retire",val:retireWhenResult.earliest,color:"#EC4899",bg:"#FDF0F6",bc:"#EC489940"},
+              {label:"Comfortable (120% funded)",val:retireWhenResult.comfortable,color:GREEN,bg:"#EAF5EE",bc:GREEN+"40"}].map(({label,val,color,bg,bc})=>(
+              <div key={label} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"22px 26px"}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>{label}</div>
+                {val?(
+                  <><div className="num" style={{fontWeight:700,fontSize:48,color,lineHeight:1,marginBottom:8}}>{val.age}</div>
+                  <div style={{fontSize:13,color:TEXT2}}>In <strong style={{color}}>{val.age-currentAge} years</strong> · {val.pct}% funded</div></>
+                ):(
+                  <div style={{fontWeight:700,fontSize:16,color:RED,marginTop:8}}>Not achievable by 80</div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="card">
+            <div className="lbl" style={{marginBottom:14}}>Corpus vs Required at Each Retirement Age</div>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={retireWhenResult.timeline} margin={{top:4,right:16,left:0,bottom:0}}>
+                <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
+                <XAxis dataKey="age" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
+                <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
+                <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
+                <Line type="monotone" dataKey="corpus" name="Your Corpus" stroke="#EC4899" strokeWidth={2.5} dot={false} activeDot={{r:4}}/>
+                <Line type="monotone" dataKey="needed" name="Corpus Needed" stroke="#F59E0B" strokeWidth={2} strokeDasharray="5 4" dot={false}/>
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </>)}
+      </>)}
     </div>
   );
 }
