@@ -2348,7 +2348,7 @@ function GoalSeekPage(){
   const makeGoal=(id)=>({id,name:"Child Education",presentValue:1000000,years:10,inflation:10,returnRate:recRate(10).rate,color:PURP,active:true});
   const [goals,setGoals]=React.useState([makeGoal(1),makeGoal(2)]);
   const [nextId,setNextId]=React.useState(3);
-  const addGoal=()=>{if(goals.filter(g=>g.active).length>=5)return;const id=nextId;setNextId(id+1);setGoals(prev=>[...prev,{...makeGoal(id),name:"New Goal",presentValue:500000,years:5,inflation:6,returnRate:10,color:TEXT2}]);};
+  const addGoal=()=>{if(goals.filter(g=>g.active).length>=10)return;const id=nextId;setNextId(id+1);setGoals(prev=>[...prev,{...makeGoal(id),name:"New Goal",presentValue:500000,years:5,inflation:6,returnRate:10,color:TEXT2}]);};
   const removeGoal=(id)=>setGoals(prev=>prev.filter(g=>g.id!==id));
   const updateGoal=(id,field,value)=>setGoals(prev=>prev.map(g=>{if(g.id!==id)return g;const updated={...g,[field]:value};if(field==="years")updated.returnRate=recRate(value).rate;return updated;}));
   const activeGoals=goals.filter(g=>g.active);
@@ -2375,36 +2375,66 @@ function GoalSeekPage(){
   }
 
   return(
-    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+    <div style={{display:"flex",flexDirection:"column",gap:16}}>
 
-      {/* GOAL CARDS — INPUTS */}
+      {/* GOAL CARDS */}
       {goalCalcs.map((g,idx)=>(
-        <div key={g.id} className="card" style={{padding:"20px 24px",borderColor:g.color+"40"}}>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr 1fr auto",gap:12,alignItems:"start"}}>
+        <div key={g.id} className="card" style={{padding:"22px 24px",borderColor:g.color+"40"}}>
+
+          {/* Header row: Goal label + dropdown + delete */}
+          <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:18}}>
+            <div style={{fontSize:13,fontWeight:700,color:g.color,letterSpacing:"0.5px",minWidth:56}}>Goal {idx+1}</div>
+            <select value={g.name}
+              onChange={e=>{const preset=GOAL_PRESETS.find(p=>p.name===e.target.value)||GOAL_PRESETS[8];setGoals(prev=>prev.map(pg=>pg.id===g.id?{...pg,name:e.target.value,inflation:preset.inflation,color:preset.color}:pg));}}
+              style={{flex:1,maxWidth:260,background:"#FAF8F5",border:`1.5px solid ${g.color}50`,borderRadius:8,color:g.color,padding:"9px 12px",fontSize:14,outline:"none",fontWeight:700}}>
+              {GOAL_PRESETS.map(p=><option key={p.name} value={p.name}>{p.name}</option>)}
+            </select>
+            {activeGoals.length>1&&(
+              <div onClick={()=>removeGoal(g.id)}
+                style={{marginLeft:"auto",width:30,height:30,borderRadius:7,background:"#FDEAEA",border:`1px solid ${RED}40`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:16,color:RED,flexShrink:0}}>×</div>
+            )}
+          </div>
+
+          {/* Input fields row */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:12,marginBottom:16}}>
             <div>
-              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Goal {idx+1}</div>
-              <select value={g.name} onChange={e=>{const preset=GOAL_PRESETS.find(p=>p.name===e.target.value)||GOAL_PRESETS[8];setGoals(prev=>prev.map(pg=>pg.id===g.id?{...pg,name:e.target.value,inflation:preset.inflation,color:preset.color}:pg));}}
-                style={{width:"100%",background:"#FAF8F5",border:`1.5px solid ${g.color}40`,borderRadius:8,color:g.color,padding:"9px 10px",fontSize:13,outline:"none",fontWeight:600}}>
-                {GOAL_PRESETS.map(p=><option key={p.name} value={p.name}>{p.name}</option>)}
-              </select>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Present Value</div>
+              <Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/>
             </div>
-            <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Present Value</div><Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/></div>
-            <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Timeline</div><Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/></div>
-            <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Inflation</div><Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/></div>
             <div>
-              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>
-                Return {!isCustomRate(g)&&<span style={{fontSize:9,color:g.rec.color,background:g.rec.color+"20",padding:"1px 5px",borderRadius:3,marginLeft:4}}>AUTO</span>}
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Timeline</div>
+              <Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Inflation</div>
+              <Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>
+                Return Rate
+                {!isCustomRate(g)&&<span style={{marginLeft:6,fontSize:9,color:g.rec.color,background:g.rec.color+"20",padding:"2px 6px",borderRadius:4,fontWeight:700}}>AUTO</span>}
               </div>
               <Field label="" value={g.returnRate} onChange={v=>updateGoal(g.id,"returnRate",v)} suffix="%" step={0.5} min={1} color={isCustomRate(g)?"#F59E0B":g.rec.color}/>
+              {!isCustomRate(g)&&<div style={{fontSize:11,color:TEXT3,marginTop:4}}>{g.rec.label}</div>}
             </div>
-            <div style={{paddingTop:28}}>{activeGoals.length>1&&<div onClick={()=>removeGoal(g.id)} style={{width:28,height:28,borderRadius:6,background:"#FDEAEA",border:`1px solid ${RED}40`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,color:RED}}>×</div>}</div>
           </div>
-          {/* Mini results per goal */}
-          <div style={{marginTop:14,paddingTop:12,borderTop:`1px solid ${BORDER}`,display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8}}>
-            {[["Future Value",formatINR(g.fv),g.color],["Inflation Impact",`+${formatINR(g.fv-g.presentValue)}`,"#F59E0B"],["Monthly SIP",formatINR(g.sip),ACC],["Total to Invest",formatINR(g.totalInvested),TEXT3],["Wealth Gain",formatINR(g.gain),GREEN],["CAGR",`${g.returnRate}%`,g.rec.color]].map(([l,v,c])=>(
-              <div key={l} style={{background:"#FAF8F5",borderRadius:8,padding:"8px 10px"}}>
-                <div style={{fontSize:10,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"0.8px",fontWeight:700}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:13,color:c}}>{v}</div>
+
+          {/* Divider */}
+          <div style={{height:1,background:BORDER,marginBottom:14}}/>
+
+          {/* Results row */}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8}}>
+            {[
+              ["Future Value",formatINR(g.fv),g.color],
+              ["Inflation Impact",`+${formatINR(g.fv-g.presentValue)}`,"#D97706"],
+              ["Monthly SIP",formatINR(g.sip),ACC],
+              ["Total to Invest",formatINR(g.totalInvested),TEXT2],
+              ["Wealth Gain",formatINR(g.gain),GREEN],
+              ["CAGR",`${g.returnRate}%`,g.rec.color],
+            ].map(([l,v,c])=>(
+              <div key={l} style={{background:"#F7F5F0",borderRadius:8,padding:"10px 12px"}}>
+                <div style={{fontSize:10,color:TEXT3,marginBottom:5,textTransform:"uppercase",letterSpacing:"0.8px",fontWeight:700}}>{l}</div>
+                <div className="num" style={{fontWeight:700,fontSize:14,color:c}}>{v}</div>
               </div>
             ))}
           </div>
@@ -2412,18 +2442,19 @@ function GoalSeekPage(){
       ))}
 
       {/* ADD GOAL */}
-      {activeGoals.length<5&&(
-        <div onClick={addGoal} style={{border:`2px dashed ${BORDER}`,borderRadius:12,padding:"16px",textAlign:"center",cursor:"pointer",color:TEXT3,fontSize:13,transition:"all 0.2s"}}
+      {activeGoals.length<10&&(
+        <div onClick={addGoal}
+          style={{border:`2px dashed ${BORDER}`,borderRadius:12,padding:"16px",textAlign:"center",cursor:"pointer",color:TEXT3,fontSize:13,transition:"all 0.2s"}}
           onMouseEnter={e=>{e.currentTarget.style.borderColor=ACC;e.currentTarget.style.color=ACC;}}
           onMouseLeave={e=>{e.currentTarget.style.borderColor=BORDER;e.currentTarget.style.color=TEXT3;}}>
-          + Add Goal ({activeGoals.length}/5)
+          + Add Goal ({activeGoals.length}/10)
         </div>
       )}
 
       {/* COMBINED RESULTS */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
         {[
-          {l:"Goals Defined",v:`${activeGoals.length} / 5`,c:TEXT2,bg:"#ffffff",bc:BORDER},
+          {l:"Goals Defined",v:`${activeGoals.length} / 10`,c:TEXT2,bg:"#ffffff",bc:BORDER},
           {l:"Total Future Value",v:formatINR(totalFV),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40"},
           {l:"Combined Monthly SIP",v:formatINR(totalMonthlySIP),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
         ].map(({l,v,c,bg,bc})=>(
@@ -2450,7 +2481,7 @@ function GoalSeekPage(){
               <div style={{width:80,height:5,background:BORDER,borderRadius:3,overflow:"hidden"}}>
                 <div style={{height:"100%",width:`${(g.sip/totalMonthlySIP*100).toFixed(0)}%`,background:g.color,borderRadius:3}}/>
               </div>
-              <div style={{fontSize:11,color:TEXT3,width:30,textAlign:"right"}}>{(g.sip/totalMonthlySIP*100).toFixed(0)}%</div>
+              <div style={{fontSize:11,color:TEXT3,width:32,textAlign:"right"}}>{(g.sip/totalMonthlySIP*100).toFixed(0)}%</div>
             </div>
           ))}
         </div>
