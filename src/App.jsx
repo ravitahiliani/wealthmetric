@@ -2396,25 +2396,48 @@ function GoalSeekPage(){
           </div>
 
           {/* Input fields row */}
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:12,marginBottom:16}}>
+          <div style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr",gap:10,marginBottom:16,alignItems:"start"}}>
             <div>
-              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Present Value</div>
-              <Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/>
-            </div>
-            <div>
-              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Timeline</div>
-              <Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/>
-            </div>
-            <div>
-              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Inflation</div>
-              <Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/>
-            </div>
-            <div>
-              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>
-                Return Rate
-                {!isCustomRate(g)&&<span style={{marginLeft:6,fontSize:9,color:g.rec.color,background:g.rec.color+"20",padding:"2px 6px",borderRadius:4,fontWeight:700}}>AUTO</span>}
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Present Value</div>
+              <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
+                <span style={{padding:"0 10px",color:g.color,fontFamily:"'DM Mono',monospace",fontWeight:600,fontSize:13,borderRight:`1px solid ${BORDER}`,alignSelf:"stretch",display:"flex",alignItems:"center",background:"#FAF8F5"}}>₹</span>
+                <input type="number" value={g.presentValue} step={50000} min={0}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))updateGoal(g.id,"presentValue",n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
+                {g.presentValue>=100000&&<span style={{padding:"0 8px",fontSize:11,color:g.color,fontWeight:700,whiteSpace:"nowrap",fontFamily:"'DM Mono',monospace"}}>
+                  {g.presentValue>=10000000?`${(g.presentValue/10000000).toFixed(2)}Cr`:g.presentValue>=100000?`${(g.presentValue/100000).toFixed(2)}L`:""}
+                </span>}
               </div>
-              <Field label="" value={g.returnRate} onChange={v=>updateGoal(g.id,"returnRate",v)} suffix="%" step={0.5} min={1} color={isCustomRate(g)?"#F59E0B":g.rec.color}/>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Timeline</div>
+              <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
+                <input type="number" value={g.years} step={1} min={1}
+                  onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))updateGoal(g.id,"years",Math.max(1,n));}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
+                <span style={{padding:"0 8px",fontSize:11,color:TEXT3,whiteSpace:"nowrap"}}>yrs</span>
+              </div>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Inflation</div>
+              <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
+                <input type="number" value={g.inflation} step={0.5} min={0}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))updateGoal(g.id,"inflation",n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
+                <span style={{padding:"0 8px",fontSize:11,color:TEXT3}}>%</span>
+              </div>
+            </div>
+            <div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6,display:"flex",alignItems:"center",gap:6}}>
+                Rate of Return
+                {!isCustomRate(g)&&<span style={{fontSize:9,color:g.rec.color,background:g.rec.color+"20",padding:"2px 6px",borderRadius:4,fontWeight:700}}>AUTO</span>}
+              </div>
+              <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
+                <input type="number" value={g.returnRate} step={0.5} min={1}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))updateGoal(g.id,"returnRate",n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:isCustomRate(g)?"#F59E0B":g.rec.color,padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none",minWidth:0}}/>
+                <span style={{padding:"0 8px",fontSize:11,color:TEXT3}}>%</span>
+              </div>
               {!isCustomRate(g)&&<div style={{fontSize:11,color:TEXT3,marginTop:4}}>{g.rec.label}</div>}
             </div>
           </div>
