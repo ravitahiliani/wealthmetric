@@ -1732,30 +1732,33 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Running Costs</div>
             <Field label="Annual Insurance" value={effectiveIns} onChange={setInsurance} prefix="₹" step={1000} min={0} color={BLUE}/>
             <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
-              💡 Auto-estimated at 2.5% of on-road price. Edit above if you have a quote.
+              💡 Auto-estimated at 2.5% of on-road price.
             </div>
             <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={BLUE}/>
             <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
-              💡 Thumb rule: ~1.5% of on-road price per year ({formatINR(Math.round(carPrice*0.015/12))}/mo) — includes routine servicing + tyre amortisation. Higher for older or premium cars.
+              💡 Thumb rule: ~1.5% of on-road price per year — includes routine servicing + tyre amortisation.
             </div>
             <Field label="Monthly Fuel / Charging" value={fuel} onChange={setFuel} prefix="₹" step={500} min={0} color={BLUE}/>
-            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4,marginBottom:14}}>
-              💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo
-            </div>
+
 
           </div>
         </div>
 
         {/* RESULTS */}
-        <div style={{background:check.comfortable?"#EAF5EE":check.manageable?"#FFFBEB":"#FDEAEA",border:`1.5px solid ${check.verdictColor}`,borderRadius:14,padding:"20px 26px",display:"flex",alignItems:"center",gap:20}}>
-          <div style={{fontSize:40}}>{check.comfortable?"🚗":check.manageable?"⚠️":"🔴"}</div>
+        <div style={{background:check.comfortable?"#EAF5EE":check.manageable?"#FFFBEB":"#FDEAEA",border:`2px solid ${check.verdictColor}`,borderRadius:16,padding:"28px 32px",display:"flex",alignItems:"center",gap:24}}>
           <div style={{flex:1}}>
-            <div style={{fontWeight:700,fontSize:22,color:check.verdictColor}}>{check.verdict}</div>
-            <div style={{fontSize:13,color:TEXT2,marginTop:4}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly cost <strong style={{color:check.verdictColor}}>{formatINRFull(check.monthlyCost)}</strong></div>
+            <div style={{fontWeight:800,fontSize:32,color:check.verdictColor,marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
+              {check.comfortable?"✓ Comfortable":check.manageable?"⚠ Manageable":"✗ Stretched"}
+            </div>
+            <div style={{fontSize:15,color:TEXT2,display:"flex",gap:24,flexWrap:"wrap"}}>
+              <span>EMI <strong style={{color:check.verdictColor,fontSize:17}}>{check.emiPct.toFixed(1)}%</strong> of income</span>
+              <span>Total monthly <strong style={{color:check.verdictColor,fontSize:17}}>{formatINRFull(check.monthlyCost)}</strong></span>
+            </div>
           </div>
-          <div style={{textAlign:"right"}}>
-            <div style={{fontSize:12,color:TEXT3,marginBottom:4}}>Remaining</div>
-            <div className="num" style={{fontWeight:700,fontSize:24,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
+          <div style={{textAlign:"right",flexShrink:0}}>
+            <div style={{fontSize:13,color:TEXT3,marginBottom:6,letterSpacing:"0.5px",textTransform:"uppercase",fontWeight:600}}>Monthly Surplus</div>
+            <div className="num" style={{fontWeight:800,fontSize:36,color:check.disposable>0?GREEN:RED,lineHeight:1}}>{formatINRFull(check.disposable)}</div>
+            <div style={{fontSize:12,color:TEXT3,marginTop:4}}>after all car costs</div>
           </div>
         </div>
 
@@ -1823,9 +1826,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
             <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={1} min={1} color={BLUE}/>
             <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE} hint="Insurance/12 + maintenance + fuel"/>
-            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4}}>
-              💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo
-            </div>
+
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Settings</div>
