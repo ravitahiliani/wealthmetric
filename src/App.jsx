@@ -20,7 +20,7 @@ const GLOBAL_CSS = `
   .pill.on{background:#C17F24;color:#ffffff;border-color:#C17F24;box-shadow:0 2px 6px rgba(193,127,36,0.3)}
   .pill.off:hover{color:#1A1714;border-color:#C17F24;background:#F5E6C8}
   .asset-pill{cursor:pointer;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600;transition:all 0.15s;border:1.5px solid transparent;white-space:nowrap;user-select:none}
-  .lbl{font-size:10px;color:#8A8480;letter-spacing:1.8px;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+  .lbl{font-size:12px;color:#5A5650;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:10px}
   .toggle-sw{width:40px;height:22px;border-radius:11px;transition:background 0.2s;display:flex;align-items:center;padding:3px;cursor:pointer;flex-shrink:0}
   .toggle-kn{width:16px;height:16px;border-radius:50%;background:white;transition:transform 0.2s;box-shadow:0 1px 3px rgba(26,23,20,0.3)}
   ::-webkit-scrollbar{width:5px;height:5px}
@@ -84,7 +84,7 @@ function Field({label,value,onChange,suffix="",prefix="",step=1,min=0,color,hint
   return(
     <div style={{marginBottom:14}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
-        <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600}}>{label}</div>
+        <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700}}>{label}</div>
         {readable&&<div className="num" style={{fontSize:11,color:c,fontWeight:700,background:"#ffffff",border:`1px solid ${c}33`,borderRadius:5,padding:"1px 8px"}}>{readable}</div>}
       </div>
       <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
@@ -96,7 +96,7 @@ function Field({label,value,onChange,suffix="",prefix="",step=1,min=0,color,hint
           style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"9px 12px",fontSize:15,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",width:"100%"}}/>
         {suffix&&<span style={{padding:"0 12px",color:TEXT3,fontSize:12,whiteSpace:"nowrap"}}>{suffix}</span>}
       </div>
-      {hint&&<div style={{fontSize:10,color:TEXT3,marginTop:4}}>{hint}</div>}
+      {hint&&<div style={{fontSize:12,color:TEXT3,marginTop:5}}>{hint}</div>}
     </div>
   );
 }
@@ -451,24 +451,24 @@ function CalculatorPage(){
             {/* Top: Annual Return + Time Horizon side by side */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               <div className="card" style={{padding:"18px 18px"}}>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Annual Return</div>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
                 <div style={{display:"flex",alignItems:"baseline",gap:4}}>
                   <input type="number" value={annualRate} step={0.1} min={0}
                     onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
                     style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                   <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
                 </div>
-                <div style={{fontSize:11,color:TEXT3,marginTop:6}}>per annum</div>
+                <div style={{fontSize:12,color:TEXT3,marginTop:6}}>per annum</div>
               </div>
               <div className="card" style={{padding:"18px 18px"}}>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Time Horizon</div>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
                 <div style={{display:"flex",alignItems:"baseline",gap:4}}>
                   <input type="number" value={years} step={0.5} min={0.5}
                     onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
                     style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                   <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
                 </div>
-                <div style={{fontSize:11,color:TEXT3,marginTop:6}}>investment period</div>
+                <div style={{fontSize:12,color:TEXT3,marginTop:6}}>investment period</div>
               </div>
             </div>
 
@@ -495,7 +495,7 @@ function CalculatorPage(){
             </div>
             {sipOn?(<>
               {/* Frequency */}
-              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Frequency</div>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Frequency</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
                 {Object.entries(SIP_FREQS).map(([k,v])=>(
                   <div key={k} onClick={()=>setSipFreqKey(k)}
@@ -509,7 +509,7 @@ function CalculatorPage(){
                 ))}
               </div>
               {/* Amount */}
-              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Amount</div>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Amount</div>
               <div style={{display:"flex",alignItems:"center",background:"#EEF3FF",border:`1.5px solid ${BLUE}40`,borderRadius:9,overflow:"hidden",marginBottom:20}}>
                 <span style={{padding:"0 14px",color:BLUE,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${BLUE}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
                 <input type="number" value={sipAmt} step={100} min={0}
@@ -521,7 +521,7 @@ function CalculatorPage(){
               </div>
               {/* Step-up */}
               <div style={{paddingTop:16,borderTop:`1px solid ${BORDER}`}}>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Step-Up</div>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Step-Up</div>
                 <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
                   <div style={{flexShrink:0}}>
                     <div style={{fontSize:10,color:TEXT3,marginBottom:6}}>Percentage</div>
@@ -571,7 +571,7 @@ function CalculatorPage(){
         <div className="card" style={{padding:0,overflow:"hidden"}}>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1px 1fr 1px 1fr 1px 1fr",gap:0}}>
             <div style={{padding:"16px 20px"}}>
-              <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Annual Return</div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Annual Return</div>
               <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
                 <input type="number" value={annualRate} step={0.1} min={0} onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}} style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"9px 12px",fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
                 <span style={{padding:"0 12px",fontSize:12,color:TEXT3}}>% p.a.</span>
@@ -579,7 +579,7 @@ function CalculatorPage(){
             </div>
             <div style={{background:BORDER}}/>
             <div style={{padding:"16px 20px"}}>
-              <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Time Horizon</div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Time Horizon</div>
               <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
                 <input type="number" value={years} step={0.5} min={0.5} onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}} style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"9px 12px",fontSize:16,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
                 <span style={{padding:"0 12px",fontSize:12,color:TEXT3}}>years</span>
@@ -595,7 +595,7 @@ function CalculatorPage(){
               <div style={{fontSize:9,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Lumpsum (optional)</div>
               <Field label="" value={fsLumpsum} onChange={setFsLumpsum} prefix="₹" step={1000} min={0} color={ACC}/>
               <div style={{marginTop:10}}>
-                <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>SIP Frequency</div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>SIP Frequency</div>
                 <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
                   {Object.entries(SIP_FREQS).map(([k,v])=>(
                     <div key={k} className={`pill ${fsSipFreqKey===k?"on":"off"}`}
@@ -606,11 +606,11 @@ function CalculatorPage(){
               </div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginTop:10}}>
                 <div>
-                  <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Step-Up %</div>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Step-Up %</div>
                   <NumInput value={fsStepPct} onChange={v=>setFsStepPct(v)} step={1} min={0} max={100} suffix="%" color={fsStepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"6px 8px",fontSize:13}}}/>
                 </div>
                 <div>
-                  <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Every</div>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Every</div>
                   <div style={{display:"flex",flexDirection:"column",gap:3}}>
                     {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
                       <div key={k} onClick={()=>setFsStepFreq(k)}
@@ -653,7 +653,7 @@ function CalculatorPage(){
                   {l:"SIP XIRR",v:sipOn?calcResults.sip.xirr.toFixed(1)+"%":"—",c:BLUE,bg:"#F0F4FF",bc:BLUE+"40"},
                 ].map(({l,v,c,bg,bc})=>(
                   <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"26px 28px"}}>
-                    <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:14,fontWeight:600}}>{l}</div>
+                    <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",marginBottom:14,fontWeight:600}}>{l}</div>
                     <div className="num" style={{fontWeight:700,fontSize:"clamp(26px,2.5vw,38px)",color:c,lineHeight:1}}>{v}</div>
                   </div>
                 ))}
@@ -673,8 +673,8 @@ function CalculatorPage(){
               </div>
               <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.5vw,32px)",color:ACC,lineHeight:1,marginBottom:4}}>{formatINR(calcResults.ls.corpus)}</div>
               <div style={{display:"flex",gap:20,paddingTop:12,borderTop:`1px solid ${BORDER}`,marginTop:12}}>
-                <div><div style={{fontSize:9,color:TEXT3,marginBottom:3}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:14,color:GREEN}}>{formatINR(calcResults.ls.gain)}</div></div>
-                <div><div style={{fontSize:9,color:TEXT3,marginBottom:3}}>CAGR</div><div className="num" style={{fontWeight:700,fontSize:14,color:GREEN}}>{rate}%</div></div>
+                <div><div style={{fontSize:11,color:TEXT3,marginBottom:4}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:14,color:GREEN}}>{formatINR(calcResults.ls.gain)}</div></div>
+                <div><div style={{fontSize:11,color:TEXT3,marginBottom:4}}>CAGR</div><div className="num" style={{fontWeight:700,fontSize:14,color:GREEN}}>{rate}%</div></div>
               </div>
             </div>
             {sipOn&&(
@@ -691,8 +691,8 @@ function CalculatorPage(){
                 </div>
                 <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.5vw,32px)",color:BLUE,lineHeight:1,marginBottom:4}}>{formatINR(calcResults.sip.corpus)}</div>
                 <div style={{display:"flex",gap:20,paddingTop:12,borderTop:`1px solid ${BORDER}`,marginTop:12}}>
-                  <div><div style={{fontSize:9,color:TEXT3,marginBottom:3}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:14,color:BLUE}}>{formatINR(calcResults.sip.gain)}</div></div>
-                  <div><div style={{fontSize:9,color:TEXT3,marginBottom:3}}>XIRR</div><div className="num" style={{fontWeight:700,fontSize:14,color:BLUE}}>{calcResults.sip.xirr.toFixed(1)}%</div></div>
+                  <div><div style={{fontSize:11,color:TEXT3,marginBottom:4}}>GAIN</div><div className="num" style={{fontWeight:700,fontSize:14,color:BLUE}}>{formatINR(calcResults.sip.gain)}</div></div>
+                  <div><div style={{fontSize:11,color:TEXT3,marginBottom:4}}>XIRR</div><div className="num" style={{fontWeight:700,fontSize:14,color:BLUE}}>{calcResults.sip.xirr.toFixed(1)}%</div></div>
                 </div>
               </div>
             )}
@@ -725,7 +725,7 @@ function CalculatorPage(){
               <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
                 <th style={{textAlign:"left",padding:"6px 12px",color:TEXT3,fontWeight:600,fontSize:10}}>Component</th>
                 {["Invested","Corpus","Gain","Return"].map(h=>(
-                  <th key={h} style={{textAlign:"right",padding:"6px 12px",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
+                  <th key={h} style={{textAlign:"right",padding:"6px 12px",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
@@ -768,7 +768,7 @@ function CalculatorPage(){
             ["Target Corpus",formatINR(targetCorpus),"#1A1714","#ffffff",BORDER],
           ].map(([l,v,c,bg,bc])=>(
             <div key={l} style={{background:bg,border:`1px solid ${bc}`,borderRadius:14,padding:"18px 20px"}}>
-              <div style={{fontSize:9,color:TEXT3,marginBottom:8,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+              <div style={{fontSize:11,color:TEXT2,marginBottom:8,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
               <div className="num" style={{fontWeight:700,fontSize:"clamp(15px,1.6vw,20px)",color:c}}>{v}</div>
             </div>
           ))}
@@ -793,7 +793,7 @@ function CalculatorPage(){
           <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
             <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
               {["Step-Up","Starting SIP","vs No Step-Up","Saving"].map(h=>(
-                <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
+                <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
               ))}
             </tr></thead>
             <tbody>
@@ -911,14 +911,14 @@ function EMIPage(){
     <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:16,alignItems:"start"}}>
       <div style={{display:"flex",flexDirection:"column",gap:12}}>
         <div className="card">
-          <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Loan Type</div>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Loan Type</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
             {Object.entries(LOAN_TYPES).map(([k,v])=>(
               <div key={k} onClick={()=>handleLoanType(k)}
                 style={{padding:"8px 10px",borderRadius:8,border:`1px solid ${loanType===k?ACC:BORDER}`,
                   background:loanType===k?ACC_L:"transparent",cursor:"pointer",transition:"all 0.15s"}}>
                 <div style={{fontSize:12,fontWeight:600,color:loanType===k?ACC_D:TEXT3}}>{v.label}</div>
-                <div style={{fontSize:9,color:TEXT3,marginTop:2}}>{v.rateHint}</div>
+                <div style={{fontSize:11,color:TEXT2,marginTop:2}}>{v.rateHint}</div>
               </div>
             ))}
           </div>
@@ -940,21 +940,21 @@ function EMIPage(){
           {prepayOn&&(<>
             <div style={{height:1,background:BORDER,marginBottom:14}}/>
             <div style={{marginBottom:14}}>
-              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8}}>Strategy</div>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Strategy</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
                 {[{k:"tenure",label:"Reduce Tenure",desc:"Same EMI, pay off sooner"},{k:"emi",label:"Reduce EMI",desc:"Lower EMI, same tenure"}].map(({k,label,desc})=>(
                   <div key={k} onClick={()=>setPrepayStrategy(k)}
                     style={{padding:"8px 10px",borderRadius:8,border:`1px solid ${prepayStrategy===k?"#F59E0B":BORDER}`,
                       background:prepayStrategy===k?"#FFFBEB":"transparent",cursor:"pointer"}}>
                     <div style={{fontSize:11,fontWeight:600,color:prepayStrategy===k?"#F59E0B":TEXT3}}>{label}</div>
-                    <div style={{fontSize:9,color:TEXT3,marginTop:2}}>{desc}</div>
+                    <div style={{fontSize:11,color:TEXT2,marginTop:2}}>{desc}</div>
                   </div>
                 ))}
               </div>
             </div>
             <Field label="Prepay Amount" value={prepayAmt} onChange={setPrepayAmt} prefix="₹" step={5000} min={0} color="#F59E0B"/>
             <div>
-              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:7}}>Frequency</div>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:7}}>Frequency</div>
               <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
                 {[["monthly","Monthly"],["quarterly","Quarterly"],["annually","Annually"]].map(([k,l])=>(
                   <div key={k} className={`pill ${prepayFreq===k?"on":"off"}`}
@@ -979,15 +979,15 @@ function EMIPage(){
               ]:[]),
             ].map(([l,v,c,sub])=>(
               <div key={l}>
-                <div style={{fontSize:9,color:"#666",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div>
                 <div className="num" style={{fontWeight:700,fontSize:"clamp(14px,1.4vw,19px)",color:c}}>{v}</div>
-                {sub&&<div style={{fontSize:9,color:"#666",marginTop:2}}>{sub}</div>}
+                {sub&&<div style={{fontSize:11,color:TEXT2,marginTop:2}}>{sub}</div>}
               </div>
             ))}
           </div>
 
           <div className="card">
-            <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Principal vs Interest Split</div>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Principal vs Interest Split</div>
             <div style={{height:14,borderRadius:7,background:BORDER,overflow:"hidden",marginBottom:8}}>
               <div style={{height:"100%",width:`${(principal/results.totalPay*100).toFixed(1)}%`,background:ACC,borderRadius:"7px 0 0 7px"}}/>
             </div>
@@ -1043,7 +1043,7 @@ function EMIPage(){
                 <thead>
                   <tr style={{borderBottom:`1px solid ${BORDER}`}}>
                     {["Year","Balance","Principal Paid","Yr Principal","Yr Interest"].map((h,i)=>(
-                      <th key={h} style={{textAlign:i===0?"left":"right",padding:"6px 10px",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
+                      <th key={h} style={{textAlign:i===0?"left":"right",padding:"6px 10px",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -1072,11 +1072,11 @@ function EMIPage(){
 function RetirementSharedInputs({currentAge,setCurrentAge,lifeExp,setLifeExp,retireAge,setRetireAge,showRetireAge,currentSavings,setCurrentSavings,monthlyExpense,setMonthlyExpense,preReturnRate,setPreReturnRate,postReturnRate,setPostReturnRate,inflation,setInflation}){
   return(<>
     <div className="card">
-      <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Timeline</div>
+      <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Timeline</div>
       <div style={{display:"grid",gridTemplateColumns:`repeat(${showRetireAge?3:2},1fr)`,gap:8}}>
-        <div><div style={{fontSize:9,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Current Age</div><NumInput value={currentAge} onChange={setCurrentAge} step={1} min={18} suffix="y" color={ACC}/></div>
-        {showRetireAge&&<div><div style={{fontSize:9,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Retire At</div><NumInput value={retireAge} onChange={v=>setRetireAge(Math.max(currentAge+1,v))} step={1} min={currentAge+1} suffix="y" color={ACC}/></div>}
-        <div><div style={{fontSize:9,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Life Expectancy</div><NumInput value={lifeExp} onChange={setLifeExp} step={1} min={(retireAge||currentAge)+1} suffix="y" color={ACC}/></div>
+        <div><div style={{fontSize:11,color:TEXT2,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Current Age</div><NumInput value={currentAge} onChange={setCurrentAge} step={1} min={18} suffix="y" color={ACC}/></div>
+        {showRetireAge&&<div><div style={{fontSize:11,color:TEXT2,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Retire At</div><NumInput value={retireAge} onChange={v=>setRetireAge(Math.max(currentAge+1,v))} step={1} min={currentAge+1} suffix="y" color={ACC}/></div>}
+        <div><div style={{fontSize:11,color:TEXT2,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:5}}>Life Expectancy</div><NumInput value={lifeExp} onChange={setLifeExp} step={1} min={(retireAge||currentAge)+1} suffix="y" color={ACC}/></div>
       </div>
       {showRetireAge&&(
         <div style={{marginTop:8,fontSize:11,color:TEXT3,display:"flex",justifyContent:"space-between"}}>
@@ -1086,13 +1086,13 @@ function RetirementSharedInputs({currentAge,setCurrentAge,lifeExp,setLifeExp,ret
       )}
     </div>
     <div className="card">
-      <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Financials</div>
+      <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Financials</div>
       <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
       <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
       <TipBox>💡 Include rent as a real retirement expense. If you own property counted as savings, don't double-count it.</TipBox>
     </div>
     <div className="card">
-      <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Rates</div>
+      <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Rates</div>
       <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC} hint="Expected return while accumulating"/>
       <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE} hint="Expected return during retirement"/>
       <Field label="Inflation Rate" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
@@ -1104,12 +1104,12 @@ function RetirementStepUp({stepPct,setStepPct,stepFreq,setStepFreq}){
   return(
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
       <div>
-        <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Step-Up %</div>
+        <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
         <NumInput value={stepPct} onChange={v=>setStepPct(v)} step={1} min={0} max={50} suffix="%" color={stepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"9px 10px",fontSize:15}}}/>
-        <div style={{fontSize:10,color:TEXT3,marginTop:4}}>0 = no step-up</div>
+        <div style={{fontSize:12,color:TEXT3,marginTop:5}}>0 = no step-up</div>
       </div>
       <div>
-        <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Every</div>
+        <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
         <div style={{display:"flex",flexDirection:"column",gap:3}}>
           {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>(
             <div key={k} onClick={()=>setStepFreq(k)}
@@ -1257,7 +1257,7 @@ function RetirementPage(){
             postReturnRate={postReturnRate} setPostReturnRate={setPostReturnRate} inflation={inflation} setInflation={setInflation}/>
           {mode==="check"&&(
             <div className="card" style={{borderColor:ACC+"40"}}>
-              <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Monthly SIP</div>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Monthly SIP</div>
               <Field label="SIP Amount" value={monthlySIP} onChange={setMonthlySIP} prefix="₹" step={500} min={0} color={ACC}/>
               <div style={{height:1,background:BORDER,margin:"2px 0 12px"}}/>
               <RetirementStepUp stepPct={sipStepPct} setStepPct={setSipStepPct} stepFreq={sipStepFreq} setStepFreq={setSipStepFreq}/>
@@ -1265,7 +1265,7 @@ function RetirementPage(){
           )}
           {mode==="sipneeded"&&(
             <div className="card" style={{borderColor:PURP+"40"}}>
-              <div style={{fontSize:10,color:PURP,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Target Corpus</div>
+              <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Target Corpus</div>
               <Field label="Target Corpus (0 = auto from expenses)" value={targetCorpus} onChange={setTargetCorpus} prefix="₹" step={100000} min={0} color={PURP}
                 hint={`0 = auto-calculate: ${sipNeededResult?formatINR(sipNeededResult.autoCorpus):"calculating..."}`}/>
               <div style={{height:1,background:BORDER,margin:"2px 0 12px"}}/>
@@ -1274,7 +1274,7 @@ function RetirementPage(){
           )}
           {mode==="retirewhen"&&(
             <div className="card" style={{borderColor:"#EC489940"}}>
-              <div style={{fontSize:10,color:"#EC4899",letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Monthly SIP</div>
+              <div style={{fontSize:12,color:"#EC4899",letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Monthly SIP</div>
               <Field label="SIP Amount" value={rwMonthlySIP} onChange={setRwMonthlySIP} prefix="₹" step={500} min={0} color="#EC4899"/>
               <div style={{height:1,background:BORDER,margin:"2px 0 12px"}}/>
               <RetirementStepUp stepPct={rwStepPct} setStepPct={setRwStepPct} stepFreq={rwStepFreq} setStepFreq={setRwStepFreq}/>
@@ -1292,15 +1292,15 @@ function RetirementPage(){
                 [checkResult.surplus>=0?"Surplus":"Shortfall",formatINR(Math.abs(checkResult.surplus)),checkResult.surplus>=0?GREEN:RED,null],
                 ["Monthly Exp. at Retirement",formatINR(checkResult.expAtRetire),"#A09880","Inflation adjusted"],
               ].map(([l,v,c,sub])=>(
-                <div key={l}><div style={{fontSize:9,color:"#666",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div>
+                <div key={l}><div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div>
                 <div className="num" style={{fontWeight:700,fontSize:"clamp(14px,1.4vw,18px)",color:c}}>{v}</div>
-                {sub&&<div style={{fontSize:9,color:"#666",marginTop:2}}>{sub}</div>}</div>
+                {sub&&<div style={{fontSize:11,color:TEXT2,marginTop:2}}>{sub}</div>}</div>
               ))}
             </div>
 
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               <div className="card" style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-                <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:8,alignSelf:"flex-start"}}>Retirement Readiness</div>
+                <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8,alignSelf:"flex-start"}}>Retirement Readiness</div>
                 <svg width="140" height="80" viewBox="0 0 140 80">
                   <path d={`M ${CX-R} ${CY} A ${R} ${R} 0 0 1 ${CX+R} ${CY}`} fill="none" stroke={BORDER} strokeWidth="12" strokeLinecap="round"/>
                   {pct>0&&<path d={`M ${CX-R} ${CY} A ${R} ${R} 0 ${largeArc} 1 ${arcX} ${arcY}`} fill="none" stroke={gaugeColor} strokeWidth="12" strokeLinecap="round"/>}
@@ -1310,7 +1310,7 @@ function RetirementPage(){
                 <div style={{fontSize:12,fontWeight:700,color:gaugeColor,marginTop:4}}>{pct>=100?"On Track ✓":pct>=70?"Almost There":"Needs Attention"}</div>
               </div>
               <div className="card" style={{borderColor:checkResult.corpusSurvives?GREEN+"30":RED+"30"}}>
-                <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Corpus Survivability</div>
+                <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Corpus Survivability</div>
                 <div style={{fontSize:28,marginBottom:6}}>{checkResult.corpusSurvives?"💰":"⚠️"}</div>
                 {checkResult.corpusSurvives?(
                   <><div style={{fontWeight:700,fontSize:14,color:GREEN}}>Lasts till age {lifeExp}</div>
@@ -1367,7 +1367,7 @@ function RetirementPage(){
               {[["Target Corpus",formatINR(sipNeededResult.corpusTarget),PURP],["From Savings",formatINR(sipNeededResult.savingsC),"#C4B5FD"],
                 ["SIP Must Build",formatINR(Math.max(0,sipNeededResult.corpusTarget-sipNeededResult.savingsC)),"#E879F9"],["Time to Retire",`${sipNeededResult.yearsToRetire} years`,"#F0ABFC"]].map(([l,v,c])=>(
                 <div key={l} className="card" style={{borderColor:PURP+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+                  <div style={{fontSize:11,color:TEXT2,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
                   <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
                 </div>
               ))}
@@ -1392,7 +1392,7 @@ function RetirementPage(){
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
               {[{label:"Earliest You Can Retire",val:retireWhenResult.earliest,color:"#EC4899",icon:"🏁"},{label:"Comfortable (120% funded)",val:retireWhenResult.comfortable,color:GREEN,icon:"😊"}].map(({label,val,color,icon})=>(
                 <div key={label} style={{background:BG_INV,border:`1px solid ${color}50`,borderRadius:12,padding:"18px 20px"}}>
-                  <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>{label}</div>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>{label}</div>
                   {val?(
                     <><div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:28}}>{icon}</span><div className="num" style={{fontWeight:700,fontSize:32,color}}>{val.age}</div></div>
                     <div style={{fontSize:12,color:"#8A8480",marginTop:6}}>In <strong style={{color}}>{val.age-currentAge} years</strong> · {val.pct}% funded</div></>
@@ -1427,7 +1427,7 @@ function RetirementPage(){
 function FinancesPanel({income,setIncome,expenses,setExpenses,expenseHint}){
   return(
     <div className="card">
-      <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Your Finances</div>
+      <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Your Finances</div>
       <Field label="Monthly Income (In-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
       <TipBox>💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.</TipBox>
       <Field label="Monthly Expenses (incl. existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint={expenseHint}/>
@@ -1491,14 +1491,14 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             {[{k:"check",label:"Is it affordable?",desc:"Enter car price"},{k:"discover",label:"What can I afford?",desc:"Find your budget"}].map(m=>(
               <div key={m.k} onClick={()=>setMode(m.k)} style={{padding:"10px 12px",borderRadius:8,cursor:"pointer",border:`1px solid ${mode===m.k?BLUE:BORDER}`,background:mode===m.k?BLUE_L:"transparent",transition:"all 0.15s"}}>
                 <div style={{fontSize:11,fontWeight:700,color:mode===m.k?BLUE:TEXT3}}>{m.label}</div>
-                <div style={{fontSize:9,color:TEXT3,marginTop:2}}>{m.desc}</div>
+                <div style={{fontSize:11,color:TEXT2,marginTop:2}}>{m.desc}</div>
               </div>
             ))}
           </div>
         </div>
         {mode==="check"&&(
           <div className="card" style={{borderColor:BLUE+"40"}}>
-            <div style={{fontSize:10,color:BLUE,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Car Details</div>
+            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Car Details</div>
             <Field label="Car Price" value={carPrice} onChange={setCarPrice} prefix="₹" step={50000} min={0} color={BLUE}/>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={BLUE}/>
@@ -1519,7 +1519,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
         )}
         {mode==="discover"&&(
           <div className="card" style={{borderColor:BLUE+"40"}}>
-            <div style={{fontSize:10,color:BLUE,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Comfort Level</div>
+            <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Comfort Level</div>
             <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE} hint="Insurance/12 + maintenance + fuel"/>
             <TipBox>💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo</TipBox>
             <Field label="Max EMI as % of Income (ceiling)" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={1} min={1} color={BLUE}/>
@@ -1541,7 +1541,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
               <div style={{fontSize:12,color:TEXT2,marginTop:3}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
             </div>
             <div style={{textAlign:"right"}}>
-              <div style={{fontSize:9,color:TEXT3,marginBottom:3}}>REMAINING</div>
+              <div style={{fontSize:11,color:TEXT3,marginBottom:4}}>REMAINING</div>
               <div className="num" style={{fontWeight:700,fontSize:20,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
             </div>
           </div>
@@ -1549,17 +1549,17 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             {[["Monthly EMI",formatINRFull(check.emi),BLUE],["All-in Monthly",formatINR(check.monthlyCost),"#60A5FA"],
               ["Down Payment",formatINR(check.down),"#93C5FD"],[`Total Cost (${tenure}Y)`,formatINR(check.totalOwnership),"#BFDBFE"]].map(([l,v,c])=>(
               <div key={l} className="card" style={{borderColor:BLUE+"20"}}>
-                <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+                <div style={{fontSize:11,color:TEXT2,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
                 <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
               </div>
             ))}
           </div>
           <div className="card">
-            <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>EMI Comfort Gauge</div>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>EMI Comfort Gauge</div>
             <div style={{position:"relative",height:10,borderRadius:5,background:BORDER,overflow:"hidden",marginBottom:6}}>
               <div style={{position:"absolute",left:0,height:"100%",width:`${Math.min(check.emiPct,100)}%`,background:check.verdictColor,borderRadius:5}}/>
             </div>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:TEXT3}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:TEXT2}}>
               <span style={{color:GREEN}}>0–15% Comfortable</span><span style={{color:"#F59E0B"}}>15–25% Manageable</span><span style={{color:RED}}>25%+ Stretched</span>
             </div>
           </div>
@@ -1594,7 +1594,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             {[["Max Car Price",formatINR(discover.maxCarPrice),BLUE],["Max Loan",formatINR(discover.loanAmt),"#60A5FA"],
               ["Down Payment",formatINR(discover.down),"#93C5FD"],["Total Monthly",formatINR(discover.totalMonthly),"#BFDBFE"]].map(([l,v,c])=>(
               <div key={l} className="card" style={{borderColor:BLUE+"20"}}>
-                <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+                <div style={{fontSize:11,color:TEXT2,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
                 <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
               </div>
             ))}
@@ -1604,7 +1604,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
               <thead><tr style={{borderBottom:`1px solid ${BORDER}`}}>
                 {["EMI % Cap","Max EMI/mo","Max Loan","Max Car Price","Comfort"].map(h=>(
-                  <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
+                  <th key={h} style={{padding:"6px 10px",textAlign:"right",color:TEXT2,fontWeight:700,fontSize:12}}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
@@ -1701,7 +1701,7 @@ function HousePage(){
           <div style={{display:"flex",flexDirection:"column",gap:6}}>
             {[{k:"check",label:"Is it affordable?",desc:"Enter house price"},{k:"discover",label:"What can I afford?",desc:"Find your budget"},{k:"rentorbuy",label:"Rent or Buy?",desc:"Compare both paths"}].map(m=>(
               <div key={m.k} onClick={()=>setMode(m.k)} style={{padding:"10px 12px",borderRadius:8,cursor:"pointer",border:`1px solid ${mode===m.k?ACC:BORDER}`,background:mode===m.k?ACC_L:"transparent",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <div><div style={{fontSize:11,fontWeight:700,color:mode===m.k?ACC_D:TEXT3}}>{m.label}</div><div style={{fontSize:9,color:TEXT3,marginTop:1}}>{m.desc}</div></div>
+                <div><div style={{fontSize:11,fontWeight:700,color:mode===m.k?ACC_D:TEXT3}}>{m.label}</div><div style={{fontSize:11,color:TEXT2,marginTop:1}}>{m.desc}</div></div>
                 {mode===m.k&&<div style={{width:6,height:6,borderRadius:"50%",background:ACC}}/>}
               </div>
             ))}
@@ -1709,7 +1709,7 @@ function HousePage(){
         </div>
         {(mode==="check"||mode==="rentorbuy")&&(
           <div className="card" style={{borderColor:ACC+"40"}}>
-            <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Property Details</div>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Property Details</div>
             <Field label="House Price" value={housePrice} onChange={setHousePrice} prefix="₹" step={500000} min={0} color={ACC}/>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={ACC}/>
@@ -1722,7 +1722,7 @@ function HousePage(){
         )}
         {mode==="discover"&&(
           <div className="card" style={{borderColor:ACC+"40"}}>
-            <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
             <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={5} min={5} color={ACC} hint="RBI guideline: EMI ≤ 40–50% of net income"/>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={discoverDownPct} onChange={setDiscoverDownPct} suffix="%" step={5} min={10} color={ACC}/>
@@ -1733,7 +1733,7 @@ function HousePage(){
         )}
         {mode==="rentorbuy"&&(
           <div className="card" style={{borderColor:PURP+"40"}}>
-            <div style={{fontSize:10,color:PURP,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Renting Scenario</div>
+            <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Renting Scenario</div>
             <Field label="Current Monthly Rent" value={rent} onChange={setRent} prefix="₹" step={1000} min={0} color={PURP}/>
             <Field label="Annual Rent Increase" value={rentIncrease} onChange={setRentIncrease} suffix="%" step={0.5} min={0} color={PURP}/>
             <Field label="Property Appreciation" value={appreciation} onChange={setAppreciation} suffix="%" step={0.5} min={0} color={PURP}/>
@@ -1752,24 +1752,24 @@ function HousePage(){
                 <div style={{fontSize:12,color:TEXT2,marginTop:3}}>EMI is <strong style={{color:check.verdictColor}}>{check.emiPct.toFixed(1)}%</strong> of income · Total monthly <strong style={{color:check.verdictColor}}>{formatINR(check.monthlyCost)}</strong></div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:9,color:TEXT3,marginBottom:3}}>REMAINING</div>
+                <div style={{fontSize:11,color:TEXT3,marginBottom:4}}>REMAINING</div>
                 <div className="num" style={{fontWeight:700,fontSize:20,color:check.disposable>0?GREEN:RED}}>{formatINR(check.disposable)}</div>
               </div>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))",gap:10}}>
               {[["Monthly EMI",formatINRFull(check.emi),ACC],["Down Payment",formatINR(check.down),GREEN],[`Value in ${tenure}Y`,formatINR(check.finalVal),"#34D399"],["Equity Built",formatINR(check.equityBuilt),"#A7F3D0"]].map(([l,v,c])=>(
                 <div key={l} className="card" style={{borderColor:ACC+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+                  <div style={{fontSize:11,color:TEXT2,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
                   <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
                 </div>
               ))}
             </div>
             <div className="card">
-              <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>EMI Comfort Gauge</div>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>EMI Comfort Gauge</div>
               <div style={{position:"relative",height:10,borderRadius:5,background:BORDER,overflow:"hidden",marginBottom:6}}>
                 <div style={{position:"absolute",left:0,height:"100%",width:`${Math.min(check.emiPct,100)}%`,background:check.verdictColor,borderRadius:5}}/>
               </div>
-              <div style={{display:"flex",justifyContent:"space-between",fontSize:9,color:TEXT3}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:TEXT2}}>
                 <span style={{color:GREEN}}>0–30% Comfortable</span><span style={{color:"#F59E0B"}}>30–45% Manageable</span><span style={{color:RED}}>45%+ Stretched</span>
               </div>
             </div>
@@ -1785,7 +1785,7 @@ function HousePage(){
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:10}}>
               {[["Max Home Price",formatINR(discover.maxPrice),ACC],["Max Loan",formatINR(discover.loan),GREEN],["Down Needed",formatINR(discover.down),"#34D399"],["Max Monthly EMI",formatINRFull(discover.maxEmi),"#A7F3D0"]].map(([l,v,c])=>(
                 <div key={l} className="card" style={{borderColor:ACC+"20"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+                  <div style={{fontSize:11,color:TEXT2,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
                   <div className="num" style={{fontWeight:700,fontSize:"clamp(13px,1.3vw,17px)",color:c}}>{v}</div>
                 </div>
               ))}
@@ -1796,21 +1796,21 @@ function HousePage(){
           <>
             <div style={{background:BG_INV,border:`1px solid ${PURP}40`,borderRadius:12,padding:"16px 20px",display:"flex",gap:20,flexWrap:"wrap"}}>
               <div>
-                <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Buy — Monthly</div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Buy — Monthly</div>
                 <div className="num" style={{fontWeight:700,fontSize:20,color:ACC}}>{formatINR(rentorbuy.emi+maintenance)}</div>
               </div>
               <div>
-                <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Rent — Monthly</div>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Rent — Monthly</div>
                 <div className="num" style={{fontWeight:700,fontSize:20,color:PURP}}>{formatINR(rent)}</div>
               </div>
               {rentorbuy.crossover?(
                 <div style={{marginLeft:"auto",textAlign:"right"}}>
-                  <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Buy becomes better at</div>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Buy becomes better at</div>
                   <div className="num" style={{fontWeight:700,fontSize:20,color:GREEN}}>Year {rentorbuy.crossover.year}</div>
                 </div>
               ):(
                 <div style={{marginLeft:"auto",textAlign:"right"}}>
-                  <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Verdict in {tenure}Y</div>
+                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"2px",textTransform:"uppercase",marginBottom:4}}>Verdict in {tenure}Y</div>
                   <div className="num" style={{fontWeight:700,fontSize:18,color:rentorbuy.data[rentorbuy.data.length-1]?.buy>rentorbuy.data[rentorbuy.data.length-1]?.rent?ACC:PURP}}>
                     {rentorbuy.data[rentorbuy.data.length-1]?.buy>rentorbuy.data[rentorbuy.data.length-1]?.rent?"Buy wins 🏠":"Rent wins 📈"}
                   </div>
@@ -1876,7 +1876,7 @@ function GratuityPage(){
         <div className="card" style={{borderColor:"#F59E0B40"}}>
           <div style={{fontWeight:700,fontSize:14,color:"#F59E0B",marginBottom:14}}>Employee Details</div>
           <div style={{marginBottom:12}}>
-            <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:7}}>Organisation Type</div>
+            <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:7}}>Organisation Type</div>
             <PillRow options={[["covered","Covered (10+)"],["notcovered","Not Covered"]]} value={employeeType} set={setEmployeeType} activeColor="#F59E0B"/>
             <div style={{fontSize:10,color:TEXT3,marginTop:6,lineHeight:1.6}}>{employeeType==="covered"?"Gratuity Act 1972 · Salary × 15/26 · Exempt up to ₹20L":"Gratuitous payment · Salary × 15/30 · Exempt up to ₹10L"}</div>
           </div>
@@ -1919,7 +1919,7 @@ function GratuityPage(){
             {l:"Salary at Retirement",v:formatINR(Math.round(projSalary)),c:"#60A5FA",sub:`At ${salaryHike}% annual hike`},
           ].map(({l,v,c,sub,hi})=>(
             <div key={l} className="card" style={{borderColor:hi?c+"50":c+"20"}}>
-              <div style={{fontSize:9,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:5}}>{l}</div>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:5}}>{l}</div>
               <div className="num" style={{fontWeight:700,fontSize:"clamp(14px,1.4vw,18px)",color:c}}>{v}</div>
               <div style={{fontSize:10,color:TEXT3,marginTop:3}}>{sub}</div>
             </div>
@@ -2020,7 +2020,7 @@ function GoalSeekPage(){
     <div style={{display:"flex",flexDirection:"column",gap:20}}>
       <div className="stat-banner" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(170px,1fr))",gap:14}}>
         {[["Goals Defined",`${activeGoals.length} / 5`,"#E4D8C8"],["Total Future Value",formatINR(totalFV),"#F59E0B"],["Combined Monthly SIP",formatINR(totalMonthlySIP),ACC]].map(([l,v,c])=>(
-          <div key={l}><div style={{fontSize:9,color:"#666",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div><div className="num" style={{fontWeight:700,fontSize:"clamp(15px,1.5vw,20px)",color:c}}>{v}</div></div>
+          <div key={l}><div style={{fontSize:11,color:TEXT2,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div><div className="num" style={{fontWeight:700,fontSize:"clamp(15px,1.5vw,20px)",color:c}}>{v}</div></div>
         ))}
       </div>
 
@@ -2030,17 +2030,17 @@ function GoalSeekPage(){
           <div key={g.id} className="card" style={{borderColor:g.color+"40"}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr 1fr auto",gap:12,alignItems:"start",flexWrap:"wrap"}}>
               <div>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Goal {idx+1}</div>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Goal {idx+1}</div>
                 <select value={g.name} onChange={e=>{const preset=GOAL_PRESETS.find(p=>p.name===e.target.value)||GOAL_PRESETS[8];setGoals(prev=>prev.map(pg=>pg.id===g.id?{...pg,name:e.target.value,inflation:preset.inflation,color:preset.color}:pg));}}
                   style={{width:"100%",background:"#FAF8F5",border:`1.5px solid ${g.color}40`,borderRadius:8,color:g.color,padding:"8px 10px",fontSize:12,outline:"none",fontWeight:600}}>
                   {GOAL_PRESETS.map(p=><option key={p.name} value={p.name}>{p.name}</option>)}
                 </select>
               </div>
-              <div><div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Present Value</div><Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/></div>
-              <div><div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Timeline</div><Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/></div>
-              <div><div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Inflation</div><Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/></div>
+              <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Present Value</div><Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/></div>
+              <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Timeline</div><Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/></div>
+              <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Inflation</div><Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/></div>
               <div>
-                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Return Rate{!isCustomRate&&<span style={{marginLeft:4,fontSize:8,color:rec.color,background:rec.color+"20",padding:"1px 5px",borderRadius:3}}>AUTO</span>}</div>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Return Rate{!isCustomRate&&<span style={{marginLeft:4,fontSize:8,color:rec.color,background:rec.color+"20",padding:"1px 5px",borderRadius:3}}>AUTO</span>}</div>
                 <Field label="" value={g.returnRate} onChange={v=>updateGoal(g.id,"returnRate",v)} suffix="%" step={0.5} min={1} color={isCustomRate?"#F59E0B":rec.color}/>
               </div>
               <div style={{paddingTop:22}}>{activeGoals.length>1&&<div onClick={()=>removeGoal(g.id)} style={{width:28,height:28,borderRadius:6,background:"#FDEAEA",border:`1px solid ${RED}40`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,color:RED}}>×</div>}</div>
@@ -2048,7 +2048,7 @@ function GoalSeekPage(){
             <div style={{marginTop:14,paddingTop:12,borderTop:`1px solid ${BORDER}`,display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:10}}>
               {[["Future Value",formatINR(g.fv),g.color],["Inflation Impact",`+${formatINR(g.fv-g.presentValue)}`,"#F59E0B"],["Monthly SIP Needed",formatINR(g.sip),ACC,true],["Total to Invest",formatINR(g.totalInvested),TEXT3],["Wealth Gain",formatINR(g.gain),GREEN],["CAGR",`${g.returnRate}%`,rec.color]].map(([l,v,c,big])=>(
                 <div key={l} style={{background:"#FAF8F5",borderRadius:8,padding:"8px 12px"}}>
-                  <div style={{fontSize:9,color:TEXT3,marginBottom:3,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
+                  <div style={{fontSize:11,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
                   <div className="num" style={{fontWeight:700,fontSize:big?16:13,color:c}}>{v}</div>
                 </div>
               ))}
@@ -2190,7 +2190,7 @@ export default function App(){
         <div style={{maxWidth:1400,margin:"0 auto",display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
           <div style={{marginRight:16,flexShrink:0,cursor:"pointer"}} onClick={()=>setPage("home")}>
             <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:21,fontWeight:900,color:ACC,letterSpacing:"-0.5px",lineHeight:1}}>WealthMetric</div>
-            <div style={{fontSize:9,color:TEXT3,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Personal Finance</div>
+            <div style={{fontSize:11,color:TEXT2,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Personal Finance</div>
           </div>
           {PAGES.filter(p=>p.id!=="home").map(p=>(
             <div key={p.id} className={`nav-tab ${page===p.id?"active":"inactive"}`} onClick={()=>setPage(p.id)}>
