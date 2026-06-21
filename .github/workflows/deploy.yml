@@ -21,6 +21,8 @@ jobs:
 
       - run: npm run build
 
+      - run: echo 'wealthmetric.in' > ./dist/CNAME
+
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
