@@ -1673,7 +1673,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
             <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Exclude this car's EMI"/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, all existing EMIs — except this car"/>
           </div>
           {/* Car Details */}
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
@@ -1682,6 +1682,9 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={BLUE}/>
               <Field label="Interest Rate" value={rate} onChange={setRate} suffix="%" step={0.1} min={0} color={BLUE}/>
+            </div>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-2,marginBottom:14}}>
+              💡 PSU banks 8.5–10% · Private 9.5–12% · NBFCs 12–16%
             </div>
             <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={BLUE}/>
           </div>
@@ -1692,8 +1695,8 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{fontSize:12,color:TEXT3,marginTop:-10,marginBottom:14}}>Auto-estimate: {formatINR(insAuto)}/yr</div>
             <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={BLUE}/>
             <Field label="Monthly Fuel / Charging" value={fuel} onChange={setFuel} prefix="₹" step={500} min={0} color={BLUE}/>
-            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5}}>
-              💡 PSU banks 8.5–10% · Private 9.5–12% · NBFCs 12–16%
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4}}>
+              💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo
             </div>
           </div>
         </div>
@@ -1766,12 +1769,18 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
             <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
+              💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
+            </div>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, all existing EMIs — except this car"/>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
             <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={1} min={1} color={BLUE}/>
             <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE} hint="Insurance/12 + maintenance + fuel"/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4}}>
+              💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo
+            </div>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Settings</div>
@@ -1917,7 +1926,10 @@ function HousePage(){
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
             <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Exclude this home's EMI"/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
+              💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
+            </div>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, existing EMIs — except this house"/>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Property Details</div>
@@ -1926,14 +1938,14 @@ function HousePage(){
               <Field label="Down Payment" value={downPct} onChange={setDownPct} suffix="%" step={5} min={0} color={ACC}/>
               <Field label="Interest Rate" value={rate} onChange={setRate} suffix="%" step={0.1} min={0} color={ACC}/>
             </div>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-2,marginBottom:14}}>
+              💡 PSU banks 8–9.5% · Private 8.5–10.5% · Check PMAY subsidy if eligible
+            </div>
             <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={ACC}/>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Additional Costs</div>
             <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={ACC} hint="Society: ₹2–10K/mo"/>
-            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:8}}>
-              💡 PSU banks 8–9.5% · Private 8.5–10.5%<br/>Check PMAY subsidy if eligible
-            </div>
           </div>
         </div>
 
@@ -1983,7 +1995,10 @@ function HousePage(){
           <div className="card" style={{padding:"20px 22px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Your Finances</div>
             <Field label="Monthly Income (in-hand)" value={income} onChange={setIncome} prefix="₹" step={5000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
+              💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
+            </div>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, existing EMIs — except this house"/>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
