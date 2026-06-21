@@ -441,60 +441,65 @@ function CalculatorPage(){
         ))}
       </div>
 
-      {/* ── INPUTS ROW ── */}
+      {/* ── INPUTS ── */}
       {mode==="calculate"&&(
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1.4fr",gap:12,alignItems:"stretch"}}>
+        <div style={{display:"grid",gridTemplateColumns:"340px 1fr",gap:14,alignItems:"stretch"}}>
 
-          {/* Annual Return */}
-          <div className="card" style={{padding:"22px 22px"}}>
-            <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:16}}>Annual Return</div>
-            <div style={{display:"flex",alignItems:"baseline",gap:4}}>
-              <input type="number" value={annualRate} step={0.1} min={0}
-                onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
-                style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:42,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-              <span style={{fontSize:18,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
+          {/* LEFT PANEL */}
+          <div style={{display:"grid",gridTemplateRows:"auto 1fr",gap:14}}>
+
+            {/* Top: Annual Return + Time Horizon side by side */}
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              <div className="card" style={{padding:"18px 18px"}}>
+                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Annual Return</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                  <input type="number" value={annualRate} step={0.1} min={0}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
+                    style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
+                </div>
+                <div style={{fontSize:11,color:TEXT3,marginTop:6}}>per annum</div>
+              </div>
+              <div className="card" style={{padding:"18px 18px"}}>
+                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Time Horizon</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                  <input type="number" value={years} step={0.5} min={0.5}
+                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
+                    style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
+                </div>
+                <div style={{fontSize:11,color:TEXT3,marginTop:6}}>investment period</div>
+              </div>
             </div>
-            <div style={{fontSize:11,color:TEXT3,marginTop:8}}>per annum</div>
+
+            {/* Bottom: Lumpsum */}
+            <div className="card" style={{padding:"20px 22px",borderColor:ACC+"50"}}>
+              <div style={{fontSize:13,color:ACC,fontWeight:700,marginBottom:14}}>Lumpsum</div>
+              <div style={{display:"flex",alignItems:"center",background:"#FFF8EE",border:`1.5px solid ${ACC}40`,borderRadius:9,overflow:"hidden"}}>
+                <span style={{padding:"0 14px",color:ACC,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${ACC}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
+                <input type="number" value={lumpsum} step={1000} min={0}
+                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setLumpsum(n);}}
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+              </div>
+              <div className="num" style={{fontSize:12,color:ACC,marginTop:8,fontWeight:600}}>
+                {lumpsum>=10000000?`= ₹${(lumpsum/10000000).toFixed(2)} Crore`:lumpsum>=100000?`= ₹${(lumpsum/100000).toFixed(2)} Lakh`:lumpsum>=1000?`= ₹${(lumpsum/1000).toFixed(1)}K`:""}
+              </div>
+            </div>
           </div>
 
-          {/* Time Horizon */}
-          <div className="card" style={{padding:"22px 22px"}}>
-            <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:16}}>Time Horizon</div>
-            <div style={{display:"flex",alignItems:"baseline",gap:4}}>
-              <input type="number" value={years} step={0.5} min={0.5}
-                onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
-                style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:42,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-              <span style={{fontSize:18,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
-            </div>
-            <div style={{fontSize:11,color:TEXT3,marginTop:8}}>investment period</div>
-          </div>
-
-          {/* Lumpsum */}
-          <div className="card" style={{padding:"22px 22px",borderColor:ACC+"50"}}>
-            <div style={{fontSize:10,color:ACC,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700,marginBottom:16}}>Lumpsum</div>
-            <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${ACC}40`,borderRadius:9,overflow:"hidden"}}>
-              <span style={{padding:"0 12px",color:ACC,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:16,borderRight:`1px solid ${ACC}30`,alignSelf:"stretch",display:"flex",alignItems:"center",background:"#FFF8EE"}}>₹</span>
-              <input type="number" value={lumpsum} step={1000} min={0}
-                onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setLumpsum(n);}}
-                style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"12px 12px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
-            </div>
-            <div className="num" style={{fontSize:12,color:ACC,marginTop:8,fontWeight:600}}>
-              {lumpsum>=10000000?`= ₹${(lumpsum/10000000).toFixed(2)} Crore`:lumpsum>=100000?`= ₹${(lumpsum/100000).toFixed(2)} Lakh`:lumpsum>=1000?`= ₹${(lumpsum/1000).toFixed(1)}K`:""}
-            </div>
-          </div>
-
-          {/* SIP */}
-          <div className="card" style={{padding:"22px 22px",borderColor:sipOn?BLUE+"50":BORDER}}>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
-              <div style={{fontSize:10,color:BLUE,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>SIP</div>
+          {/* RIGHT PANEL: SIP */}
+          <div className="card" style={{padding:"22px 26px",borderColor:sipOn?BLUE+"50":BORDER}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:20}}>
+              <div style={{fontSize:15,color:BLUE,fontWeight:700,letterSpacing:"-0.3px"}}>SIP</div>
               <Toggle on={sipOn} set={setSipOn} color={BLUE}/>
             </div>
             {sipOn?(<>
               {/* Frequency */}
-              <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:12}}>
+              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Frequency</div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
                 {Object.entries(SIP_FREQS).map(([k,v])=>(
                   <div key={k} onClick={()=>setSipFreqKey(k)}
-                    style={{cursor:"pointer",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:600,
+                    style={{cursor:"pointer",padding:"7px 14px",borderRadius:7,fontSize:12,fontWeight:600,
                       transition:"all 0.15s",userSelect:"none",
                       background:sipFreqKey===k?BLUE:"#FAF8F5",
                       color:sipFreqKey===k?"#ffffff":TEXT2,
@@ -504,47 +509,58 @@ function CalculatorPage(){
                 ))}
               </div>
               {/* Amount */}
-              <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BLUE}40`,borderRadius:9,overflow:"hidden",marginBottom:12}}>
-                <span style={{padding:"0 12px",color:BLUE,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:16,borderRight:`1px solid ${BLUE}30`,alignSelf:"stretch",display:"flex",alignItems:"center",background:"#EEF3FF"}}>₹</span>
+              <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:10}}>Amount</div>
+              <div style={{display:"flex",alignItems:"center",background:"#EEF3FF",border:`1.5px solid ${BLUE}40`,borderRadius:9,overflow:"hidden",marginBottom:20}}>
+                <span style={{padding:"0 14px",color:BLUE,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${BLUE}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
                 <input type="number" value={sipAmt} step={100} min={0}
                   onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setSipAmt(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"12px 12px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+                <div className="num" style={{padding:"0 14px",fontSize:12,color:BLUE,fontWeight:600,whiteSpace:"nowrap"}}>
+                  {sipAmt>=100000?`${(sipAmt/100000).toFixed(2)}L`:sipAmt>=1000?`${(sipAmt/1000).toFixed(1)}K`:""}
+                </div>
               </div>
               {/* Step-up */}
-              <div style={{display:"flex",gap:10,alignItems:"flex-start",paddingTop:10,borderTop:`1px solid ${BORDER}`}}>
-                <div style={{flexShrink:0}}>
-                  <div style={{fontSize:9,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Step-Up</div>
-                  <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:7,overflow:"hidden",width:80}}>
-                    <input type="number" value={stepPct} step={1} min={0} max={100}
-                      onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setStepPct(n);}}
-                      style={{flex:1,background:"transparent",border:"none",color:stepPct>0?"#F59E0B":"#1A1714",padding:"7px 8px",fontSize:15,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
-                    <span style={{padding:"0 6px",fontSize:11,color:TEXT3}}>%</span>
+              <div style={{paddingTop:16,borderTop:`1px solid ${BORDER}`}}>
+                <div style={{fontSize:10,color:TEXT3,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Step-Up</div>
+                <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
+                  <div style={{flexShrink:0}}>
+                    <div style={{fontSize:10,color:TEXT3,marginBottom:6}}>Percentage</div>
+                    <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden",width:90}}>
+                      <input type="number" value={stepPct} step={1} min={0} max={100}
+                        onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setStepPct(n);}}
+                        style={{flex:1,background:"transparent",border:"none",color:stepPct>0?"#F59E0B":"#1A1714",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                      <span style={{padding:"0 8px",fontSize:12,color:TEXT3}}>%</span>
+                    </div>
+                  </div>
+                  <div style={{flex:1,opacity:stepPct>0?1:0.3,pointerEvents:stepPct>0?"auto":"none"}}>
+                    <div style={{fontSize:10,color:TEXT3,marginBottom:6}}>Increase Every</div>
+                    <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                      {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
+                        const active=stepFreq===k&&stepPct>0;
+                        return(
+                          <div key={k} onClick={()=>setStepFreq(k)}
+                            style={{cursor:"pointer",padding:"7px 14px",borderRadius:7,fontSize:12,fontWeight:600,
+                              transition:"all 0.15s",userSelect:"none",
+                              background:active?"#F59E0B":"#FAF8F5",
+                              color:active?"#ffffff":TEXT2,
+                              border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>
+                            {v.label}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-                <div style={{flex:1,opacity:stepPct>0?1:0.3,pointerEvents:stepPct>0?"auto":"none"}}>
-                  <div style={{fontSize:9,color:TEXT3,letterSpacing:"1px",textTransform:"uppercase",fontWeight:600,marginBottom:6}}>Every</div>
-                  <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
-                    {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
-                      const active=stepFreq===k&&stepPct>0;
-                      return(
-                        <div key={k} onClick={()=>setStepFreq(k)}
-                          style={{cursor:"pointer",padding:"5px 9px",borderRadius:6,fontSize:10,fontWeight:600,
-                            transition:"all 0.15s",userSelect:"none",
-                            background:active?"#F59E0B":"#FAF8F5",
-                            color:active?"#ffffff":TEXT2,
-                            border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>
-                          {v.label}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {stepPct>0&&<div style={{marginTop:10,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"8px 12px",fontSize:12,color:"#F59E0B"}}>
+                  ↑ SIP increases by {stepPct}% every {STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}
+                </div>}
               </div>
-              {stepPct>0&&<div style={{marginTop:8,background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:6,padding:"6px 10px",fontSize:11,color:"#F59E0B"}}>
-                ↑ {stepPct}% every {STEPUP_FREQS[stepFreq]?.label?.toLowerCase()}
-              </div>}
             </>):(
-              <div style={{color:TEXT3,fontSize:12,textAlign:"center",padding:"16px 0"}}>Toggle on to add SIP</div>
+              <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"60%",color:TEXT3,gap:8}}>
+                <div style={{fontSize:32}}>📈</div>
+                <div style={{fontSize:13,fontWeight:500}}>Toggle on to add a SIP</div>
+                <div style={{fontSize:11}}>alongside your lumpsum investment</div>
+              </div>
             )}
           </div>
         </div>
