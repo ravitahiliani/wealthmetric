@@ -450,7 +450,7 @@ function CalculatorPage(){
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
-                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
                   <input type="number" value={annualRate} step={0.1} min={0}
                     onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
                     style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
@@ -460,7 +460,7 @@ function CalculatorPage(){
               </div>
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
-                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
                   <input type="number" value={years} step={0.5} min={0.5}
                     onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
                     style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
@@ -565,7 +565,7 @@ function CalculatorPage(){
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
-                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
                   <input type="number" value={annualRate} step={0.1} min={0}
                     onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
                     style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
@@ -575,7 +575,7 @@ function CalculatorPage(){
               </div>
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
-                <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
                   <input type="number" value={years} step={0.5} min={0.5}
                     onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
                     style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
@@ -1076,28 +1076,28 @@ function RetirementSharedInputs({currentAge,setCurrentAge,lifeExp,setLifeExp,ret
       <div style={{display:"grid",gridTemplateColumns:`repeat(${showRetireAge?3:2},1fr)`,gap:12}}>
         <div>
           <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Current Age</div>
-          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+          <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
             <input type="number" value={currentAge} step={1} min={18}
               onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setCurrentAge(n);}}
-              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
             <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
           </div>
         </div>
         {showRetireAge&&<div>
           <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Retire At</div>
-          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+          <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
             <input type="number" value={retireAge} step={1} min={currentAge+1}
               onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setRetireAge(Math.max(currentAge+1,n));}}
-              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
             <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
           </div>
         </div>}
         <div>
           <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Life Expectancy</div>
-          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+          <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
             <input type="number" value={lifeExp} step={1} min={(retireAge||currentAge)+1}
               onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setLifeExp(n);}}
-              style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+              style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
             <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
           </div>
         </div>
@@ -1294,11 +1294,11 @@ function RetirementPage(){
                 ].map(({label,val,set,color})=>(
                   <div key={label}>
                     <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                    <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px"}}>
                       <input type="number" value={val} step={1} min={18}
                         onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                        style={{background:"transparent",border:"none",color,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-                      <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                        style={{background:"transparent",border:"none",color,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <span style={{fontSize:13,color:TEXT3,flexShrink:0,marginLeft:4}}>yrs</span>
                     </div>
                   </div>
                 ))}
@@ -1444,11 +1444,11 @@ function RetirementPage(){
                 ].map(({label,val,set,color})=>(
                   <div key={label}>
                     <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                    <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px"}}>
                       <input type="number" value={val} step={1} min={18}
                         onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                        style={{background:"transparent",border:"none",color,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-                      <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                        style={{background:"transparent",border:"none",color,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <span style={{fontSize:13,color:TEXT3,flexShrink:0,marginLeft:4}}>yrs</span>
                     </div>
                   </div>
                 ))}
@@ -1541,11 +1541,11 @@ function RetirementPage(){
                 ].map(({label,val,set,color})=>(
                   <div key={label}>
                     <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                    <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px"}}>
                       <input type="number" value={val} step={1} min={18}
                         onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                        style={{background:"transparent",border:"none",color,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-                      <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                        style={{background:"transparent",border:"none",color,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <span style={{fontSize:13,color:TEXT3,flexShrink:0,marginLeft:4}}>yrs</span>
                     </div>
                   </div>
                 ))}
@@ -2183,61 +2183,82 @@ function GratuityPage(){
   }
 
   return(
-    <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:18,alignItems:"start"}}>
-      <div style={{display:"flex",flexDirection:"column",gap:12}}>
-        <div className="card" style={{borderColor:"#F59E0B40"}}>
-          <div style={{fontWeight:700,fontSize:14,color:"#F59E0B",marginBottom:14}}>Employee Details</div>
-          <div style={{marginBottom:12}}>
-            <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:7}}>Organisation Type</div>
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+
+      {/* INPUTS */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+
+        {/* Employee Details */}
+        <div className="card" style={{padding:"20px 22px",borderColor:"#F59E0B40"}}>
+          <div style={{fontSize:12,color:"#D97706",letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Employee Details</div>
+          <div style={{marginBottom:14}}>
+            <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Organisation Type</div>
             <PillRow options={[["covered","Covered (10+)"],["notcovered","Not Covered"]]} value={employeeType} set={setEmployeeType} activeColor="#F59E0B"/>
-            <div style={{fontSize:10,color:TEXT3,marginTop:6,lineHeight:1.6}}>{employeeType==="covered"?"Gratuity Act 1972 · Salary × 15/26 · Exempt up to ₹20L":"Gratuitous payment · Salary × 15/30 · Exempt up to ₹10L"}</div>
+            <div style={{fontSize:11,color:TEXT3,marginTop:8,lineHeight:1.6}}>
+              {employeeType==="covered"?"Act 1972 · Salary×15/26 · Exempt up to ₹20L":"Gratuitous · Salary×15/30 · Exempt up to ₹10L"}
+            </div>
           </div>
-          <Field label="Current Age" value={currentAge} onChange={setCurrentAge} suffix=" yrs" step={1} min={18} color="#F59E0B"/>
-          <Field label="Retirement Age" value={retirementAge} onChange={v=>setRetirementAge(Math.max(currentAge+1,v))} suffix=" yrs" step={1} min={currentAge+1} color="#F59E0B"/>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+            <Field label="Current Age" value={currentAge} onChange={setCurrentAge} suffix=" yrs" step={1} min={18} color="#F59E0B"/>
+            <Field label="Retirement Age" value={retirementAge} onChange={v=>setRetirementAge(Math.max(currentAge+1,v))} suffix=" yrs" step={1} min={currentAge+1} color="#F59E0B"/>
+          </div>
         </div>
-        <div className="card" style={{borderColor:ACC+"40"}}>
-          <div style={{fontWeight:700,fontSize:14,color:ACC,marginBottom:14}}>Salary & Service</div>
+
+        {/* Salary & Service */}
+        <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Salary & Service</div>
           <Field label="Last Drawn Basic + DA (monthly)" value={lastSalary} onChange={setLastSalary} prefix="₹" step={1000} min={0} color={ACC} hint="Basic + DA only — not HRA or bonus"/>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
             <Field label="Years of Service" value={yearsOfService} onChange={setYearsOfService} suffix=" yrs" step={1} min={0} color={ACC}/>
             <Field label="Extra Months" value={monthsOfService} onChange={v=>setMonthsOfService(Math.min(11,Math.max(0,Math.round(v))))} suffix=" mo" step={1} min={0} color={ACC}/>
           </div>
-          <div style={{background:ACC_L,border:`1px solid ${ACC}40`,borderRadius:7,padding:"7px 11px",fontSize:11,color:ACC_D}}>
-            {yearsOfService}y {monthsOfService}m → rounded to <strong>{roundedYears} years</strong>{monthsOfService>=6?" (≥6m rounds up)":" (<6m rounds down)"}
+          <div style={{background:ACC_L,border:`1px solid ${ACC}40`,borderRadius:7,padding:"7px 11px",fontSize:12,color:ACC_D}}>
+            {yearsOfService}y {monthsOfService}m → rounded to <strong>{roundedYears} years</strong>
+            {monthsOfService>=6?" (≥6m rounds up)":" (<6m rounds down)"}
           </div>
         </div>
-        <div className="card" style={{borderColor:BLUE+"40"}}>
-          <div style={{fontWeight:700,fontSize:14,color:BLUE,marginBottom:14}}>Projection</div>
+
+        {/* Projection */}
+        <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
+          <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Projection</div>
           <Field label="Expected Annual Salary Hike" value={salaryHike} onChange={setSalaryHike} suffix="%" step={0.5} min={0} color={BLUE}/>
+          <div style={{marginTop:8,background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.6}}>
+            💡 Projects gratuity at retirement based on salary growth and additional service years.
+          </div>
         </div>
       </div>
 
-      <div style={{display:"flex",flexDirection:"column",gap:14}}>
-        <div style={{background:isEligible?"#EAF5EE":"#FDEAEA",border:`1px solid ${isEligible?GREEN:RED}`,borderRadius:12,padding:"14px 18px",display:"flex",alignItems:"center",gap:12}}>
-          <div style={{fontSize:26}}>{isEligible?"✅":"⏳"}</div>
-          <div>
-            <div style={{fontWeight:700,fontSize:16,color:isEligible?GREEN:RED}}>{isEligible?"Eligible for Gratuity":"Not Yet Eligible"}</div>
-            <div style={{fontSize:11,color:TEXT2,marginTop:2}}>{isEligible?`${yearsOfService}y ${monthsOfService}m of continuous service qualifies`:`Minimum 5 years required · ${Math.max(0,5-yearsOfService)} more year(s) to go`}</div>
+      {/* ELIGIBILITY BANNER */}
+      <div style={{background:isEligible?"#EAF5EE":"#FFF0E6",border:`1.5px solid ${isEligible?GREEN:"#F97316"}`,borderRadius:14,padding:"18px 24px",display:"flex",alignItems:"center",gap:16}}>
+        <div style={{fontSize:28}}>{isEligible?"✅":"⏳"}</div>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:18,color:isEligible?GREEN:"#F97316"}}>{isEligible?"Eligible for Gratuity":"Not Yet Eligible"}</div>
+          <div style={{fontSize:13,color:TEXT2,marginTop:3}}>
+            {isEligible?`${yearsOfService}y ${monthsOfService}m of continuous service qualifies`:`Minimum 5 years required · ${Math.max(0,5-yearsOfService)} more year(s) to go`}
           </div>
         </div>
+      </div>
 
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:10}}>
-          {[
-            {l:"Gratuity (Current)",v:formatINR(gratuity),c:ACC,sub:`${roundedYears} yrs × ₹${Math.round(lastSalary*15/divisor).toLocaleString("en-IN")}`,hi:true},
-            {l:"Tax Exempt",v:formatINR(Math.min(gratuity,taxExemptLimit)),c:GREEN,sub:`Limit: ${formatINR(taxExemptLimit)}`},
-            {l:"Taxable Amount",v:formatINR(taxableGratuity),c:taxableGratuity>0?"#F59E0B":TEXT3,sub:taxableGratuity>0?"Added to income":"Fully exempt"},
-            {l:"Monthly Accrual",v:formatINR(Math.round(lastSalary*15/divisor/12)),c:BLUE,sub:"Earned per month (approx)"},
-            {l:"Gratuity at Retirement",v:formatINR(projGratuity),c:PURP,sub:`Age ${retirementAge} · ${projYears}y service`},
-            {l:"Salary at Retirement",v:formatINR(Math.round(projSalary)),c:"#60A5FA",sub:`At ${salaryHike}% annual hike`},
-          ].map(({l,v,c,sub,hi})=>(
-            <div key={l} className="card" style={{borderColor:hi?c+"50":c+"20"}}>
-              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",marginBottom:5}}>{l}</div>
-              <div className="num" style={{fontWeight:700,fontSize:"clamp(14px,1.4vw,18px)",color:c}}>{v}</div>
-              <div style={{fontSize:10,color:TEXT3,marginTop:3}}>{sub}</div>
-            </div>
-          ))}
-        </div>
+      {/* KEY RESULTS */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
+        {[
+          {l:"Gratuity (Current)",v:formatINR(gratuity),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:`${roundedYears} yrs · ${divisor===26?"Covered Act":"Not Covered"}`},
+          {l:"Tax Exempt",v:formatINR(Math.min(gratuity,taxExemptLimit)),c:GREEN,bg:"#EAF5EE",bc:GREEN+"40",sub:`Limit: ${formatINR(taxExemptLimit)}`},
+          {l:"Taxable Amount",v:formatINR(taxableGratuity),c:taxableGratuity>0?"#D97706":TEXT3,bg:taxableGratuity>0?"#FFFBEB":"#ffffff",bc:taxableGratuity>0?"#F59E0B40":BORDER,sub:taxableGratuity>0?"Added to income":"Fully exempt"},
+          {l:"Monthly Accrual",v:formatINR(Math.round(lastSalary*15/divisor/12)),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40",sub:"earned per month (approx)"},
+          {l:"Gratuity at Retirement",v:formatINR(projGratuity),c:PURP,bg:"#F5F0FF",bc:PURP+"40",sub:`Age ${retirementAge} · ${projYears}y service`},
+          {l:"Salary at Retirement",v:formatINR(Math.round(projSalary)),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:`At ${salaryHike}% annual hike`},
+        ].map(({l,v,c,bg,bc,sub})=>(
+          <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"18px 22px"}}>
+            <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{l}</div>
+            <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+            <div style={{fontSize:11,color:TEXT3,marginTop:6}}>{sub}</div>
+          </div>
+        ))}
+      </div>
 
+      {/* COMPUTATION + CHART */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
         <div className="card">
           <div style={{fontWeight:700,fontSize:14,color:"#1A1714",marginBottom:12}}>Step-by-Step Computation</div>
           <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
@@ -2263,8 +2284,8 @@ function GratuityPage(){
         {yearData.length>0&&(
           <div className="card">
             <div style={{fontWeight:700,fontSize:14,color:"#1A1714",marginBottom:4}}>Gratuity Growth to Retirement</div>
-            <div style={{fontSize:11,color:TEXT3,marginBottom:14}}>Projected at {salaryHike}% annual salary hike · capped at ₹20L</div>
-            <ResponsiveContainer width="100%" height={220}>
+            <div style={{fontSize:11,color:TEXT3,marginBottom:14}}>At {salaryHike}% annual salary hike · capped at ₹20L</div>
+            <ResponsiveContainer width="100%" height={240}>
               <AreaChart data={yearData} margin={{top:4,right:16,left:0,bottom:0}}>
                 <defs><linearGradient id="gg1" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={ACC} stopOpacity={0.25}/><stop offset="95%" stopColor={ACC} stopOpacity={0}/></linearGradient></defs>
                 <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
@@ -2307,6 +2328,7 @@ function GoalSeekPage(){
   const removeGoal=(id)=>setGoals(prev=>prev.filter(g=>g.id!==id));
   const updateGoal=(id,field,value)=>setGoals(prev=>prev.map(g=>{if(g.id!==id)return g;const updated={...g,[field]:value};if(field==="years")updated.returnRate=recRate(value).rate;return updated;}));
   const activeGoals=goals.filter(g=>g.active);
+  const isCustomRate=g=>g.returnRate!==recRate(g.years).rate;
 
   const goalCalcs=activeGoals.map(g=>{
     const fv=g.presentValue*Math.pow(1+g.inflation/100,g.years);
@@ -2330,52 +2352,42 @@ function GoalSeekPage(){
 
   return(
     <div style={{display:"flex",flexDirection:"column",gap:20}}>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(170px,1fr))",gap:12}}>
-        {[
-          {l:"Goals Defined",v:`${activeGoals.length} / 5`,c:TEXT2,bg:"#ffffff",bc:BORDER},
-          {l:"Total Future Value",v:formatINR(totalFV),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40"},
-          {l:"Combined Monthly SIP",v:formatINR(totalMonthlySIP),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
-        ].map(({l,v,c,bg,bc})=>(
-          <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
-            <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,26px)",color:c,lineHeight:1}}>{v}</div>
-          </div>
-        ))}
-      </div>
 
-      {goalCalcs.map((g,idx)=>{
-        const rec=recRate(g.years);const isCustomRate=g.returnRate!==rec.rate;
-        return(
-          <div key={g.id} className="card" style={{borderColor:g.color+"40"}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr 1fr auto",gap:12,alignItems:"start",flexWrap:"wrap"}}>
-              <div>
-                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Goal {idx+1}</div>
-                <select value={g.name} onChange={e=>{const preset=GOAL_PRESETS.find(p=>p.name===e.target.value)||GOAL_PRESETS[8];setGoals(prev=>prev.map(pg=>pg.id===g.id?{...pg,name:e.target.value,inflation:preset.inflation,color:preset.color}:pg));}}
-                  style={{width:"100%",background:"#FAF8F5",border:`1.5px solid ${g.color}40`,borderRadius:8,color:g.color,padding:"8px 10px",fontSize:12,outline:"none",fontWeight:600}}>
-                  {GOAL_PRESETS.map(p=><option key={p.name} value={p.name}>{p.name}</option>)}
-                </select>
-              </div>
-              <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Present Value</div><Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/></div>
-              <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Timeline</div><Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/></div>
-              <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Inflation</div><Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/></div>
-              <div>
-                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Return Rate{!isCustomRate&&<span style={{marginLeft:4,fontSize:8,color:rec.color,background:rec.color+"20",padding:"1px 5px",borderRadius:3}}>AUTO</span>}</div>
-                <Field label="" value={g.returnRate} onChange={v=>updateGoal(g.id,"returnRate",v)} suffix="%" step={0.5} min={1} color={isCustomRate?"#F59E0B":rec.color}/>
-              </div>
-              <div style={{paddingTop:22}}>{activeGoals.length>1&&<div onClick={()=>removeGoal(g.id)} style={{width:28,height:28,borderRadius:6,background:"#FDEAEA",border:`1px solid ${RED}40`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,color:RED}}>×</div>}</div>
+      {/* GOAL CARDS — INPUTS */}
+      {goalCalcs.map((g,idx)=>(
+        <div key={g.id} className="card" style={{padding:"20px 24px",borderColor:g.color+"40"}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr 1fr auto",gap:12,alignItems:"start"}}>
+            <div>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Goal {idx+1}</div>
+              <select value={g.name} onChange={e=>{const preset=GOAL_PRESETS.find(p=>p.name===e.target.value)||GOAL_PRESETS[8];setGoals(prev=>prev.map(pg=>pg.id===g.id?{...pg,name:e.target.value,inflation:preset.inflation,color:preset.color}:pg));}}
+                style={{width:"100%",background:"#FAF8F5",border:`1.5px solid ${g.color}40`,borderRadius:8,color:g.color,padding:"9px 10px",fontSize:13,outline:"none",fontWeight:600}}>
+                {GOAL_PRESETS.map(p=><option key={p.name} value={p.name}>{p.name}</option>)}
+              </select>
             </div>
-            <div style={{marginTop:14,paddingTop:12,borderTop:`1px solid ${BORDER}`,display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:10}}>
-              {[["Future Value",formatINR(g.fv),g.color],["Inflation Impact",`+${formatINR(g.fv-g.presentValue)}`,"#F59E0B"],["Monthly SIP Needed",formatINR(g.sip),ACC,true],["Total to Invest",formatINR(g.totalInvested),TEXT3],["Wealth Gain",formatINR(g.gain),GREEN],["CAGR",`${g.returnRate}%`,rec.color]].map(([l,v,c,big])=>(
-                <div key={l} style={{background:"#FAF8F5",borderRadius:8,padding:"8px 12px"}}>
-                  <div style={{fontSize:11,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"1px"}}>{l}</div>
-                  <div className="num" style={{fontWeight:700,fontSize:big?16:13,color:c}}>{v}</div>
-                </div>
-              ))}
+            <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Present Value</div><Field label="" value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} prefix="₹" step={50000} min={0} color={g.color}/></div>
+            <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Timeline</div><Field label="" value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} suffix=" yrs" step={1} min={1} color={g.color}/></div>
+            <div><div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Inflation</div><Field label="" value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} suffix="%" step={0.5} min={0} color={g.color}/></div>
+            <div>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>
+                Return {!isCustomRate(g)&&<span style={{fontSize:9,color:g.rec.color,background:g.rec.color+"20",padding:"1px 5px",borderRadius:3,marginLeft:4}}>AUTO</span>}
+              </div>
+              <Field label="" value={g.returnRate} onChange={v=>updateGoal(g.id,"returnRate",v)} suffix="%" step={0.5} min={1} color={isCustomRate(g)?"#F59E0B":g.rec.color}/>
             </div>
+            <div style={{paddingTop:28}}>{activeGoals.length>1&&<div onClick={()=>removeGoal(g.id)} style={{width:28,height:28,borderRadius:6,background:"#FDEAEA",border:`1px solid ${RED}40`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,color:RED}}>×</div>}</div>
           </div>
-        );
-      })}
+          {/* Mini results per goal */}
+          <div style={{marginTop:14,paddingTop:12,borderTop:`1px solid ${BORDER}`,display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8}}>
+            {[["Future Value",formatINR(g.fv),g.color],["Inflation Impact",`+${formatINR(g.fv-g.presentValue)}`,"#F59E0B"],["Monthly SIP",formatINR(g.sip),ACC],["Total to Invest",formatINR(g.totalInvested),TEXT3],["Wealth Gain",formatINR(g.gain),GREEN],["CAGR",`${g.returnRate}%`,g.rec.color]].map(([l,v,c])=>(
+              <div key={l} style={{background:"#FAF8F5",borderRadius:8,padding:"8px 10px"}}>
+                <div style={{fontSize:10,color:TEXT3,marginBottom:4,textTransform:"uppercase",letterSpacing:"0.8px",fontWeight:700}}>{l}</div>
+                <div className="num" style={{fontWeight:700,fontSize:13,color:c}}>{v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
 
+      {/* ADD GOAL */}
       {activeGoals.length<5&&(
         <div onClick={addGoal} style={{border:`2px dashed ${BORDER}`,borderRadius:12,padding:"16px",textAlign:"center",cursor:"pointer",color:TEXT3,fontSize:13,transition:"all 0.2s"}}
           onMouseEnter={e=>{e.currentTarget.style.borderColor=ACC;e.currentTarget.style.color=ACC;}}
@@ -2384,38 +2396,54 @@ function GoalSeekPage(){
         </div>
       )}
 
+      {/* COMBINED RESULTS */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+        {[
+          {l:"Goals Defined",v:`${activeGoals.length} / 5`,c:TEXT2,bg:"#ffffff",bc:BORDER},
+          {l:"Total Future Value",v:formatINR(totalFV),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40"},
+          {l:"Combined Monthly SIP",v:formatINR(totalMonthlySIP),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
+        ].map(({l,v,c,bg,bc})=>(
+          <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
+            <div className="num" style={{fontWeight:700,fontSize:"clamp(22px,2.2vw,32px)",color:c,lineHeight:1}}>{v}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* SIP BREAKDOWN BANNER */}
       <div style={{background:"#FFFBF2",border:`1.5px solid ${ACC}50`,borderRadius:14,padding:"24px 28px",display:"flex",alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap",gap:16}}>
         <div>
           <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Start Investing Today</div>
           <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:ACC,lineHeight:1}}>{formatINR(totalMonthlySIP)}</div>
           <div style={{fontSize:13,color:TEXT2,marginTop:8}}>per month across all {activeGoals.length} goals</div>
         </div>
-        <div style={{flex:1,display:"flex",flexDirection:"column",gap:8}}>
+        <div style={{flex:1,display:"flex",flexDirection:"column",gap:10,minWidth:200}}>
           {goalCalcs.map(g=>(
             <div key={g.id} style={{display:"flex",alignItems:"center",gap:10}}>
               <div style={{width:10,height:10,borderRadius:2,background:g.color,flexShrink:0}}/>
-              <div style={{fontSize:12,color:TEXT2,flex:1}}>{g.name}</div>
-              <div className="num" style={{fontSize:12,color:g.color,fontWeight:600,marginRight:8}}>{formatINR(g.sip)}/mo</div>
-              <div style={{width:100,height:5,background:BORDER,borderRadius:3,overflow:"hidden"}}>
+              <div style={{fontSize:13,color:TEXT2,flex:1}}>{g.name}</div>
+              <div className="num" style={{fontSize:13,color:g.color,fontWeight:600,marginRight:8}}>{formatINR(g.sip)}/mo</div>
+              <div style={{width:80,height:5,background:BORDER,borderRadius:3,overflow:"hidden"}}>
                 <div style={{height:"100%",width:`${(g.sip/totalMonthlySIP*100).toFixed(0)}%`,background:g.color,borderRadius:3}}/>
               </div>
-              <div style={{fontSize:10,color:TEXT3,width:30,textAlign:"right"}}>{(g.sip/totalMonthlySIP*100).toFixed(0)}%</div>
+              <div style={{fontSize:11,color:TEXT3,width:30,textAlign:"right"}}>{(g.sip/totalMonthlySIP*100).toFixed(0)}%</div>
             </div>
           ))}
         </div>
       </div>
 
+      {/* CHART */}
       {combinedData.length>0&&(
         <div className="card">
-          <div style={{fontWeight:700,fontSize:14,color:"#1A1714",marginBottom:4}}>Corpus Building — All Goals</div>
-          <ResponsiveContainer width="100%" height={280}>
+          <div style={{fontWeight:700,fontSize:14,color:"#1A1714",marginBottom:14}}>Corpus Building — All Goals</div>
+          <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={combinedData} margin={{top:4,right:16,left:0,bottom:0}}>
-              <defs>{goalCalcs.map((g)=><linearGradient key={g.id} id={`gcg${g.id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={g.color} stopOpacity={0.3}/><stop offset="95%" stopColor={g.color} stopOpacity={0}/></linearGradient>)}</defs>
+              <defs>{goalCalcs.map(g=><linearGradient key={g.id} id={`gcg${g.id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={g.color} stopOpacity={0.3}/><stop offset="95%" stopColor={g.color} stopOpacity={0}/></linearGradient>)}</defs>
               <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
               <XAxis dataKey="year" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
               <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-              <Tooltip content={<ChartTooltip labelPrefix="Year "/>}/><Legend wrapperStyle={{fontSize:11}} formatter={(val)=>{const g=goalCalcs.find(g=>`goal_${g.id}`===val);return g?g.name:val;}}/>
-              {goalCalcs.map((g)=><Area key={g.id} type="monotone" dataKey={`goal_${g.id}`} name={`goal_${g.id}`} stroke={g.color} strokeWidth={2} fill={`url(#gcg${g.id})`} connectNulls={false}/>)}
+              <Tooltip content={<ChartTooltip labelPrefix="Year "/>}/><Legend wrapperStyle={{fontSize:11}} formatter={val=>{const g=goalCalcs.find(g=>`goal_${g.id}`===val);return g?g.name:val;}}/>
+              {goalCalcs.map(g=><Area key={g.id} type="monotone" dataKey={`goal_${g.id}`} name={`goal_${g.id}`} stroke={g.color} strokeWidth={2} fill={`url(#gcg${g.id})`} connectNulls={false}/>)}
             </AreaChart>
           </ResponsiveContainer>
         </div>
