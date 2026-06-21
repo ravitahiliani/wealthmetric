@@ -1755,7 +1755,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             </div>
             <div style={{fontSize:15,color:TEXT2,display:"flex",gap:24,flexWrap:"wrap"}}>
               <span>EMI <strong style={{color:check.verdictColor,fontSize:17}}>{check.emiPct.toFixed(1)}%</strong> of income</span>
-              <span>Total monthly spend <strong style={{color:check.verdictColor,fontSize:17}}>{formatINRFull(check.monthlyCost)}</strong></span>
+              <span>Total monthly spend (incl. EMI) <strong style={{color:check.verdictColor,fontSize:17}}>{formatINRFull(check.monthlyCost)}</strong></span>
             </div>
           </div>
           <div style={{textAlign:"right",flexShrink:0}}>
@@ -1831,7 +1831,10 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
             <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={1} min={1} color={BLUE}/>
-            <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE} hint="Insurance/12 + maintenance + fuel"/>
+            <Field label="Monthly Running Cost Budget" value={discoverRunning} onChange={setDiscoverRunning} prefix="₹" step={500} min={0} color={BLUE}/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Insurance/12 + maintenance + fuel costs combined.
+            </div>
 
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
@@ -2060,7 +2063,10 @@ function HousePage(){
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
-            <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={5} min={5} color={ACC} hint="RBI guideline: EMI ≤ 40–50% of net income"/>
+            <Field label="Max EMI as % of Income" value={emiPctOfIncome} onChange={setEmiPctOfIncome} suffix="%" step={5} min={5} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 RBI guideline: EMI ≤ 40–50% of net income.
+            </div>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Settings</div>
@@ -2111,7 +2117,10 @@ function HousePage(){
           <div className="card" style={{padding:"20px 22px",borderColor:GREEN+"40"}}>
             <div style={{fontSize:12,color:GREEN,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Growth Assumptions</div>
             <Field label="Property Appreciation" value={appreciation} onChange={setAppreciation} suffix="%" step={0.5} min={0} color={GREEN}/>
-            <Field label="Investment Return (if renting)" value={investReturn} onChange={setInvestReturn} suffix="%" step={0.5} min={0} color={GREEN} hint="Down payment + EMI-rent diff invested"/>
+            <Field label="Investment Return (if renting)" value={investReturn} onChange={setInvestReturn} suffix="%" step={0.5} min={0} color={GREEN}/>
+            <div style={{background:"#EAF5EE",border:`1px solid ${GREEN}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:"#1B5E35",lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Assumes down payment + monthly (EMI − rent) difference is invested in mutual funds.
+            </div>
           </div>
         </div>
 
@@ -2206,8 +2215,8 @@ function GratuityPage(){
           <div style={{marginBottom:14}}>
             <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Organisation Type</div>
             <PillRow options={[["covered","Covered (10+)"],["notcovered","Not Covered"]]} value={employeeType} set={setEmployeeType} activeColor="#F59E0B"/>
-            <div style={{fontSize:11,color:TEXT3,marginTop:8,lineHeight:1.6}}>
-              {employeeType==="covered"?"Act 1972 · Salary×15/26 · Exempt up to ₹20L":"Gratuitous · Salary×15/30 · Exempt up to ₹10L"}
+            <div style={{background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"8px 12px",fontSize:12,color:"#92400E",lineHeight:1.5,marginTop:8}}>
+              💡 {employeeType==="covered"?"Payment of Gratuity Act 1972 · Formula: Salary × 15/26 · Statutory cap & tax exemption: ₹20L":"Gratuitous payment (not under Act) · Formula: Salary × 15/30 · Tax exemption limit: ₹10L"}
             </div>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
@@ -2219,7 +2228,10 @@ function GratuityPage(){
         {/* Salary & Service */}
         <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
           <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Salary & Service</div>
-          <Field label="Last Drawn Basic + DA (monthly)" value={lastSalary} onChange={setLastSalary} prefix="₹" step={1000} min={0} color={ACC} hint="Basic + DA only — not HRA or bonus"/>
+          <Field label="Last Drawn Basic + DA (monthly)" value={lastSalary} onChange={setLastSalary} prefix="₹" step={1000} min={0} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Use Basic + DA only. Exclude HRA, bonus, allowances — gratuity is calculated only on this component.
+            </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
             <Field label="Years of Service" value={yearsOfService} onChange={setYearsOfService} suffix=" yrs" step={1} min={0} color={ACC}/>
             <Field label="Extra Months" value={monthsOfService} onChange={v=>setMonthsOfService(Math.min(11,Math.max(0,Math.round(v))))} suffix=" mo" step={1} min={0} color={ACC}/>
