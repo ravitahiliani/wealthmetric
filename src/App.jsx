@@ -1249,60 +1249,60 @@ function RetirementPage(){
       {/* ══ PLAN CHECK ══ */}
       {mode==="check"&&(<>
         {/* INPUTS ROW */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
-          {/* Timeline */}
-          <div className="card" style={{padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
-              {[
-                {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
-                {label:"Retire At",val:retireAge,set:v=>setRetireAge(Math.max(currentAge+1,v)),color:ACC},
-                {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
-              ].map(({label,val,set,color})=>(
-                <div key={label}>
-                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
-                  <div style={{display:"flex",alignItems:"baseline",gap:3}}>
-                    <input type="number" value={val} step={1} min={18}
-                      onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                      style={{background:"transparent",border:"none",color,padding:0,fontSize:30,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-                    <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+          {/* LEFT: Timeline + Financials */}
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div className="card" style={{padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+                {[
+                  {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
+                  {label:"Retire At",val:retireAge,set:v=>setRetireAge(Math.max(currentAge+1,v)),color:ACC},
+                  {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
+                ].map(({label,val,set,color})=>(
+                  <div key={label}>
+                    <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                      <input type="number" value={val} step={1} min={18}
+                        onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
+                        style={{background:"transparent",border:"none",color,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div style={{marginTop:12,paddingTop:10,borderTop:`1px solid ${BORDER}`,fontSize:12,color:TEXT3,display:"flex",justifyContent:"space-between"}}>
+                <span>Accumulation: <strong style={{color:ACC}}>{retireAge-currentAge} yrs</strong></span>
+                <span>Retirement: <strong style={{color:BLUE}}>{lifeExp-retireAge} yrs</strong></span>
+              </div>
             </div>
-            <div style={{marginTop:12,paddingTop:10,borderTop:`1px solid ${BORDER}`,fontSize:12,color:TEXT3,display:"flex",justifyContent:"space-between"}}>
-              <span>Accumulation: <strong style={{color:ACC}}>{retireAge-currentAge} yrs</strong></span>
-              <span>Retirement: <strong style={{color:BLUE}}>{lifeExp-retireAge} yrs</strong></span>
+            <div className="card" style={{padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
+              <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
+              <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
             </div>
           </div>
-
-          {/* Financials */}
-          <div className="card" style={{padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
-            <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
-          </div>
-
-          {/* Rates + SIP */}
-          <div className="card" style={{padding:"20px 22px"}}>
+          {/* RIGHT: Rates & SIP */}
+          <div className="card" style={{padding:"22px 24px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Rates & SIP</div>
             <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC}/>
             <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE}/>
             <Field label="Inflation" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
-            <div style={{height:1,background:BORDER,margin:"8px 0 12px"}}/>
+            <div style={{height:1,background:BORDER,margin:"8px 0 14px"}}/>
             <Field label="Monthly SIP" value={monthlySIP} onChange={setMonthlySIP} prefix="₹" step={500} min={0} color={ACC}/>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:4}}>
-              <div>
+            <div style={{display:"flex",gap:14,alignItems:"flex-start",marginTop:8}}>
+              <div style={{width:110,flexShrink:0}}>
                 <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
                 <NumInput value={sipStepPct} onChange={v=>setSipStepPct(v)} step={1} min={0} max={50} suffix="%" color={sipStepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"8px 10px",fontSize:15}}}/>
+                <div style={{fontSize:11,color:TEXT3,marginTop:4}}>0 = none</div>
               </div>
-              <div style={{opacity:sipStepPct>0?1:0.3,pointerEvents:sipStepPct>0?"auto":"none"}}>
-                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
-                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+              <div style={{flex:1,opacity:sipStepPct>0?1:0.3,pointerEvents:sipStepPct>0?"auto":"none"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Increase Every</div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
                   {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
                     const active=sipStepFreq===k&&sipStepPct>0;
                     return <div key={k} onClick={()=>setSipStepFreq(k)}
-                      style={{cursor:"pointer",padding:"4px 8px",borderRadius:6,fontSize:10,fontWeight:600,
+                      style={{cursor:"pointer",padding:"6px 12px",borderRadius:7,fontSize:12,fontWeight:600,
                         background:active?"#F59E0B":"#FAF8F5",color:active?"#ffffff":TEXT2,border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>{v.label}</div>;
                   })}
                 </div>
@@ -1399,57 +1399,57 @@ function RetirementPage(){
       {/* ══ SIP NEEDED ══ */}
       {mode==="sipneeded"&&(<>
         {/* INPUTS ROW */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
-          {/* Timeline */}
-          <div className="card" style={{padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
-              {[
-                {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
-                {label:"Retire At",val:sipRetireAge,set:setSipRetireAge,color:ACC},
-                {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
-              ].map(({label,val,set,color})=>(
-                <div key={label}>
-                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
-                  <div style={{display:"flex",alignItems:"baseline",gap:3}}>
-                    <input type="number" value={val} step={1} min={18}
-                      onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                      style={{background:"transparent",border:"none",color,padding:0,fontSize:30,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-                    <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+          {/* LEFT: Timeline + Financials */}
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div className="card" style={{padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+                {[
+                  {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
+                  {label:"Retire At",val:sipRetireAge,set:setSipRetireAge,color:ACC},
+                  {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
+                ].map(({label,val,set,color})=>(
+                  <div key={label}>
+                    <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                      <input type="number" value={val} step={1} min={18}
+                        onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
+                        style={{background:"transparent",border:"none",color,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+            <div className="card" style={{padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
+              <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
+              <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
+              <Field label="Target Corpus (0 = auto)" value={targetCorpus} onChange={setTargetCorpus} prefix="₹" step={100000} min={0} color={PURP}
+                hint={`Auto: ${sipNeededResult?formatINR(sipNeededResult.autoCorpus):"calculating..."}`}/>
             </div>
           </div>
-
-          {/* Financials */}
-          <div className="card" style={{padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
-            <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
-            <Field label="Target Corpus (0 = auto)" value={targetCorpus} onChange={setTargetCorpus} prefix="₹" step={100000} min={0} color={PURP}
-              hint={`Auto: ${sipNeededResult?formatINR(sipNeededResult.autoCorpus):"calculating..."}`}/>
-          </div>
-
-          {/* Rates + Step-up */}
-          <div className="card" style={{padding:"20px 22px"}}>
+          {/* RIGHT: Rates & Step-Up */}
+          <div className="card" style={{padding:"22px 24px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Rates & Step-Up</div>
             <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC}/>
             <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE}/>
             <Field label="Inflation" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
-            <div style={{height:1,background:BORDER,margin:"8px 0 12px"}}/>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <div>
+            <div style={{height:1,background:BORDER,margin:"8px 0 14px"}}/>
+            <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
+              <div style={{width:110,flexShrink:0}}>
                 <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
                 <NumInput value={sipStep2Pct} onChange={v=>setSipStep2Pct(v)} step={1} min={0} max={50} suffix="%" color={sipStep2Pct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"8px 10px",fontSize:15}}}/>
+                <div style={{fontSize:11,color:TEXT3,marginTop:4}}>0 = none</div>
               </div>
-              <div style={{opacity:sipStep2Pct>0?1:0.3,pointerEvents:sipStep2Pct>0?"auto":"none"}}>
-                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
-                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+              <div style={{flex:1,opacity:sipStep2Pct>0?1:0.3,pointerEvents:sipStep2Pct>0?"auto":"none"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Increase Every</div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
                   {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
                     const active=sipStep2Freq===k&&sipStep2Pct>0;
                     return <div key={k} onClick={()=>setSipStep2Freq(k)}
-                      style={{cursor:"pointer",padding:"4px 8px",borderRadius:6,fontSize:10,fontWeight:600,
+                      style={{cursor:"pointer",padding:"6px 12px",borderRadius:7,fontSize:12,fontWeight:600,
                         background:active?"#F59E0B":"#FAF8F5",color:active?"#ffffff":TEXT2,border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>{v.label}</div>;
                   })}
                 </div>
@@ -1497,56 +1497,56 @@ function RetirementPage(){
       {/* ══ RETIRE WHEN ══ */}
       {mode==="retirewhen"&&(<>
         {/* INPUTS ROW */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
-          {/* Timeline */}
-          <div className="card" style={{padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-              {[
-                {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
-                {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
-              ].map(({label,val,set,color})=>(
-                <div key={label}>
-                  <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
-                  <div style={{display:"flex",alignItems:"baseline",gap:3}}>
-                    <input type="number" value={val} step={1} min={18}
-                      onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                      style={{background:"transparent",border:"none",color,padding:0,fontSize:30,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
-                    <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+          {/* LEFT: Timeline + Financials */}
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div className="card" style={{padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                {[
+                  {label:"Current Age",val:currentAge,set:setCurrentAge,color:ACC},
+                  {label:"Life Expectancy",val:lifeExp,set:setLifeExp,color:"#1A1714"},
+                ].map(({label,val,set,color})=>(
+                  <div key={label}>
+                    <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                      <input type="number" value={val} step={1} min={18}
+                        onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
+                        style={{background:"transparent",border:"none",color,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <span style={{fontSize:13,color:TEXT3,flexShrink:0}}>yrs</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div style={{marginTop:12,fontSize:12,color:TEXT3}}>We scan ages {currentAge+1}–80 to find when you can retire</div>
             </div>
-            <div style={{marginTop:12,fontSize:12,color:TEXT3}}>We scan ages {currentAge+1}–80 to find when you can retire</div>
+            <div className="card" style={{padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
+              <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
+              <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
+            </div>
           </div>
-
-          {/* Financials */}
-          <div className="card" style={{padding:"20px 22px"}}>
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Financials</div>
-            <Field label="Current Savings" value={currentSavings} onChange={setCurrentSavings} prefix="₹" step={10000} min={0} color={ACC}/>
-            <Field label="Monthly Expenses (today)" value={monthlyExpense} onChange={setMonthlyExpense} prefix="₹" step={1000} min={0} color={ACC}/>
-          </div>
-
-          {/* Rates + SIP */}
-          <div className="card" style={{padding:"20px 22px"}}>
+          {/* RIGHT: Rates & SIP */}
+          <div className="card" style={{padding:"22px 24px"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Rates & SIP</div>
             <Field label="Pre-retirement Return" value={preReturnRate} onChange={setPreReturnRate} suffix="% p.a." step={0.5} min={1} color={ACC}/>
             <Field label="Post-retirement Return" value={postReturnRate} onChange={setPostReturnRate} suffix="% p.a." step={0.5} min={1} color={BLUE}/>
             <Field label="Inflation" value={inflation} onChange={setInflation} suffix="% p.a." step={0.5} min={1} color="#F59E0B"/>
-            <div style={{height:1,background:BORDER,margin:"8px 0 12px"}}/>
+            <div style={{height:1,background:BORDER,margin:"8px 0 14px"}}/>
             <Field label="Monthly SIP" value={rwMonthlySIP} onChange={setRwMonthlySIP} prefix="₹" step={500} min={0} color="#EC4899"/>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:4}}>
-              <div>
+            <div style={{display:"flex",gap:14,alignItems:"flex-start",marginTop:8}}>
+              <div style={{width:110,flexShrink:0}}>
                 <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Step-Up %</div>
                 <NumInput value={rwStepPct} onChange={v=>setRwStepPct(v)} step={1} min={0} max={50} suffix="%" color={rwStepPct>0?"#F59E0B":"#1A1714"} style={{input:{padding:"8px 10px",fontSize:15}}}/>
+                <div style={{fontSize:11,color:TEXT3,marginTop:4}}>0 = none</div>
               </div>
-              <div style={{opacity:rwStepPct>0?1:0.3,pointerEvents:rwStepPct>0?"auto":"none"}}>
-                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Every</div>
-                <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+              <div style={{flex:1,opacity:rwStepPct>0?1:0.3,pointerEvents:rwStepPct>0?"auto":"none"}}>
+                <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Increase Every</div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
                   {Object.entries(STEPUP_FREQS).filter(([k])=>k!=="none").map(([k,v])=>{
                     const active=rwStepFreq===k&&rwStepPct>0;
                     return <div key={k} onClick={()=>setRwStepFreq(k)}
-                      style={{cursor:"pointer",padding:"4px 8px",borderRadius:6,fontSize:10,fontWeight:600,
+                      style={{cursor:"pointer",padding:"6px 12px",borderRadius:7,fontSize:12,fontWeight:600,
                         background:active?"#F59E0B":"#FAF8F5",color:active?"#ffffff":TEXT2,border:`1.5px solid ${active?"#F59E0B":BORDER}`}}>{v.label}</div>;
                   })}
                 </div>
