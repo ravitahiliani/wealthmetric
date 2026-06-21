@@ -431,7 +431,7 @@ function CalculatorPage(){
 
       {/* MODE TOGGLE */}
       <div style={{display:"flex",gap:0,background:"#ffffff",border:`1px solid ${BORDER}`,borderRadius:10,padding:3,alignSelf:"flex-start"}}>
-        {[{k:"calculate",label:"Corpus Calculator"},{k:"findsip",label:"SIP for Target"}].map(m=>(
+        {[{k:"calculate",label:"Corpus Calculator"},{k:"findsip",label:"SIP for Target Corpus"}].map(m=>(
           <div key={m.k} onClick={()=>setMode(m.k)}
             style={{padding:"8px 24px",borderRadius:8,cursor:"pointer",fontWeight:600,fontSize:13,
               transition:"all 0.18s",background:mode===m.k?ACC:"transparent",
@@ -1040,16 +1040,40 @@ function EMIPage(){
 function RetirementSharedInputs({currentAge,setCurrentAge,lifeExp,setLifeExp,retireAge,setRetireAge,showRetireAge,currentSavings,setCurrentSavings,monthlyExpense,setMonthlyExpense,preReturnRate,setPreReturnRate,postReturnRate,setPostReturnRate,inflation,setInflation}){
   return(<>
     <div className="card">
-      <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Timeline</div>
-      <div style={{display:"grid",gridTemplateColumns:`repeat(${showRetireAge?3:2},1fr)`,gap:8}}>
-        <div><div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",fontWeight:700,marginBottom:5}}>Current Age</div><NumInput value={currentAge} onChange={setCurrentAge} step={1} min={18} suffix="y" color={ACC}/></div>
-        {showRetireAge&&<div><div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",fontWeight:700,marginBottom:5}}>Retire At</div><NumInput value={retireAge} onChange={v=>setRetireAge(Math.max(currentAge+1,v))} step={1} min={currentAge+1} suffix="y" color={ACC}/></div>}
-        <div><div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",fontWeight:700,marginBottom:5}}>Life Expectancy</div><NumInput value={lifeExp} onChange={setLifeExp} step={1} min={(retireAge||currentAge)+1} suffix="y" color={ACC}/></div>
+      <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Timeline</div>
+      <div style={{display:"grid",gridTemplateColumns:`repeat(${showRetireAge?3:2},1fr)`,gap:12}}>
+        <div>
+          <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Current Age</div>
+          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+            <input type="number" value={currentAge} step={1} min={18}
+              onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setCurrentAge(n);}}
+              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+            <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
+          </div>
+        </div>
+        {showRetireAge&&<div>
+          <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Retire At</div>
+          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+            <input type="number" value={retireAge} step={1} min={currentAge+1}
+              onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setRetireAge(Math.max(currentAge+1,n));}}
+              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+            <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
+          </div>
+        </div>}
+        <div>
+          <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Life Expectancy</div>
+          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+            <input type="number" value={lifeExp} step={1} min={(retireAge||currentAge)+1}
+              onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setLifeExp(n);}}
+              style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:32,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+            <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
+          </div>
+        </div>
       </div>
       {showRetireAge&&(
-        <div style={{marginTop:8,fontSize:11,color:TEXT3,display:"flex",justifyContent:"space-between"}}>
-          <span>Accumulation: <strong style={{color:ACC}}>{(retireAge||0)-currentAge}y</strong></span>
-          <span>Retirement: <strong style={{color:BLUE}}>{lifeExp-(retireAge||0)}y</strong></span>
+        <div style={{marginTop:12,paddingTop:10,borderTop:`1px solid ${BORDER}`,fontSize:12,color:TEXT3,display:"flex",justifyContent:"space-between"}}>
+          <span>Accumulation: <strong style={{color:ACC}}>{(retireAge||0)-currentAge} years</strong></span>
+          <span>Retirement: <strong style={{color:BLUE}}>{lifeExp-(retireAge||0)} years</strong></span>
         </div>
       )}
     </div>
@@ -1207,12 +1231,15 @@ function RetirementPage(){
   return(
     <div style={{display:"flex",flexDirection:"column",gap:16}}>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-        {[{k:"check",icon:"📊",label:"Plan Check",desc:"How am I tracking?"},{k:"sipneeded",icon:"🎯",label:"SIP Needed",desc:"What SIP do I need?"},{k:"retirewhen",icon:"🏁",label:"Retire When",desc:"When can I retire?"}].map(m=>(
+        {[{k:"check",label:"Plan Check",desc:"How am I tracking?"},{k:"sipneeded",label:"SIP Needed",desc:"What SIP do I need?"},{k:"retirewhen",label:"Retire When",desc:"When can I retire?"}].map(m=>(
           <div key={m.k} onClick={()=>setMode(m.k)}
-            style={{padding:"10px 20px",borderRadius:10,cursor:"pointer",display:"flex",alignItems:"center",gap:8,transition:"all 0.2s",
-              background:mode===m.k?ACC:"#ffffff",color:mode===m.k?"#ffffff":TEXT2,border:`1.5px solid ${mode===m.k?ACC:BORDER}`}}>
-            <span style={{fontSize:18}}>{m.icon}</span>
-            <div><div style={{fontWeight:700,fontSize:13}}>{m.label}</div><div style={{fontSize:10,opacity:0.75}}>{m.desc}</div></div>
+            style={{padding:"14px 28px",borderRadius:12,cursor:"pointer",display:"flex",flexDirection:"column",gap:3,
+              minWidth:160,transition:"all 0.2s",
+              background:mode===m.k?ACC:"#ffffff",color:mode===m.k?"#ffffff":TEXT2,
+              border:`1.5px solid ${mode===m.k?ACC:BORDER}`,
+              boxShadow:mode===m.k?"0 2px 10px rgba(193,127,36,0.25)":"none"}}>
+            <div style={{fontWeight:700,fontSize:15}}>{m.label}</div>
+            <div style={{fontSize:12,opacity:0.75}}>{m.desc}</div>
           </div>
         ))}
       </div>
@@ -1279,15 +1306,20 @@ function RetirementPage(){
                 </svg>
                 <div style={{fontSize:12,fontWeight:700,color:gaugeColor,marginTop:4}}>{pct>=100?"On Track ✓":pct>=70?"Almost There":"Needs Attention"}</div>
               </div>
-              <div className="card" style={{borderColor:checkResult.corpusSurvives?GREEN+"30":RED+"30"}}>
-                <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Corpus Survivability</div>
-                <div style={{fontSize:28,marginBottom:6}}>{checkResult.corpusSurvives?"💰":"⚠️"}</div>
+              <div className="card" style={{borderColor:checkResult.corpusSurvives?GREEN+"50":RED+"50",background:checkResult.corpusSurvives?"#F4FBF7":"#FFF0F0"}}>
+                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Corpus Survivability</div>
                 {checkResult.corpusSurvives?(
-                  <><div style={{fontWeight:700,fontSize:14,color:GREEN}}>Lasts till age {lifeExp}</div>
-                  <div style={{fontSize:11,color:TEXT3,marginTop:4}}>Balance at {lifeExp}: {formatINR(checkResult.drawData[checkResult.drawData.length-1]?.balance||0)}</div></>
+                  <>
+                    <div style={{fontWeight:700,fontSize:22,color:GREEN,marginBottom:8}}>✓ Lasts till age {lifeExp}</div>
+                    <div style={{fontSize:13,color:TEXT2,marginBottom:4}}>Balance remaining</div>
+                    <div className="num" style={{fontWeight:700,fontSize:20,color:GREEN}}>{formatINR(checkResult.drawData[checkResult.drawData.length-1]?.balance||0)}</div>
+                  </>
                 ):(
-                  <><div style={{fontWeight:700,fontSize:14,color:RED}}>Depletes at age {checkResult.depletionAge}</div>
-                  <div style={{fontSize:11,color:"#F59E0B",marginTop:4}}>{lifeExp-(checkResult.depletionAge||lifeExp)}y before life expectancy</div></>
+                  <>
+                    <div style={{fontWeight:700,fontSize:22,color:RED,marginBottom:8}}>⚠ Depletes at age {checkResult.depletionAge}</div>
+                    <div style={{fontSize:13,color:TEXT2,marginBottom:4}}>Years short</div>
+                    <div className="num" style={{fontWeight:700,fontSize:20,color:"#F59E0B"}}>{lifeExp-(checkResult.depletionAge||lifeExp)} years before expectancy</div>
+                  </>
                 )}
               </div>
             </div>
