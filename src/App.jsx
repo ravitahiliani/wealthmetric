@@ -2060,7 +2060,6 @@ function HomePage({setPage}){
 
       {/* Calculators grid */}
       <div style={{padding:"0 32px 60px"}}>
-        <div style={{marginBottom:20}}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(310px,1fr))",gap:16}}>
           {CALCULATORS.map(t=>(
             <div key={t.id} onClick={()=>setPage(t.id)}
