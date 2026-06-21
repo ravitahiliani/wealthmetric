@@ -27,7 +27,7 @@ const GLOBAL_CSS = `
   ::-webkit-scrollbar-track{background:#F7F5F0}
   ::-webkit-scrollbar-thumb{background:#C8C3B8;border-radius:3px}
   ::-webkit-scrollbar-thumb:hover{background:#8A8480}
-  .nav-tab{cursor:pointer;padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:7px;white-space:nowrap;user-select:none}
+  .nav-tab{cursor:pointer;padding:10px 20px;border-radius:10px;font-size:15px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:8px;white-space:nowrap;user-select:none}
   .nav-tab.active{background:#C17F24;color:#ffffff;box-shadow:0 2px 8px rgba(193,127,36,0.35)}
   .nav-tab.inactive{color:#5A5650;border:1.5px solid #E4E0D8;background:#ffffff}
   .nav-tab.inactive:hover{color:#1A1714;border-color:#C17F24;background:#F5E6C8}
@@ -2142,10 +2142,10 @@ function HomePage({setPage}){
       <div style={{padding:"64px 32px 48px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:1000,height:400,background:"radial-gradient(ellipse at 50% 0%,rgba(193,127,36,0.07) 0%,transparent 60%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",maxWidth:640,margin:"0 auto"}}>
-          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(44px,6.5vw,80px)",letterSpacing:"-2.5px",lineHeight:1.0,marginBottom:16,color:"#1A1714"}}>
-            Your Money,{" "}<span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
+          <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:900,fontSize:"clamp(52px,7vw,96px)",letterSpacing:"-3px",lineHeight:1.0,marginBottom:20,color:"#1A1714",whiteSpace:"nowrap"}}>
+            Your Money, <span style={{background:`linear-gradient(135deg,${ACC_D} 0%,${ACC} 60%,#E8A830 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Clearly.</span>
           </h1>
-          <p style={{fontSize:"clamp(15px,1.5vw,18px)",color:TEXT2,lineHeight:1.6}}>
+          <p style={{fontSize:"clamp(17px,1.6vw,22px)",color:TEXT2,lineHeight:1.6}}>
             The metrics behind your wealth, simplified.
           </p>
         </div>
@@ -2233,11 +2233,11 @@ export default function App(){
       <style>{GLOBAL_CSS}</style>
 
       {/* Nav */}
-      <div style={{background:"#ffffff",borderBottom:`1px solid ${BORDER}`,boxShadow:`0 1px 0 ${BORDER},0 4px 16px rgba(26,23,20,0.05)`,padding:"12px 24px",position:"sticky",top:0,zIndex:100}}>
+      <div style={{background:"#ffffff",borderBottom:`1px solid ${BORDER}`,boxShadow:`0 1px 0 ${BORDER},0 4px 16px rgba(26,23,20,0.05)`,padding:"14px 24px",position:"sticky",top:0,zIndex:100}}>
         <div style={{maxWidth:1400,margin:"0 auto",display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
           <div style={{marginRight:16,flexShrink:0,cursor:"pointer"}} onClick={()=>setPage("home")}>
-            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:21,fontWeight:900,color:ACC,letterSpacing:"-0.5px",lineHeight:1}}>WealthMetric</div>
-            <div style={{fontSize:9,color:TEXT3,letterSpacing:"2px",textTransform:"uppercase",marginTop:2}}>Personal Finance</div>
+            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:24,fontWeight:900,color:ACC,letterSpacing:"-0.5px",lineHeight:1}}>WealthMetric</div>
+            <div style={{fontSize:10,color:TEXT3,letterSpacing:"2px",textTransform:"uppercase",marginTop:3}}>Personal Finance</div>
           </div>
           {PAGES.filter(p=>p.id!=="home").map(p=>(
             <div key={p.id} className={`nav-tab ${page===p.id?"active":"inactive"}`} onClick={()=>setPage(p.id)}>
