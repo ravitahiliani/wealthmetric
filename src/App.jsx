@@ -1700,20 +1700,17 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Running Costs</div>
             <Field label="Annual Insurance" value={effectiveIns} onChange={setInsurance} prefix="₹" step={1000} min={0} color={BLUE}/>
             <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
-              💡 Auto-estimated at 2.5% of on-road price ({formatINR(insAuto)}/yr). Edit above if you have a quote.
+              💡 Auto-estimated at 2.5% of on-road price. Edit above if you have a quote.
             </div>
             <Field label="Monthly Maintenance" value={maintenance} onChange={setMaintenance} prefix="₹" step={500} min={0} color={BLUE}/>
             <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
-              💡 Thumb rule: ~1% of on-road price per year ({formatINR(Math.round(carPrice*0.01/12))}/mo) for servicing. Add more for older or premium cars.
+              💡 Thumb rule: ~1.5% of on-road price per year ({formatINR(Math.round(carPrice*0.015/12))}/mo) — includes routine servicing + tyre amortisation. Higher for older or premium cars.
             </div>
             <Field label="Monthly Fuel / Charging" value={fuel} onChange={setFuel} prefix="₹" step={500} min={0} color={BLUE}/>
             <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:4,marginBottom:14}}>
               💡 Budget car ₹6–10K/mo · Mid-range ₹10–16K/mo · Premium ₹16–25K/mo
             </div>
-            <Field label="Monthly Tyres (amortised)" value={effectiveTyres} onChange={setTyres} prefix="₹" step={100} min={0} color={BLUE}/>
-            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6}}>
-              💡 Tyres last 4–5 yrs in Indian cities. Budget: ~₹12–15K/set, Mid: ~₹20–30K/set, SUV: ~₹36K+/set. Auto-estimated at {formatINR(tyreAutoMonthly)}/mo — edit if known.
-            </div>
+
           </div>
         </div>
 
