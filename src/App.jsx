@@ -1712,7 +1712,10 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, all existing EMIs — except this car"/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Include rent, food, utilities, all existing EMIs — except this car.
+            </div>
           </div>
           {/* Car Details */}
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
@@ -1752,7 +1755,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             </div>
             <div style={{fontSize:15,color:TEXT2,display:"flex",gap:24,flexWrap:"wrap"}}>
               <span>EMI <strong style={{color:check.verdictColor,fontSize:17}}>{check.emiPct.toFixed(1)}%</strong> of income</span>
-              <span>Total monthly <strong style={{color:check.verdictColor,fontSize:17}}>{formatINRFull(check.monthlyCost)}</strong></span>
+              <span>Total monthly spend <strong style={{color:check.verdictColor,fontSize:17}}>{formatINRFull(check.monthlyCost)}</strong></span>
             </div>
           </div>
           <div style={{textAlign:"right",flexShrink:0}}>
@@ -1765,7 +1768,7 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
         <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
           {[
             {l:"Monthly EMI",v:formatINRFull(check.emi),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40"},
-            {l:"Total Monthly Cost",v:formatINRFull(check.monthlyCost),c:BLUE,bg:"#F0F4FF",bc:BLUE+"30"},
+            {l:"Total Monthly Spend (incl. EMI)",v:formatINRFull(check.monthlyCost),c:BLUE,bg:"#F0F4FF",bc:BLUE+"30"},
             {l:"Down Payment",v:formatINR(check.down),c:TEXT2,bg:"#ffffff",bc:BORDER},
             {l:`Total Cost (${tenure}Y)`,v:formatINR(check.totalOwnership),c:TEXT2,bg:"#ffffff",bc:BORDER},
           ].map(({l,v,c,bg,bc})=>(
@@ -1820,7 +1823,10 @@ function CarAffordability({income,setIncome,expenses,setExpenses}){
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, all existing EMIs — except this car"/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+            <div style={{background:BLUE_L,border:`1px solid ${BLUE}20`,borderRadius:7,padding:"8px 12px",fontSize:12,color:BLUE,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Include rent, food, utilities, all existing EMIs — except this car.
+            </div>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:BLUE+"40"}}>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
@@ -1975,7 +1981,10 @@ function HousePage(){
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, existing EMIs — except this house"/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Include rent, food, utilities, all existing EMIs — except this house.
+            </div>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Property Details</div>
@@ -2044,7 +2053,10 @@ function HousePage(){
             <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:14}}>
               💡 Add Employee PF, Employer PF, NPS — these don't hit your account but are real savings.
             </div>
-            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC} hint="Include rent, food, utilities, existing EMIs — except this house"/>
+            <Field label="Monthly Expenses (existing EMIs)" value={expenses} onChange={setExpenses} prefix="₹" step={2000} min={0} color={ACC}/>
+            <div style={{background:ACC_L,border:`1px solid ${ACC}30`,borderRadius:7,padding:"8px 12px",fontSize:12,color:ACC_D,lineHeight:1.5,marginTop:-6,marginBottom:6}}>
+              💡 Include rent, food, utilities, all existing EMIs — except this house.
+            </div>
           </div>
           <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
             <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Comfort Level</div>
