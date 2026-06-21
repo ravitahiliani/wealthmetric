@@ -928,67 +928,99 @@ function EMIPage(){
   const schedule=results?.baseSchedule;
 
   return(
-    <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:16,alignItems:"start"}}>
-      <div style={{display:"flex",flexDirection:"column",gap:12}}>
-        <div className="card">
-          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Loan Type</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+
+      {/* ── INPUTS ROW ── */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:14}}>
+
+        {/* Loan Type */}
+        <div className="card" style={{padding:"20px 22px"}}>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Type</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
             {Object.entries(LOAN_TYPES).map(([k,v])=>(
               <div key={k} onClick={()=>handleLoanType(k)}
                 style={{padding:"12px 14px",borderRadius:10,border:`1.5px solid ${loanType===k?ACC:BORDER}`,
                   background:loanType===k?ACC_L:"transparent",cursor:"pointer",transition:"all 0.15s"}}>
-                <div style={{fontSize:14,fontWeight:700,color:loanType===k?ACC_D:TEXT2,marginBottom:6}}>{v.label}</div>
-                <div style={{fontSize:12,color:loanType===k?ACC_D:TEXT3}}>{v.rateHint} interest</div>
-                <div style={{fontSize:12,color:loanType===k?ACC_D:TEXT3,marginTop:2}}>{v.tenureHint}</div>
+                <div style={{fontSize:14,fontWeight:700,color:loanType===k?ACC_D:TEXT2,marginBottom:4}}>{v.label}</div>
+                <div style={{fontSize:11,color:loanType===k?ACC_D:TEXT3}}>{v.rateHint}</div>
+                <div style={{fontSize:11,color:loanType===k?ACC_D:TEXT3,marginTop:2}}>{v.tenureHint}</div>
               </div>
             ))}
           </div>
         </div>
-        <div className="card">
+
+        {/* Loan Details */}
+        <div className="card" style={{padding:"20px 22px",borderColor:ACC+"40"}}>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Loan Details</div>
           <Field label="Loan Amount" value={principal} onChange={setPrincipal} prefix="₹" step={50000} min={10000} color={ACC}/>
           <Field label="Interest Rate" value={rate} onChange={setRate} suffix="% p.a." step={0.1} min={0.1} color={ACC} hint={`Typical for ${LOAN_TYPES[loanType].label}: ${LOAN_TYPES[loanType].rateHint}`}/>
           <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={ACC} hint={`Max for ${LOAN_TYPES[loanType].label}: ${LOAN_TYPES[loanType].maxTenure}y`}/>
         </div>
 
+        {/* Quick Summary */}
+        {results&&(
+          <div className="card" style={{padding:"20px 22px",borderColor:ACC+"30",background:"#FFFBF2"}}>
+            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:14}}>Quick Summary</div>
+            <div style={{marginBottom:16}}>
+              <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Principal vs Interest</div>
+              <div style={{height:10,borderRadius:5,background:BORDER,overflow:"hidden",marginBottom:6}}>
+                <div style={{height:"100%",width:`${(principal/results.totalPay*100).toFixed(1)}%`,background:ACC,borderRadius:5}}/>
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:11}}>
+                <span style={{color:ACC}}>Principal {(principal/results.totalPay*100).toFixed(0)}%</span>
+                <span style={{color:"#D97706"}}>Interest {(results.totalInt/results.totalPay*100).toFixed(0)}%</span>
+              </div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}>
+                <span style={{fontSize:12,color:TEXT2}}>Monthly EMI</span>
+                <span className="num" style={{fontWeight:700,fontSize:18,color:ACC}}>{formatINRFull(results.emi)}</span>
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}>
+                <span style={{fontSize:12,color:TEXT2}}>Total Interest</span>
+                <span className="num" style={{fontWeight:700,fontSize:16,color:"#D97706"}}>{formatINR(results.totalInt)}</span>
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}>
+                <span style={{fontSize:12,color:TEXT2}}>Total Payment</span>
+                <span className="num" style={{fontWeight:700,fontSize:16,color:TEXT2}}>{formatINR(results.totalPay)}</span>
+              </div>
+            </div>
+          </div>
+        )}
+        {!results&&(
+          <div className="card" style={{padding:"20px 22px",display:"flex",alignItems:"center",justifyContent:"center",color:TEXT3}}>
+            <div style={{textAlign:"center"}}>
+              <div style={{fontSize:32,marginBottom:8}}>🏦</div>
+              <div style={{fontSize:13}}>Enter loan details to see results</div>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div style={{display:"flex",flexDirection:"column",gap:14}}>
-        {results&&(<>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:12}}>
-            {[
-              {l:"Principal",v:formatINR(principal),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40",sub:"loan amount"},
-              {l:"Monthly EMI",v:formatINRFull(results.emi),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:null},
-              {l:"Total Interest",v:formatINR(results.totalInt),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40",sub:((results.totalInt/principal)*100).toFixed(0)+"% of principal"},
-              {l:"Total Payment",v:formatINR(results.totalPay),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:`over ${tenure} years`},
-              ...([].length>0?[
-                {l:"Interest Saved",v:formatINR(results.intSaved),c:GREEN,bg:"#EAF5EE",bc:GREEN+"40",sub:`${Math.floor(results.monthsSaved/12)}y ${results.monthsSaved%12}m sooner`},
-              ]:[]),
-            ].map(({l,v,c,bg,bc,sub})=>(
-              <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
-                <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:"clamp(20px,2vw,28px)",color:c,lineHeight:1}}>{v}</div>
-                {sub&&<div style={{fontSize:12,color:TEXT3,marginTop:6}}>{sub}</div>}
-              </div>
-            ))}
-          </div>
-
-          <div className="card">
-            <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Principal vs Interest Split</div>
-            <div style={{height:14,borderRadius:7,background:BORDER,overflow:"hidden",marginBottom:8}}>
-              <div style={{height:"100%",width:`${(principal/results.totalPay*100).toFixed(1)}%`,background:ACC,borderRadius:"7px 0 0 7px"}}/>
+      {/* ── STAT CARDS ── */}
+      {results&&(<>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+          {[
+            {l:"Principal",v:formatINR(principal),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40",sub:"loan amount"},
+            {l:"Monthly EMI",v:formatINRFull(results.emi),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:null},
+            {l:"Total Interest",v:formatINR(results.totalInt),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40",sub:((results.totalInt/principal)*100).toFixed(0)+"% of principal"},
+            {l:"Total Payment",v:formatINR(results.totalPay),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:`over ${tenure} years`},
+          ].map(({l,v,c,bg,bc,sub})=>(
+            <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(20px,2vw,28px)",color:c,lineHeight:1}}>{v}</div>
+              {sub&&<div style={{fontSize:12,color:TEXT3,marginTop:6}}>{sub}</div>}
             </div>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
-              <span style={{color:ACC}}>● Principal <strong>{(principal/results.totalPay*100).toFixed(0)}%</strong> ({formatINR(principal)})</span>
-              <span style={{color:"#F59E0B"}}>● Interest <strong>{(results.totalInt/results.totalPay*100).toFixed(0)}%</strong> ({formatINR(results.totalInt)})</span>
-            </div>
-          </div>
+          ))}
+        </div>
 
-
-
+        {/* ── CHARTS ── */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+          {/* Annual Principal vs Interest chart */}
           {schedule&&schedule.length>0&&(
             <div className="card">
               <div className="lbl" style={{marginBottom:14}}>Annual Principal vs Interest Paid</div>
-              <ResponsiveContainer width="100%" height={240}>
+              <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={schedule} margin={{top:4,right:16,left:0,bottom:0}}>
                   <CartesianGrid strokeDasharray="3 3" stroke={BORDER} vertical={false}/>
                   <XAxis dataKey="year" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
@@ -1001,17 +1033,17 @@ function EMIPage(){
             </div>
           )}
 
+          {/* Amortization table */}
           <div className="card">
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
               <div className="lbl" style={{marginBottom:0}}>Amortization Schedule</div>
-
             </div>
-            <div style={{overflowX:"auto"}}>
+            <div style={{overflowX:"auto",maxHeight:280,overflowY:"auto"}}>
               <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
-                <thead>
+                <thead style={{position:"sticky",top:0,background:"#ffffff"}}>
                   <tr style={{borderBottom:`1px solid ${BORDER}`}}>
-                    {["Year","Balance","Principal Paid","Yr Principal","Yr Interest"].map((h,i)=>(
-                      <th key={h} style={{textAlign:i===0?"left":"right",padding:"6px 10px",color:TEXT3,fontWeight:600,fontSize:10}}>{h}</th>
+                    {["Year","Balance","Cumulative Principal","Yr Principal","Yr Interest"].map((h,i)=>(
+                      <th key={h} style={{textAlign:i===0?"left":"right",padding:"6px 10px",color:TEXT2,fontWeight:700,fontSize:11}}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -1029,8 +1061,8 @@ function EMIPage(){
               </table>
             </div>
           </div>
-        </>)}
-      </div>
+        </div>
+      </>)}
     </div>
   );
 }
