@@ -443,7 +443,7 @@ function CalculatorPage(){
 
       {/* ── INPUTS ── */}
       {mode==="calculate"&&(
-        <div style={{display:"grid",gridTemplateColumns:"340px 1fr",gap:14,alignItems:"stretch"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch"}}>
 
           {/* LEFT PANEL */}
           <div style={{display:"grid",gridTemplateRows:"auto 1fr",gap:14}}>
