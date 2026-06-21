@@ -752,10 +752,6 @@ function EMIPage(){
   const [principal,setPrincipal]=useState(2000000);
   const [rate,setRate]=useState(8.5);
   const [tenure,setTenure]=useState(20);
-  const [prepayOn,setPrepayOn]=useState(false);
-  const [prepayAmt,setPrepayAmt]=useState(50000);
-  const [prepayFreq,setPrepayFreq]=useState("annually");
-  const [prepayStrategy,setPrepayStrategy]=useState("tenure");
 
   const LOAN_TYPES={
     home:    {label:"🏠 Home",     rateHint:"7–10%",  tenureHint:"Up to 30 yrs", defaultRate:8.5, defaultTenure:20,maxTenure:30},
@@ -794,17 +790,10 @@ function EMIPage(){
       if(pBal<=0){actualMonths=m-1;break;}
       const intP=pBal*r;
       let prinP;
-      if(prepayStrategy==="emi"&&prepayOn)prinP=Math.min(newEmi-intP,pBal);
+      if(false)prinP=Math.min(newEmi-intP,pBal);
       else prinP=Math.min(emi-intP,pBal);
       pBal-=prinP;pTotInt+=intP;
-      if(prepayOn&&prepayAmt>0){
-        let pp=0;
-        if(prepayFreq==="monthly")pp=prepayAmt;
-        else if(prepayFreq==="quarterly"&&m%3===0)pp=prepayAmt;
-        else if(prepayFreq==="annually"&&m%12===0)pp=prepayAmt;
-        pp=Math.min(pp,pBal);pBal-=pp;
-        if(prepayStrategy==="emi"&&pBal>0){const remMonths=n-m;if(remMonths>0)newEmi=pBal*r*Math.pow(1+r,remMonths)/(Math.pow(1+r,remMonths)-1);}
-      }
+
       if(m%12===0||pBal<=0){
         const yr=Math.ceil(m/12);const prev=prepaySchedule[prepaySchedule.length-1];
         prepaySchedule.push({year:yr,balance:Math.round(Math.max(pBal,0)),principalPaid:Math.round(principal-Math.max(pBal,0)),
@@ -821,12 +810,12 @@ function EMIPage(){
       withoutPrepay:baseSchedule[i]?.balance??0,
       withPrepay:prepaySchedule[i]?.balance??0,
     }));
-    return{emi,finalEmi:prepayStrategy==="emi"&&prepayOn?newEmi:emi,totalPay,totalInt,
+    return{emi,finalEmi:false?newEmi:emi,totalPay,totalInt,
       baseSchedule,prepaySchedule,compChart,
-      intSaved:prepayOn?intSaved:0,monthsSaved:prepayOn?monthsSaved:0,actualMonths};
-  },[principal,rate,tenure,prepayOn,prepayAmt,prepayFreq,prepayStrategy]);
+      intSaved:0,monthsSaved:0,actualMonths};
+  },[principal,rate,tenure]);
 
-  const schedule=prepayOn?results?.prepaySchedule:results?.baseSchedule;
+  const schedule=results?.baseSchedule;
 
   return(
     <div style={{display:"grid",gridTemplateColumns:"300px minmax(0,1fr)",gap:16,alignItems:"start"}}>
@@ -836,10 +825,11 @@ function EMIPage(){
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
             {Object.entries(LOAN_TYPES).map(([k,v])=>(
               <div key={k} onClick={()=>handleLoanType(k)}
-                style={{padding:"10px 12px",borderRadius:8,border:`1.5px solid ${loanType===k?ACC:BORDER}`,
+                style={{padding:"12px 14px",borderRadius:10,border:`1.5px solid ${loanType===k?ACC:BORDER}`,
                   background:loanType===k?ACC_L:"transparent",cursor:"pointer",transition:"all 0.15s"}}>
-                <div style={{fontSize:13,fontWeight:700,color:loanType===k?ACC_D:TEXT2}}>{v.label}</div>
-                <div style={{fontSize:11,color:loanType===k?ACC_D:TEXT3,marginTop:3}}>{v.rateHint} · {v.tenureHint}</div>
+                <div style={{fontSize:14,fontWeight:700,color:loanType===k?ACC_D:TEXT2,marginBottom:6}}>{v.label}</div>
+                <div style={{fontSize:12,color:loanType===k?ACC_D:TEXT3}}>{v.rateHint} interest</div>
+                <div style={{fontSize:12,color:loanType===k?ACC_D:TEXT3,marginTop:2}}>{v.tenureHint}</div>
               </div>
             ))}
           </div>
@@ -849,57 +839,18 @@ function EMIPage(){
           <Field label="Interest Rate" value={rate} onChange={setRate} suffix="% p.a." step={0.1} min={0.1} color={ACC} hint={`Typical for ${LOAN_TYPES[loanType].label}: ${LOAN_TYPES[loanType].rateHint}`}/>
           <Field label="Tenure" value={tenure} onChange={setTenure} suffix="years" step={1} min={1} color={ACC} hint={`Max for ${LOAN_TYPES[loanType].label}: ${LOAN_TYPES[loanType].maxTenure}y`}/>
         </div>
-        <div className="card" style={{borderColor:prepayOn?"#F59E0B40":BORDER}}>
-          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:prepayOn?14:0}}>
-            <div style={{width:8,height:8,borderRadius:2,background:"#F59E0B"}}/>
-            <div style={{flex:1}}>
-              <div style={{fontWeight:700,fontSize:13,color:"#F59E0B"}}>Prepayment</div>
-              <div style={{fontSize:12,color:TEXT3}}>Pay extra to save interest & close sooner</div>
-            </div>
-            <Toggle on={prepayOn} set={setPrepayOn} color="#F59E0B"/>
-          </div>
-          {prepayOn&&(<>
-            <div style={{background:"#FFFBEB",border:"1px solid #F59E0B30",borderRadius:7,padding:"8px 12px",fontSize:12,color:"#D97706",marginBottom:12,lineHeight:1.6}}>
-              💡 <strong>Reduce Tenure:</strong> Same EMI, loan ends earlier, saves more interest.<br/>
-              <strong>Reduce EMI:</strong> Lower monthly payment, same loan period.
-            </div>
-            <div style={{height:1,background:BORDER,marginBottom:14}}/>
-            <div style={{marginBottom:14}}>
-              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Strategy</div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
-                {[{k:"tenure",label:"Reduce Tenure",desc:"Same EMI, pay off sooner"},{k:"emi",label:"Reduce EMI",desc:"Lower EMI, same tenure"}].map(({k,label,desc})=>(
-                  <div key={k} onClick={()=>setPrepayStrategy(k)}
-                    style={{padding:"8px 10px",borderRadius:8,border:`1px solid ${prepayStrategy===k?"#F59E0B":BORDER}`,
-                      background:prepayStrategy===k?"#FFFBEB":"transparent",cursor:"pointer"}}>
-                    <div style={{fontSize:11,fontWeight:600,color:prepayStrategy===k?"#F59E0B":TEXT3}}>{label}</div>
-                    <div style={{fontSize:9,color:TEXT3,marginTop:2}}>{desc}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <Field label="Prepay Amount" value={prepayAmt} onChange={setPrepayAmt} prefix="₹" step={5000} min={0} color="#F59E0B"/>
-            <div>
-              <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:7}}>Frequency</div>
-              <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-                {[["monthly","Monthly"],["quarterly","Quarterly"],["annually","Annually"]].map(([k,l])=>(
-                  <div key={k} className={`pill ${prepayFreq===k?"on":"off"}`}
-                    style={prepayFreq===k?{background:"#F59E0B",borderColor:"#F59E0B",color:"#ffffff"}:{}}
-                    onClick={()=>setPrepayFreq(k)}>{l}</div>
-                ))}
-              </div>
-            </div>
-          </>)}
-        </div>
+
       </div>
 
       <div style={{display:"flex",flexDirection:"column",gap:14}}>
         {results&&(<>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:12}}>
             {[
+              {l:"Principal",v:formatINR(principal),c:BLUE,bg:"#F0F4FF",bc:BLUE+"40",sub:"loan amount"},
               {l:"Monthly EMI",v:formatINRFull(results.emi),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:null},
               {l:"Total Interest",v:formatINR(results.totalInt),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40",sub:((results.totalInt/principal)*100).toFixed(0)+"% of principal"},
               {l:"Total Payment",v:formatINR(results.totalPay),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:`over ${tenure} years`},
-              ...(prepayOn&&results.intSaved>0?[
+              ...([].length>0?[
                 {l:"Interest Saved",v:formatINR(results.intSaved),c:GREEN,bg:"#EAF5EE",bc:GREEN+"40",sub:`${Math.floor(results.monthsSaved/12)}y ${results.monthsSaved%12}m sooner`},
               ]:[]),
             ].map(({l,v,c,bg,bc,sub})=>(
@@ -922,25 +873,7 @@ function EMIPage(){
             </div>
           </div>
 
-          {prepayOn&&results.compChart.length>0&&(
-            <div className="card">
-              <div className="lbl" style={{marginBottom:14}}>Outstanding Balance — With vs Without Prepayment</div>
-              <ResponsiveContainer width="100%" height={240}>
-                <AreaChart data={results.compChart} margin={{top:4,right:16,left:0,bottom:0}}>
-                  <defs>
-                    <linearGradient id="wog" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={BLUE} stopOpacity={0.15}/><stop offset="95%" stopColor={BLUE} stopOpacity={0}/></linearGradient>
-                    <linearGradient id="wpg" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={ACC} stopOpacity={0.2}/><stop offset="95%" stopColor={ACC} stopOpacity={0}/></linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke={BORDER}/>
-                  <XAxis dataKey="year" tick={{fill:TEXT3,fontSize:10}} axisLine={false} tickLine={false}/>
-                  <YAxis tickFormatter={v=>formatINR(v)} tick={{fill:TEXT3,fontSize:9}} axisLine={false} tickLine={false} width={72}/>
-                  <Tooltip content={<ChartTooltip/>}/><Legend wrapperStyle={{fontSize:11}}/>
-                  <Area type="monotone" dataKey="withoutPrepay" name="Without Prepayment" stroke={BLUE} strokeWidth={2} fill="url(#wog)"/>
-                  <Area type="monotone" dataKey="withPrepay" name="With Prepayment" stroke={ACC} strokeWidth={2.5} fill="url(#wpg)"/>
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          )}
+
 
           {schedule&&schedule.length>0&&(
             <div className="card">
@@ -961,7 +894,7 @@ function EMIPage(){
           <div className="card">
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
               <div className="lbl" style={{marginBottom:0}}>Amortization Schedule</div>
-              {prepayOn&&<span style={{fontSize:10,color:"#F59E0B",background:"#FFFBEB",padding:"3px 8px",borderRadius:4}}>with prepayment</span>}
+
             </div>
             <div style={{overflowX:"auto"}}>
               <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
@@ -1210,16 +1143,18 @@ function RetirementPage(){
 
         <div style={{display:"flex",flexDirection:"column",gap:14}}>
           {mode==="check"&&checkResult&&(<>
-            <div className="stat-banner" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:16}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:12}}>
               {[
-                ["Corpus Needed",formatINR(checkResult.corpusNeeded),"#F59E0B","At retirement"],
-                ["Corpus You'll Build",formatINR(checkResult.totalCorpus),ACC,"At retirement"],
-                [checkResult.surplus>=0?"Surplus":"Shortfall",formatINR(Math.abs(checkResult.surplus)),checkResult.surplus>=0?GREEN:RED,null],
-                ["Monthly Exp. at Retirement",formatINR(checkResult.expAtRetire),"#A09880","Inflation adjusted"],
-              ].map(([l,v,c,sub])=>(
-                <div key={l}><div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div>
-                <div className="num" style={{fontWeight:700,fontSize:"clamp(14px,1.4vw,18px)",color:c}}>{v}</div>
-                {sub&&<div style={{fontSize:9,color:"#666",marginTop:2}}>{sub}</div>}</div>
+                {l:"Corpus Needed",v:formatINR(checkResult.corpusNeeded),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40",sub:"At retirement"},
+                {l:"Corpus You'll Build",v:formatINR(checkResult.totalCorpus),c:ACC,bg:"#FFFBF2",bc:ACC+"50",sub:"At retirement"},
+                {l:checkResult.surplus>=0?"Surplus":"Shortfall",v:formatINR(Math.abs(checkResult.surplus)),c:checkResult.surplus>=0?GREEN:RED,bg:checkResult.surplus>=0?"#EAF5EE":"#FDEAEA",bc:(checkResult.surplus>=0?GREEN:RED)+"40",sub:null},
+                {l:"Monthly Exp. at Retirement",v:formatINR(checkResult.expAtRetire),c:TEXT2,bg:"#ffffff",bc:BORDER,sub:"Inflation adjusted"},
+              ].map(({l,v,c,bg,bc,sub})=>(
+                <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
+                  <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,24px)",color:c,lineHeight:1}}>{v}</div>
+                  {sub&&<div style={{fontSize:12,color:TEXT3,marginTop:6}}>{sub}</div>}
+                </div>
               ))}
             </div>
 
@@ -1283,10 +1218,10 @@ function RetirementPage(){
           </>)}
 
           {mode==="sipneeded"&&sipNeededResult&&(<>
-            <div style={{background:BG_INV,border:`1px solid ${PURP}`,borderRadius:12,padding:"24px 28px"}}>
-              <div style={{fontSize:11,color:ACC,letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>Monthly SIP Required to Retire at {sipRetireAge}</div>
-              <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:PURP}}>{formatINRFull(sipNeededResult.sipNeeded)}</div>
-              {sipStep2Pct>0&&<div style={{fontSize:12,color:"#8A8480",marginTop:4}}>Starting SIP with <strong style={{color:"#F59E0B"}}>{sipStep2Pct}% step-up</strong> · Without step-up: <strong style={{color:"#C4B5FD"}}>{formatINRFull(sipNeededResult.sipNeededFlat)}</strong></div>}
+            <div style={{background:"#F5F0FF",border:`1.5px solid ${PURP}50`,borderRadius:14,padding:"24px 28px"}}>
+              <div style={{fontSize:12,color:PURP,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Monthly SIP Required to Retire at {sipRetireAge}</div>
+              <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:PURP,lineHeight:1}}>{formatINRFull(sipNeededResult.sipNeeded)}</div>
+              {sipStep2Pct>0&&<div style={{fontSize:12,color:TEXT2,marginTop:8}}>Starting SIP with <strong style={{color:"#F59E0B"}}>{sipStep2Pct}% step-up</strong> · Without step-up: <strong style={{color:PURP}}>{formatINRFull(sipNeededResult.sipNeededFlat)}</strong></div>}
             </div>
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:10}}>
               {[["Target Corpus",formatINR(sipNeededResult.corpusTarget),PURP],["From Savings",formatINR(sipNeededResult.savingsC),"#C4B5FD"],
@@ -1315,14 +1250,14 @@ function RetirementPage(){
 
           {mode==="retirewhen"&&retireWhenResult&&(<>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-              {[{label:"Earliest You Can Retire",val:retireWhenResult.earliest,color:"#EC4899",icon:"🏁"},{label:"Comfortable (120% funded)",val:retireWhenResult.comfortable,color:GREEN,icon:"😊"}].map(({label,val,color,icon})=>(
-                <div key={label} style={{background:BG_INV,border:`1px solid ${color}50`,borderRadius:12,padding:"18px 20px"}}>
-                  <div style={{fontSize:9,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:8}}>{label}</div>
+              {[{label:"Earliest You Can Retire",val:retireWhenResult.earliest,color:"#EC4899",bg:"#FDF0F6",bc:"#EC489940"},{label:"Comfortable (120% funded)",val:retireWhenResult.comfortable,color:GREEN,bg:"#EAF5EE",bc:GREEN+"40"}].map(({label,val,color,bg,bc})=>(
+                <div key={label} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+                  <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>{label}</div>
                   {val?(
-                    <><div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:28}}>{icon}</span><div className="num" style={{fontWeight:700,fontSize:32,color}}>{val.age}</div></div>
-                    <div style={{fontSize:12,color:"#8A8480",marginTop:6}}>In <strong style={{color}}>{val.age-currentAge} years</strong> · {val.pct}% funded</div></>
+                    <><div className="num" style={{fontWeight:700,fontSize:40,color,lineHeight:1}}>{val.age}</div>
+                    <div style={{fontSize:13,color:TEXT2,marginTop:8}}>In <strong style={{color}}>{val.age-currentAge} years</strong> · {val.pct}% funded</div></>
                   ):(
-                    <div style={{fontWeight:700,fontSize:14,color:RED,marginTop:8}}>Not achievable by 80 with current SIP</div>
+                    <div style={{fontWeight:700,fontSize:14,color:RED,marginTop:8}}>Not achievable by 80</div>
                   )}
                 </div>
               ))}
@@ -1943,9 +1878,16 @@ function GoalSeekPage(){
 
   return(
     <div style={{display:"flex",flexDirection:"column",gap:20}}>
-      <div className="stat-banner" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(170px,1fr))",gap:14}}>
-        {[["Goals Defined",`${activeGoals.length} / 5`,"#E4D8C8"],["Total Future Value",formatINR(totalFV),"#F59E0B"],["Combined Monthly SIP",formatINR(totalMonthlySIP),ACC]].map(([l,v,c])=>(
-          <div key={l}><div style={{fontSize:11,color:TEXT2,letterSpacing:"0.5px",textTransform:"uppercase",marginBottom:4}}>{l}</div><div className="num" style={{fontWeight:700,fontSize:"clamp(15px,1.5vw,20px)",color:c}}>{v}</div></div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(170px,1fr))",gap:12}}>
+        {[
+          {l:"Goals Defined",v:`${activeGoals.length} / 5`,c:TEXT2,bg:"#ffffff",bc:BORDER},
+          {l:"Total Future Value",v:formatINR(totalFV),c:"#D97706",bg:"#FFFBEB",bc:"#F59E0B40"},
+          {l:"Combined Monthly SIP",v:formatINR(totalMonthlySIP),c:ACC,bg:"#FFFBF2",bc:ACC+"50"},
+        ].map(({l,v,c,bg,bc})=>(
+          <div key={l} style={{background:bg,border:`1.5px solid ${bc}`,borderRadius:14,padding:"20px 22px"}}>
+            <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>{l}</div>
+            <div className="num" style={{fontWeight:700,fontSize:"clamp(18px,1.8vw,26px)",color:c,lineHeight:1}}>{v}</div>
+          </div>
         ))}
       </div>
 
@@ -1990,11 +1932,11 @@ function GoalSeekPage(){
         </div>
       )}
 
-      <div className="stat-banner" style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap",gap:16}}>
+      <div style={{background:"#FFFBF2",border:`1.5px solid ${ACC}50`,borderRadius:14,padding:"24px 28px",display:"flex",alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap",gap:16}}>
         <div>
-          <div style={{fontSize:10,color:"#666",letterSpacing:"2px",textTransform:"uppercase",marginBottom:6}}>Start Investing Today</div>
-          <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:ACC}}>{formatINR(totalMonthlySIP)}</div>
-          <div style={{fontSize:12,color:"#8A8480",marginTop:4}}>per month across all {activeGoals.length} goals</div>
+          <div style={{fontSize:12,color:ACC,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Start Investing Today</div>
+          <div className="num" style={{fontWeight:700,fontSize:"clamp(28px,4vw,44px)",color:ACC,lineHeight:1}}>{formatINR(totalMonthlySIP)}</div>
+          <div style={{fontSize:13,color:TEXT2,marginTop:8}}>per month across all {activeGoals.length} goals</div>
         </div>
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:8}}>
           {goalCalcs.map(g=>(
