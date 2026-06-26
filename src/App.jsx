@@ -451,9 +451,8 @@ function CalculatorPage(){
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
                 <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-                  <input type="number" value={annualRate} step={0.1} min={0}
-                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
-                    style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <ClearableInput value={annualRate} onChange={v=>setAnnualRate(v)} step={0.1} min={0} color={ACC}
+                    style={{background:"transparent",border:"none",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                   <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
                 </div>
                 <div style={{fontSize:12,color:TEXT3,marginTop:6}}>per annum</div>
@@ -461,9 +460,8 @@ function CalculatorPage(){
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
                 <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-                  <input type="number" value={years} step={0.5} min={0.5}
-                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
-                    style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <ClearableInput value={years} onChange={v=>setYears(v)} step={0.5} min={0.5} color="#1A1714"
+                    style={{background:"transparent",border:"none",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                   <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
                 </div>
                 <div style={{fontSize:12,color:TEXT3,marginTop:6}}>investment period</div>
@@ -473,9 +471,8 @@ function CalculatorPage(){
               <div style={{fontSize:13,color:ACC,fontWeight:700,marginBottom:14}}>Lumpsum</div>
               <div style={{display:"flex",alignItems:"center",background:"#FFF8EE",border:`1.5px solid ${ACC}40`,borderRadius:9,overflow:"hidden"}}>
                 <span style={{padding:"0 14px",color:ACC,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${ACC}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
-                <input type="number" value={lumpsum} step={1000} min={0}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setLumpsum(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+                <ClearableInput value={lumpsum} onChange={v=>setLumpsum(v)} step={1000} min={0} color="#1A1714"
+                  style={{flex:1,background:"transparent",border:"none",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
               </div>
               <div className="num" style={{fontSize:12,color:ACC,marginTop:8,fontWeight:600}}>
                 {lumpsum>=10000000?`= ₹${(lumpsum/10000000).toFixed(2)} Crore`:lumpsum>=100000?`= ₹${(lumpsum/100000).toFixed(2)} Lakh`:lumpsum>=1000?`= ₹${(lumpsum/1000).toFixed(1)}K`:""}
@@ -506,9 +503,8 @@ function CalculatorPage(){
               <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Amount</div>
               <div style={{display:"flex",alignItems:"center",background:"#EEF3FF",border:`1.5px solid ${BLUE}40`,borderRadius:9,overflow:"hidden",marginBottom:20}}>
                 <span style={{padding:"0 14px",color:BLUE,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${BLUE}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
-                <input type="number" value={sipAmt} step={100} min={0}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setSipAmt(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+                <ClearableInput value={sipAmt} onChange={v=>setSipAmt(v)} step={100} min={0} color="#1A1714"
+                  style={{flex:1,background:"transparent",border:"none",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
                 <div className="num" style={{padding:"0 14px",fontSize:12,color:BLUE,fontWeight:600,whiteSpace:"nowrap"}}>
                   {sipAmt>=100000?`${(sipAmt/100000).toFixed(2)}L`:sipAmt>=1000?`${(sipAmt/1000).toFixed(1)}K`:""}
                 </div>
@@ -519,9 +515,8 @@ function CalculatorPage(){
                   <div style={{flexShrink:0}}>
                     <div style={{fontSize:12,color:TEXT3,marginBottom:6}}>Percentage</div>
                     <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden",width:90}}>
-                      <input type="number" value={stepPct} step={1} min={0} max={100}
-                        onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setStepPct(n);}}
-                        style={{flex:1,background:"transparent",border:"none",color:stepPct>0?"#F59E0B":"#1A1714",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                      <ClearableInput value={stepPct} onChange={v=>setStepPct(v)} step={1} min={0} max={100} color={stepPct>0?"#F59E0B":"#1A1714"}
+                        style={{flex:1,background:"transparent",border:"none",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
                       <span style={{padding:"0 8px",fontSize:12,color:TEXT3}}>%</span>
                     </div>
                   </div>
@@ -566,9 +561,8 @@ function CalculatorPage(){
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Annual Return</div>
                 <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-                  <input type="number" value={annualRate} step={0.1} min={0}
-                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setAnnualRate(n);}}
-                    style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <ClearableInput value={annualRate} onChange={v=>setAnnualRate(v)} step={0.1} min={0} color={ACC}
+                    style={{background:"transparent",border:"none",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                   <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>%</span>
                 </div>
                 <div style={{fontSize:12,color:TEXT3,marginTop:6}}>per annum</div>
@@ -576,9 +570,8 @@ function CalculatorPage(){
               <div className="card" style={{padding:"18px 18px"}}>
                 <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Time Horizon</div>
                 <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-                  <input type="number" value={years} step={0.5} min={0.5}
-                    onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setYears(n);}}
-                    style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                  <ClearableInput value={years} onChange={v=>setYears(v)} step={0.5} min={0.5} color="#1A1714"
+                    style={{background:"transparent",border:"none",padding:0,fontSize:38,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                   <span style={{fontSize:16,color:TEXT3,fontWeight:600,flexShrink:0}}>yrs</span>
                 </div>
                 <div style={{fontSize:12,color:TEXT3,marginTop:6}}>investment period</div>
@@ -588,9 +581,8 @@ function CalculatorPage(){
               <div style={{fontSize:13,color:PURP,fontWeight:700,marginBottom:14}}>Target Corpus</div>
               <div style={{display:"flex",alignItems:"center",background:"#F5F0FF",border:`1.5px solid ${PURP}40`,borderRadius:9,overflow:"hidden"}}>
                 <span style={{padding:"0 14px",color:PURP,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${PURP}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
-                <input type="number" value={targetCorpus} step={100000} min={0}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setTargetCorpus(n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+                <ClearableInput value={targetCorpus} onChange={v=>setTargetCorpus(v)} step={100000} min={0} color="#1A1714"
+                  style={{flex:1,background:"transparent",border:"none",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
               </div>
               <div className="num" style={{fontSize:12,color:PURP,marginTop:8,fontWeight:600}}>
                 {targetCorpus>=10000000?`= ₹${(targetCorpus/10000000).toFixed(2)} Crore`:targetCorpus>=100000?`= ₹${(targetCorpus/100000).toFixed(2)} Lakh`:targetCorpus>=1000?`= ₹${(targetCorpus/1000).toFixed(1)}K`:""}
@@ -601,9 +593,8 @@ function CalculatorPage(){
             <div style={{fontSize:13,color:ACC,fontWeight:700,marginBottom:14}}>Lumpsum (optional)</div>
             <div style={{display:"flex",alignItems:"center",background:"#FFF8EE",border:`1.5px solid ${ACC}40`,borderRadius:9,overflow:"hidden",marginBottom:20}}>
               <span style={{padding:"0 14px",color:ACC,fontFamily:"'DM Mono',monospace",fontWeight:700,fontSize:18,borderRight:`1px solid ${ACC}30`,alignSelf:"stretch",display:"flex",alignItems:"center"}}>₹</span>
-              <input type="number" value={fsLumpsum} step={1000} min={0}
-                onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setFsLumpsum(n);}}
-                style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
+              <ClearableInput value={fsLumpsum} onChange={v=>setFsLumpsum(v)} step={1000} min={0} color="#1A1714"
+                style={{flex:1,background:"transparent",border:"none",padding:"13px 14px",fontSize:20,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none"}}/>
             </div>
             <div style={{height:1,background:BORDER,marginBottom:18}}/>
             <div style={{fontSize:12,color:BLUE,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>SIP Frequency</div>
@@ -625,9 +616,8 @@ function CalculatorPage(){
                 <div style={{flexShrink:0}}>
                   <div style={{fontSize:12,color:TEXT3,marginBottom:6}}>Percentage</div>
                   <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden",width:90}}>
-                    <input type="number" value={fsStepPct} step={1} min={0} max={100}
-                      onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))setFsStepPct(n);}}
-                      style={{flex:1,background:"transparent",border:"none",color:fsStepPct>0?"#F59E0B":"#1A1714",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
+                    <ClearableInput value={fsStepPct} onChange={v=>setFsStepPct(v)} step={1} min={0} max={100} color={fsStepPct>0?"#F59E0B":"#1A1714"}
+                      style={{flex:1,background:"transparent",border:"none",padding:"9px 10px",fontSize:18,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:0}}/>
                     <span style={{padding:"0 8px",fontSize:12,color:TEXT3}}>%</span>
                   </div>
                 </div>
@@ -1077,27 +1067,24 @@ function RetirementSharedInputs({currentAge,setCurrentAge,lifeExp,setLifeExp,ret
         <div>
           <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Current Age</div>
           <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-            <input type="number" value={currentAge} step={1} min={18}
-              onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setCurrentAge(n);}}
-              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+            <ClearableInput value={currentAge} onChange={v=>setCurrentAge(v)} step={1} min={18} color={ACC} isInt={true}
+              style={{background:"transparent",border:"none",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
             <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
           </div>
         </div>
         {showRetireAge&&<div>
           <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Retire At</div>
           <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-            <input type="number" value={retireAge} step={1} min={currentAge+1}
-              onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setRetireAge(Math.max(currentAge+1,n));}}
-              style={{background:"transparent",border:"none",color:ACC,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+            <ClearableInput value={retireAge} onChange={v=>setRetireAge(Math.max(currentAge+1,v))} step={1} min={currentAge+1} color={ACC} isInt={true}
+              style={{background:"transparent",border:"none",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
             <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
           </div>
         </div>}
         <div>
           <div style={{fontSize:12,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>Life Expectancy</div>
           <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px",marginTop:4}}>
-            <input type="number" value={lifeExp} step={1} min={(retireAge||currentAge)+1}
-              onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))setLifeExp(n);}}
-              style={{background:"transparent",border:"none",color:"#1A1714",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
+            <ClearableInput value={lifeExp} onChange={v=>setLifeExp(v)} step={1} min={(retireAge||currentAge)+1} color="#1A1714" isInt={true}
+              style={{background:"transparent",border:"none",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0}}/>
             <span style={{fontSize:14,color:TEXT3,fontWeight:600}}>yrs</span>
           </div>
         </div>
@@ -1295,9 +1282,8 @@ function RetirementPage(){
                   <div key={label}>
                     <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
                     <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px"}}>
-                      <input type="number" value={val} step={1} min={18}
-                        onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                        style={{background:"transparent",border:"none",color,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <ClearableInput value={val} onChange={set} step={1} min={18} color={color} isInt={true}
+                        style={{background:"transparent",border:"none",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                       <span style={{fontSize:13,color:TEXT3,flexShrink:0,marginLeft:4}}>yrs</span>
                     </div>
                   </div>
@@ -1445,9 +1431,8 @@ function RetirementPage(){
                   <div key={label}>
                     <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
                     <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px"}}>
-                      <input type="number" value={val} step={1} min={18}
-                        onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                        style={{background:"transparent",border:"none",color,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <ClearableInput value={val} onChange={set} step={1} min={18} color={color} isInt={true}
+                        style={{background:"transparent",border:"none",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                       <span style={{fontSize:13,color:TEXT3,flexShrink:0,marginLeft:4}}>yrs</span>
                     </div>
                   </div>
@@ -1542,9 +1527,8 @@ function RetirementPage(){
                   <div key={label}>
                     <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:8}}>{label}</div>
                     <div style={{display:"flex",alignItems:"center",background:"#FAF8F5",border:`1.5px solid ${BORDER}`,borderRadius:8,padding:"8px 12px"}}>
-                      <input type="number" value={val} step={1} min={18}
-                        onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))set(n);}}
-                        style={{background:"transparent",border:"none",color,padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
+                      <ClearableInput value={val} onChange={set} step={1} min={18} color={color} isInt={true}
+                        style={{background:"transparent",border:"none",padding:0,fontSize:28,fontFamily:"'DM Mono',monospace",fontWeight:700,outline:"none",width:"100%",minWidth:0,lineHeight:1}}/>
                       <span style={{fontSize:13,color:TEXT3,flexShrink:0,marginLeft:4}}>yrs</span>
                     </div>
                   </div>
@@ -2401,9 +2385,8 @@ function GoalSeekPage(){
               <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Present Value</div>
               <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
                 <span style={{padding:"0 10px",color:g.color,fontFamily:"'DM Mono',monospace",fontWeight:600,fontSize:13,borderRight:`1px solid ${BORDER}`,alignSelf:"stretch",display:"flex",alignItems:"center",background:"#FAF8F5"}}>₹</span>
-                <input type="number" value={g.presentValue} step={50000} min={0}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))updateGoal(g.id,"presentValue",n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
+                <ClearableInput value={g.presentValue} onChange={v=>updateGoal(g.id,"presentValue",v)} step={50000} min={0} color="#1A1714"
+                  style={{flex:1,background:"transparent",border:"none",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
                 {g.presentValue>=100000&&<span style={{padding:"0 8px",fontSize:11,color:g.color,fontWeight:700,whiteSpace:"nowrap",fontFamily:"'DM Mono',monospace"}}>
                   {g.presentValue>=10000000?`${(g.presentValue/10000000).toFixed(2)}Cr`:g.presentValue>=100000?`${(g.presentValue/100000).toFixed(2)}L`:""}
                 </span>}
@@ -2412,18 +2395,16 @@ function GoalSeekPage(){
             <div>
               <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Timeline</div>
               <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
-                <input type="number" value={g.years} step={1} min={1}
-                  onChange={e=>{const n=parseInt(e.target.value);if(!isNaN(n))updateGoal(g.id,"years",Math.max(1,n));}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
+                <ClearableInput value={g.years} onChange={v=>updateGoal(g.id,"years",Math.max(1,v))} step={1} min={1} color="#1A1714" isInt={true}
+                  style={{flex:1,background:"transparent",border:"none",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
                 <span style={{padding:"0 8px",fontSize:11,color:TEXT3,whiteSpace:"nowrap"}}>yrs</span>
               </div>
             </div>
             <div>
               <div style={{fontSize:11,color:TEXT2,letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:6}}>Inflation</div>
               <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
-                <input type="number" value={g.inflation} step={0.5} min={0}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))updateGoal(g.id,"inflation",n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:"#1A1714",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
+                <ClearableInput value={g.inflation} onChange={v=>updateGoal(g.id,"inflation",v)} step={0.5} min={0} color="#1A1714"
+                  style={{flex:1,background:"transparent",border:"none",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:500,outline:"none",minWidth:0}}/>
                 <span style={{padding:"0 8px",fontSize:11,color:TEXT3}}>%</span>
               </div>
             </div>
@@ -2433,9 +2414,8 @@ function GoalSeekPage(){
                 {!isCustomRate(g)&&<span style={{fontSize:9,color:g.rec.color,background:g.rec.color+"20",padding:"2px 6px",borderRadius:4,fontWeight:700}}>AUTO</span>}
               </div>
               <div style={{display:"flex",alignItems:"center",background:"#ffffff",border:`1.5px solid ${BORDER}`,borderRadius:8,overflow:"hidden"}}>
-                <input type="number" value={g.returnRate} step={0.5} min={1}
-                  onChange={e=>{const n=parseFloat(e.target.value);if(!isNaN(n))updateGoal(g.id,"returnRate",n);}}
-                  style={{flex:1,background:"transparent",border:"none",color:isCustomRate(g)?"#F59E0B":g.rec.color,padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none",minWidth:0}}/>
+                <ClearableInput value={g.returnRate} onChange={v=>updateGoal(g.id,"returnRate",v)} step={0.5} min={1} color={isCustomRate(g)?"#F59E0B":g.rec.color}
+                  style={{flex:1,background:"transparent",border:"none",padding:"8px 10px",fontSize:14,fontFamily:"'DM Mono',monospace",fontWeight:600,outline:"none",minWidth:0}}/>
                 <span style={{padding:"0 8px",fontSize:11,color:TEXT3}}>%</span>
               </div>
               {!isCustomRate(g)&&<div style={{fontSize:11,color:TEXT3,marginTop:4}}>{g.rec.label}</div>}
