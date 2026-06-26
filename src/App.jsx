@@ -138,6 +138,19 @@ function NumInput({value,onChange,step=1,min=0,max,style={},color,suffix}){
   );
 }
 
+function ClearableInput({value,onChange,step=1,min=0,max,color,style={},suffix,isInt=false}){
+  const [local,setLocal]=React.useState(String(value??""));
+  const focused=React.useRef(false);
+  React.useEffect(()=>{if(!focused.current)setLocal(String(value??""));},[value]);
+  return(
+    <input type="number" value={local} step={step} min={min} max={max}
+      onFocus={()=>{focused.current=true;}}
+      onChange={e=>{setLocal(e.target.value);const n=isInt?parseInt(e.target.value):parseFloat(e.target.value);if(!isNaN(n))onChange(n);}}
+      onBlur={e=>{focused.current=false;const n=isInt?parseInt(e.target.value):parseFloat(e.target.value);if(isNaN(n)||e.target.value==="")setLocal(String(value??""));else{onChange(n);setLocal(String(n));}}}
+      style={{...style,color:color||"#1A1714"}}/>
+  );
+}
+
 function ChartTooltip({active,payload,label,labelPrefix=""}){
   if(!active||!payload?.length)return null;
   return(
