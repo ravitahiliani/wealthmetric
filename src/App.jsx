@@ -2621,6 +2621,101 @@ function HomePage({setPage}){
   );
 }
 
+
+// ─── FEEDBACK MODAL ───────────────────────────────────────────────────────────
+function FeedbackModal({onClose}){
+  const [rating,setRating]=React.useState(0);
+  const [hover,setHover]=React.useState(0);
+  const [text,setText]=React.useState("");
+  const [status,setStatus]=React.useState("idle"); // idle | sending | success | error
+
+  const handleSubmit=async()=>{
+    if(rating===0){alert("Please select a rating");return;}
+    setStatus("sending");
+    try{
+      const res=await fetch("https://api.web3forms.com/submit",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        body:JSON.stringify({
+          access_key:"3b73f698-c43e-4ab2-86cf-dba015be2e03",
+          subject:`WealthMetric Feedback — ${rating} star${rating>1?"s":""}`,
+          message:text||"(no message)",
+          rating:`${rating}/5`,
+          from_name:"WealthMetric User",
+        })
+      });
+      const data=await res.json();
+      if(data.success)setStatus("success");
+      else setStatus("error");
+    }catch(e){setStatus("error");}
+  };
+
+  return(
+    <div style={{position:"fixed",inset:0,zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center"}}>
+      {/* Backdrop */}
+      <div onClick={onClose} style={{position:"absolute",inset:0,background:"rgba(26,23,20,0.5)",backdropFilter:"blur(2px)"}}/>
+
+      {/* Modal */}
+      <div style={{position:"relative",background:"#ffffff",borderRadius:20,padding:"32px 36px",width:"100%",maxWidth:440,boxShadow:"0 24px 64px rgba(26,23,20,0.18)",zIndex:1}}>
+        {/* Close */}
+        <div onClick={onClose} style={{position:"absolute",top:16,right:16,width:32,height:32,borderRadius:8,background:"#F2F0EB",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:16,color:"#8A8480"}}>×</div>
+
+        {status==="success"?(
+          <div style={{textAlign:"center",padding:"20px 0"}}>
+            <div style={{fontSize:48,marginBottom:16}}>🙏</div>
+            <div style={{fontWeight:700,fontSize:20,color:"#1A1714",marginBottom:8}}>Thank you!</div>
+            <div style={{fontSize:14,color:"#5A5650",lineHeight:1.6}}>Your feedback helps us make WealthMetric better for everyone.</div>
+            <div onClick={onClose} style={{marginTop:24,background:"#C17F24",color:"#ffffff",border:"none",borderRadius:10,padding:"12px 32px",fontSize:14,fontWeight:600,cursor:"pointer",display:"inline-block"}}>Close</div>
+          </div>
+        ):(
+          <>
+            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontWeight:700,fontSize:22,color:"#1A1714",marginBottom:4}}>Share your feedback</div>
+            <div style={{fontSize:13,color:"#8A8480",marginBottom:24}}>Help us improve WealthMetric</div>
+
+            {/* Stars */}
+            <div style={{marginBottom:20}}>
+              <div style={{fontSize:12,color:"#5A5650",letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>How would you rate your experience?</div>
+              <div style={{display:"flex",gap:8}}>
+                {[1,2,3,4,5].map(s=>(
+                  <div key={s}
+                    onClick={()=>setRating(s)}
+                    onMouseEnter={()=>setHover(s)}
+                    onMouseLeave={()=>setHover(0)}
+                    style={{fontSize:36,cursor:"pointer",transition:"transform 0.1s",transform:(hover||rating)>=s?"scale(1.15)":"scale(1)",filter:(hover||rating)>=s?"none":"grayscale(1) opacity(0.4)"}}>
+                    ⭐
+                  </div>
+                ))}
+              </div>
+              {rating>0&&<div style={{fontSize:12,color:"#C17F24",marginTop:8,fontWeight:600}}>
+                {["","Poor","Below average","Average","Good","Excellent!"][rating]}
+              </div>}
+            </div>
+
+            {/* Text */}
+            <div style={{marginBottom:24}}>
+              <div style={{fontSize:12,color:"#5A5650",letterSpacing:"0.8px",textTransform:"uppercase",fontWeight:700,marginBottom:10}}>Any suggestions or comments? <span style={{color:"#8A8480",fontWeight:400,textTransform:"none",letterSpacing:0}}>(optional)</span></div>
+              <textarea value={text} onChange={e=>setText(e.target.value)}
+                placeholder="Tell us what you liked, what's missing, or any calculator you'd love to see..."
+                rows={4}
+                style={{width:"100%",background:"#F7F5F0",border:"1.5px solid #E4E0D8",borderRadius:10,padding:"12px 14px",fontSize:13,color:"#1A1714",fontFamily:"'DM Sans',sans-serif",outline:"none",resize:"vertical",lineHeight:1.6,boxSizing:"border-box"}}
+                onFocus={e=>{e.target.style.borderColor="#C17F24";e.target.style.boxShadow="0 0 0 3px rgba(193,127,36,0.12)";}}
+                onBlur={e=>{e.target.style.borderColor="#E4E0D8";e.target.style.boxShadow="none";}}/>
+            </div>
+
+            {status==="error"&&<div style={{fontSize:12,color:"#B83232",marginBottom:12}}>Something went wrong. Please try again.</div>}
+
+            {/* Submit */}
+            <div onClick={status==="sending"?null:handleSubmit}
+              style={{width:"100%",background:status==="sending"?"#E4D8C8":"#C17F24",color:"#ffffff",border:"none",borderRadius:10,padding:"13px",fontSize:15,fontWeight:700,cursor:status==="sending"?"not-allowed":"pointer",textAlign:"center",transition:"background 0.2s",userSelect:"none"}}>
+              {status==="sending"?"Sending...":"Submit Feedback"}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── PAGES CONFIG ─────────────────────────────────────────────────────────────
 const PAGES=[
   {id:"home",       label:"Home",             icon:"⌂"},
@@ -2636,6 +2731,7 @@ const PAGES=[
 // ─── ROOT APP ─────────────────────────────────────────────────────────────────
 export default function App(){
   const [page,setPage]=useState("home");
+  const [showFeedback,setShowFeedback]=useState(false);
 
   return(
     <div style={{minHeight:"100vh",background:"#F7F5F0",fontFamily:"'DM Sans',system-ui,sans-serif",color:"#1A1714"}}>
@@ -2653,8 +2749,19 @@ export default function App(){
               <span>{p.icon}</span><span>{p.label}</span>
             </div>
           ))}
+          <div style={{marginLeft:"auto"}}>
+            <div onClick={()=>setShowFeedback(true)}
+              style={{cursor:"pointer",padding:"10px 20px",borderRadius:10,fontSize:14,fontWeight:600,
+                background:"#F5E6C8",color:"#8A5A18",border:"1.5px solid #C17F2440",
+                display:"flex",alignItems:"center",gap:7,transition:"all 0.2s",userSelect:"none",whiteSpace:"nowrap"}}
+              onMouseEnter={e=>{e.currentTarget.style.background="#C17F24";e.currentTarget.style.color="#ffffff";}}
+              onMouseLeave={e=>{e.currentTarget.style.background="#F5E6C8";e.currentTarget.style.color="#8A5A18";}}>
+              <span style={{fontSize:16}}>💬</span> Feedback
+            </div>
+          </div>
         </div>
       </div>
+      {showFeedback&&<FeedbackModal onClose={()=>setShowFeedback(false)}/>}
 
 
 
