@@ -2749,15 +2749,11 @@ export default function App(){
               <span>{p.icon}</span><span>{p.label}</span>
             </div>
           ))}
-          <div style={{marginLeft:"auto"}}>
-            <div onClick={()=>setShowFeedback(true)}
-              style={{cursor:"pointer",padding:"10px 20px",borderRadius:10,fontSize:14,fontWeight:600,
-                background:"#F5E6C8",color:"#8A5A18",border:"1.5px solid #C17F2440",
-                display:"flex",alignItems:"center",gap:7,transition:"all 0.2s",userSelect:"none",whiteSpace:"nowrap"}}
-              onMouseEnter={e=>{e.currentTarget.style.background="#C17F24";e.currentTarget.style.color="#ffffff";}}
-              onMouseLeave={e=>{e.currentTarget.style.background="#F5E6C8";e.currentTarget.style.color="#8A5A18";}}>
-              <span style={{fontSize:16}}>💬</span> Feedback
-            </div>
+          <div onClick={()=>setShowFeedback(true)}
+            className="nav-tab inactive"
+            style={{marginLeft:"auto",cursor:"pointer",display:"flex",alignItems:"center",gap:7,
+              background:"#C17F24",color:"#ffffff",border:"1.5px solid #C17F24",whiteSpace:"nowrap",flexShrink:0}}>
+            <span style={{fontSize:14}}>💬</span><span>Feedback</span>
           </div>
         </div>
       </div>
