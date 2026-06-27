@@ -2749,13 +2749,20 @@ export default function App(){
               <span>{p.icon}</span><span>{p.label}</span>
             </div>
           ))}
-          <div onClick={()=>setShowFeedback(true)}
-            className="nav-tab inactive"
-            style={{marginLeft:"auto",cursor:"pointer",display:"flex",alignItems:"center",gap:7,
-              background:"#C17F24",color:"#ffffff",border:"1.5px solid #C17F24",whiteSpace:"nowrap",flexShrink:0}}>
-            <span style={{fontSize:14}}>💬</span><span>Feedback</span>
-          </div>
         </div>
+      </div>
+      {/* Floating Feedback Button */}
+      <div onClick={()=>setShowFeedback(true)}
+        style={{position:"fixed",bottom:28,right:28,zIndex:900,
+          background:ACC,color:"#ffffff",borderRadius:50,
+          padding:"13px 22px",fontSize:14,fontWeight:700,
+          display:"flex",alignItems:"center",gap:8,cursor:"pointer",
+          boxShadow:"0 4px 20px rgba(193,127,36,0.45)",
+          userSelect:"none",transition:"all 0.2s"}}
+        onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 8px 28px rgba(193,127,36,0.5)";}}
+        onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="0 4px 20px rgba(193,127,36,0.45)";}}>
+        <span style={{fontSize:18}}>💬</span>
+        <span>Feedback</span>
       </div>
       {showFeedback&&<FeedbackModal onClose={()=>setShowFeedback(false)}/>}
 
